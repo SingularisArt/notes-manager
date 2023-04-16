@@ -1,0 +1,26 @@
+{
+  "name": "notes-manager",
+  "version": "1.0.0",
+  "description": "A UI dashboard to help manage my school notes, keep track of assignments, study time, maintenance, etc.",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SingularisArt/notes-manager.git"
+  },
+  "author": "Hashem A. Damrah",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SingularisArt/notes-manager/issues"
+  },
+  "homepage": "https://github.com/SingularisArt/notes-manager#readme",
+  "devDependencies": {
+    "electron": "^24.1.2"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
