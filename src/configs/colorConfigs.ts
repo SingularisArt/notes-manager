@@ -1,17 +1,15 @@
-import { colors } from "@mui/material";
-
 const colorConfigs = {
   sidebar: {
-    bg: "#233044",
-    color: "#eeeeee",
-    hoverBg: "#1e293a",
-    activeBg: "#1e253a"
+    bg: "#2C3F55",
+    color: "#EEEEEE",
+    hoverBg: "#33445A",
+    activeBg: "#33445A",
   },
   topbar: {
-    bg: "#fff",
-    color: "#000"
+    bg: "#EEEDEF",
+    color: "#000",
   },
-  mainBg: colors.grey["100"]
+  mainBg: "#F8F6F8",
 };
 
 export default colorConfigs;

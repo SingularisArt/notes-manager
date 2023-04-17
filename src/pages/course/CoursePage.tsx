@@ -4,10 +4,7 @@ import Box from "@mui/material/Box";
 import Item from "../../components/common/Item";
 import ItemTitle from "../../components/common/ItemTitle";
 
-// import LineChart from "../../components/common/Charts/LineChart";
-import AreaChart from "../../components/common/Charts/AreaChart";
-// import BarChart from "../../components/common/Charts/BarChart";
-// import PieChart from "../../components/common/Charts/PieChart";
+import LineChart from "../../components/common/Charts/LineChart";
 
 import "./CoursePage.css";
 
@@ -31,7 +28,7 @@ const CoursePage = () => {
               <ItemTitle title="Study Graph" />
 
               <div className="study-graph">
-                <AreaChart data={data} dataKey="Hours Studied" width={565} height={500} />
+                <LineChart data={data} dataKey="Hours Studied" width={565} height={500} stroke="#49B49D" legend={false} />
               </div>
             </Item>
           </Grid>
@@ -54,6 +51,11 @@ const CoursePage = () => {
           <Grid item xs={100}>
             <Item>
               <ItemTitle title="Figures" />
+            </Item>
+          </Grid>
+          <Grid item xs={100}>
+            <Item>
+              <ItemTitle title="Todos" />
             </Item>
           </Grid>
         </Grid>
