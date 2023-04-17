@@ -1,28 +1,13 @@
-// import { createRoot } from 'react-dom/client';
-// import App from './App';
-
-// const container = document.getElementById('root') as HTMLElement;
-// const root = createRoot(container);
-// root.render(<App />);
-
-// // calling IPC exposed from preload script
-// window.electron.ipcRenderer.once('ipc-example', (arg) => {
-//   // eslint-disable-next-line no-console
-//   console.log(arg);
-// });
-// window.electron.ipcRenderer.sendMessage('ipc-example', ['ping']);
-
-
-import { CssBaseline } from '@mui/material';
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
-import App from './App';
-import { store } from '../redux/store';
-import reportWebVitals from '../reportWebVitals';
+import { CssBaseline } from "@mui/material";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import App from "./App";
+import { store } from "../redux/store";
+import reportWebVitals from "../reportWebVitals";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>

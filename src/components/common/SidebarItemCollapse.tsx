@@ -2,8 +2,8 @@ import { Collapse, List, ListItemButton, ListItemIcon, ListItemText, Typography 
 import { useEffect, useState } from "react";
 import colorConfigs from "../../configs/colorConfigs";
 import { RouteType } from "../../routes/config";
-import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
-import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
+import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import SidebarItem from "./SidebarItem";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";

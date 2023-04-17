@@ -7,10 +7,10 @@ import CalendarPage from "../pages/calendar/CalendarPage";
 import CoursePage from "../pages/course/CoursePage";
 
 // Icons
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import MarkunreadOutlinedIcon from '@mui/icons-material/MarkunreadOutlined';
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
-import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined";
 
 const appRoutes: RouteType[] = [
   {

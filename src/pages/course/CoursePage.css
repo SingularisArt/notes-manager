@@ -4,3 +4,7 @@
   justify-content: space-between;
   height: 100%;
 }
+
+.study-graph {
+  margin-left: -50px;
+}

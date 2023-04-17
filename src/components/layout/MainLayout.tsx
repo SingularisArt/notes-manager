@@ -8,7 +8,7 @@ import Topbar from "../common/Topbar";
 const MainLayout = () => {
   return (
     <Box sx={{ display: "flex" }}>
-      <Topbar title="hi" />
+      <Topbar title="Course" />
       <Box
         component="nav"
         sx={{
