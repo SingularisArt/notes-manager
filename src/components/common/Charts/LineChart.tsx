@@ -7,7 +7,7 @@ const LineChart = ({ data, width=500, height=500, dataKey="line", stroke="#8884d
       <XAxis dataKey="name" />
       <YAxis />
       <CartesianGrid stroke="#ccc" />
-      // <Tooltip />
+      <Tooltip />
       {legend ? <Legend /> : null}
       <Line type="monotone" dataKey={dataKey} dot={dot} strokeWidth={strokeWidth} stroke={stroke} fill={fill}/>
     </LineComp>

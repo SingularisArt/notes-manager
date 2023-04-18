@@ -6,6 +6,8 @@ import ItemTitle from "../../components/common/ItemTitle";
 
 import LineChart from "../../components/common/Charts/LineChart";
 
+import Note from "../../components/common/Note";
+
 import "./CoursePage.css";
 
 const data = [
@@ -18,6 +20,13 @@ const data = [
   { name: "Sun", ["Hours Studied"]: 8 },
 ];
 
+const noteData = [
+  { name: "Lec 1", tex_path: "/home/singularis/", pdf_path: "/home/singularis/", tex: true, pdf: false },
+  { name: "Lec 2", tex_path: "/home/singularis/", pdf_path: "/home/singularis/", tex: true, pdf: true },
+  { name: "Lec 3", tex_path: "/home/singularis/", pdf_path: "/home/singularis/", tex: false, pdf: true },
+  { name: "Lec 4", tex_path: "/home/singularis/", pdf_path: "/home/singularis/", tex: false, pdf: false },
+];
+
 const CoursePage = () => {
   return (
     <>
@@ -28,7 +37,7 @@ const CoursePage = () => {
               <ItemTitle title="Study Graph" />
 
               <div className="study-graph">
-                <LineChart data={data} dataKey="Hours Studied" width={565} height={500} stroke="#49B49D" legend={false} />
+                <LineChart data={data} dataKey="Hours Studied" width={540} height={540} stroke="#49B49D" legend={false} />
               </div>
             </Item>
           </Grid>
@@ -41,6 +50,8 @@ const CoursePage = () => {
           <Grid item xs={6}>
             <Item className="card-container">
               <ItemTitle title="Notes" />
+
+              <Note data={noteData} />
             </Item>
           </Grid>
           <Grid item xs={6}>
