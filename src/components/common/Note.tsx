@@ -3,10 +3,10 @@ import React from "react";
 import TEXSymbol from "./Symbols/TEX";
 import PDFSymbol from "./Symbols/PDF";
 
-import { spawn } from "child_process";
+import SubItemTitle from "./SubItemTitle";
 
 type NoteProp = {
-  data?: {
+  data: {
     name: string;
     tex_path: string;
     pdf_path: string;
@@ -15,44 +15,26 @@ type NoteProp = {
   }[];
 };
 
-function openPDF(path: string): void {
-  const child = spawn("zathura", [path]);
-
-  child.stdout.on("data", (data) => {
-    console.log(`stdout: ${data}`);
-  });
-
-  child.stderr.on("data", (data) => {
-    console.error(`stderr: ${data}`);
-  });
-
-  child.on("close", (code) => {
-    console.log(`child process exited with code ${code}`);
-  });
-};
-
-const openTEX = () => {
-  console.log("Button clicked!");
-};
+function sendData(path: string): void { console.log(path); }
 
 const Note: React.FC<NoteProp> = ({ data }) => {
   if (!data) {
     return (
-      <div style={{ color: "#9E9C9E" }}>No Lecture Notes</div>
+      <div style={{ paddingTop: "20px" }}>
+        <SubItemTitle title="No Lecture Notes" />
+      </div>
     );
   };
 
   return (
     <div style={{ lineHeight: 2.5 }}>
-      <div style={{ fontSize: "17px", color: "#9E9C9E" }}>
-        Lecture Notes
-      </div>
+      <SubItemTitle title="Lecture Notes" />
 
       <table style={{ width: "100%" }}>
         <tbody>
           {data.map((note) => (
             <tr key={note.name}>
-              <td>{note.name}</td>
+              <td style={{ paddingLeft: "25px" }}>{note.name}</td>
               <td style={{ textAlign: "right" }}>
                 <span>
                   {note.pdf &&
@@ -61,11 +43,11 @@ const Note: React.FC<NoteProp> = ({ data }) => {
                         paddingRight: (note.pdf && note.tex) ? "10px" : "0px",
                         verticalAlign: "middle"
                       }}>
-                      <PDFSymbol onClick={() => openPDF(note.pdf_path)} />
+                      <PDFSymbol onClick={() => sendData(note.pdf_path)} />
                     </span>}
                   {note.tex &&
                     <span style={{ verticalAlign: "middle" }}>
-                      <TEXSymbol onClick={openTEX} />
+                      <TEXSymbol onClick={() => sendData(note.tex_path)} />
                     </span>}
                 </span>
               </td>
