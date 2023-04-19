@@ -17,7 +17,7 @@ type ExamProp = {
 };
 
 const ToggleButtons = () => {
-  const [selectedValue, setSelectedValue] = useState('none');
+  const [selectedValue, setSelectedValue] = useState("none");
 
   const handleButtonSelect = (value: string) => {
     setSelectedValue(value);
@@ -83,7 +83,7 @@ const Exam: React.FC<ExamProp> = ({ data }) => {
                       <tr key={section.name}>
                         <td style={{ paddingLeft: "25px" }}>{section.name}</td>
                         <td style={{ textAlign: "center" }}><ToggleButtons /></td>
-                        <td style={{ textAlign: "right" }}>Date</td>
+                        <td style={{ textAlign: "right" }}></td>
                       </tr>
                     ))}
                   </tbody>

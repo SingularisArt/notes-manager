@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-type Props = {};
+type CalendarProps = {};
 
-const CalendarPage = (props: Props) => {
+const CalendarPage: React.FC<CalendarProps> = () => {
   return (
     <div>HomePage</div>
   );

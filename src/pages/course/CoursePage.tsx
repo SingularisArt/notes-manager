@@ -33,16 +33,6 @@ const noteData = [
   { name: "Lec 8", tex_path: "", pdf_path: "", tex: true, pdf: false },
   { name: "Lec 9", tex_path: "", pdf_path: "", tex: true, pdf: false },
   { name: "Lec 10", tex_path: "", pdf_path: "", tex: true, pdf: true },
-  { name: "Lec 11", tex_path: "", pdf_path: "", tex: true, pdf: false },
-  { name: "Lec 12", tex_path: "", pdf_path: "", tex: true, pdf: true },
-  { name: "Lec 13", tex_path: "", pdf_path: "", tex: true, pdf: false },
-  { name: "Lec 14", tex_path: "", pdf_path: "", tex: true, pdf: false },
-  { name: "Lec 15", tex_path: "", pdf_path: "", tex: true, pdf: true },
-  { name: "Lec 16", tex_path: "", pdf_path: "", tex: true, pdf: false },
-  { name: "Lec 17", tex_path: "", pdf_path: "", tex: true, pdf: true },
-  { name: "Lec 18", tex_path: "", pdf_path: "", tex: true, pdf: false },
-  { name: "Lec 19", tex_path: "", pdf_path: "", tex: true, pdf: true },
-  { name: "Lec 20", tex_path: "", pdf_path: "", tex: true, pdf: true },
 ];
 
 const examData = [
@@ -57,39 +47,16 @@ const examData = [
       { name: "Section 7", status: 1 },
       { name: "Section 8", status: 1 },
       { name: "Section 9", status: 1 },
-    ],
-  },
-  {
-    name: "Exam 2", date: "2023-03-01", sections: [
       { name: "Section 10", status: 1 },
-      { name: "Section 11", status: 1 },
-      { name: "Section 12", status: 1 },
-      { name: "Section 13", status: 1 },
-      { name: "Section 14", status: 1 },
-      { name: "Section 15", status: 1 },
-      { name: "Section 16", status: 1 },
-      { name: "Section 17", status: 1 },
-      { name: "Section 18", status: 1 },
-      { name: "Section 19", status: 1 },
-    ],
-  },
-  {
-    name: "Exam 3", date: "2023-03-01", sections: [
-      { name: "Section 20", status: 1 },
-      { name: "Section 21", status: 1 },
-      { name: "Section 22", status: 1 },
-      { name: "Section 23", status: 1 },
-      { name: "Section 24", status: 1 },
-      { name: "Section 25", status: 1 },
-      { name: "Section 26", status: 1 },
-      { name: "Section 27", status: 1 },
-      { name: "Section 28", status: 1 },
-      { name: "Section 29", status: 1 },
     ],
   },
 ];
 
-const CoursePage = () => {
+type CoursePageProps = {
+  course: string;
+};
+
+const CoursePage: React.FC<CoursePageProps> = ({ course }) => {
   return (
     <>
       <Box sx={{ width: "100%" }}>
