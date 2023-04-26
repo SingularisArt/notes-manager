@@ -7,9 +7,10 @@ const colorConfigs = {
   },
   topbar: {
     bg: "#EEEDEF",
-    color: "#000",
+    color: "#000000",
   },
   mainBg: "#F8F6F8",
+  addButton: "#4051B7"
 };
 
 export default colorConfigs;

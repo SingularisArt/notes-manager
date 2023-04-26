@@ -1,8 +1,8 @@
-import { Routes, Route, HashRouter } from "react-router-dom";
-import MainLayout from "../components/layout/MainLayout";
-import { routes } from "../routes";
+import { Routes, Route, HashRouter } from 'react-router-dom';
+import MainLayout from '../components/layout/MainLayout';
+import { routes } from '../routes';
 
-import "./App.css";
+import './App.css';
 
 function App() {
   return (
