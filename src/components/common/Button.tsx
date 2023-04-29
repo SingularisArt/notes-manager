@@ -1,28 +1,24 @@
-import React from "react";
-import ToggleButton from "@mui/material/ToggleButton";
+import React from 'react';
+import ToggleButton from '@mui/material/ToggleButton';
 
 interface ButtonProps {
   value: string;
   label?: string;
-  color?: string;
-  selectedColor?: string;
-  onButtonSelect?: (value: string) => void;
+  onClick?: (value: string) => void;
   selectedValue: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
   value,
   label,
-  color,
-  selectedColor,
-  onButtonSelect,
-  selectedValue
+  onClick,
+  selectedValue,
 }) => {
   const handleButtonClick = () => {
     if (selectedValue === value) {
-      if (onButtonSelect) onButtonSelect("none");
+      if (onClick) onClick('none');
     } else {
-      if (onButtonSelect) onButtonSelect(value);
+      if (onClick) onClick(value);
     }
   };
 
@@ -30,17 +26,16 @@ const Button: React.FC<ButtonProps> = ({
     <ToggleButton
       value={value}
       key={value}
+      selected={selectedValue === value}
+      color="primary"
       style={{
-        border: `2px solid ${color}`,
-        borderRadius: "10px",
-        color: selectedValue === value ? "white" : color,
-        backgroundColor: selectedValue === value ? selectedColor : "white",
-        marginLeft: value !== "master" ? "10px" : "0",
-        marginRight: value !== "none" ? "10px" : "0",
+        borderRadius: '10px',
+        marginLeft: value !== 'master' ? '10px' : '0',
+        marginRight: value !== 'none' ? '10px' : '0',
       }}
       onClick={handleButtonClick}
     >
-      <div style={{ fontSize: "10px" }}>{label}</div>
+      <div style={{ fontSize: '12px' }}>{label}</div>
     </ToggleButton>
   );
 };

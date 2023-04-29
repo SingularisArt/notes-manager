@@ -1,16 +1,73 @@
-import "react";
-import { LineChart as LineComp, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import React from 'react';
+import {
+  Category,
+  ChartComponent,
+  ColumnSeries,
+  DataLabel,
+  Inject,
+  LineSeries,
+  SeriesCollectionDirective,
+  SeriesDirective,
+  Legend,
+  AxisModel,
+  ValueType,
+} from '@syncfusion/ej2-react-charts';
 
-const LineChart = ({ data, width=500, height=500, dataKey="line", stroke="#8884d8", fill="#8884d8", strokeWidth=3, dot=false, legend=true }) => {
+type LineChartProps = {
+  data: {
+    day: string;
+    hour: number;
+  }[];
+  id?: string;
+  height?: string;
+  width?: number;
+  thickness?: number;
+  xAxis: ValueType;
+  yAxis: ValueType;
+  name: string;
+  xName: string;
+  yName: string;
+  marker?: AxisModel;
+  legend?: AxisModel;
+};
+
+const LineChart: React.FC<LineChartProps> = ({
+  data,
+  id = '',
+  height = '450px',
+  width = 0,
+  thickness=3,
+  xAxis,
+  yAxis,
+  name,
+  xName,
+  yName,
+  marker = { dataLabel: { visible: false } },
+  legend = { visible: false },
+}) => {
   return (
-    <LineComp width={width} height={height} data={data}>
-      <XAxis dataKey="name" />
-      <YAxis />
-      <CartesianGrid stroke="#ccc" />
-      <Tooltip />
-      {legend ? <Legend /> : null}
-      <Line type="monotone" dataKey={dataKey} dot={dot} strokeWidth={strokeWidth} stroke={stroke} fill={fill}/>
-    </LineComp>
+    <ChartComponent
+      id={id}
+      height={height}
+      chartArea={{ border: { width: width } }}
+      primaryXAxis={xAxis}
+      primaryYAxis={yAxis}
+      legendSettings={legend}
+    >
+      <Inject
+        services={[ColumnSeries, DataLabel, LineSeries, Category, Legend]}
+      />
+      <SeriesCollectionDirective>
+        <SeriesDirective
+          dataSource={data}
+          xName={xName}
+          yName={yName}
+          name={name}
+          marker={marker}
+          width={thickness}
+        />
+      </SeriesCollectionDirective>
+    </ChartComponent>
   );
 };
 

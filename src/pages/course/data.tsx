@@ -1,178 +1,183 @@
+import { ValueType } from '@syncfusion/ej2-react-charts';
+
 export const graphData = [
-  { name: 'Mon', ['Hours Studied']: 1 },
-  { name: 'Tue', ['Hours Studied']: 3 },
-  { name: 'Wed', ['Hours Studied']: 4 },
-  { name: 'Thu', ['Hours Studied']: 5 },
-  { name: 'Fri', ['Hours Studied']: 2 },
-  { name: 'Sat', ['Hours Studied']: 4 },
-  { name: 'Sun', ['Hours Studied']: 8 },
+  { day: 'Mon', hour: 5 },
+  { day: 'Tue', hour: 3 },
+  { day: 'Wed', hour: 7 },
+  { day: 'Thu', hour: 4 },
+  { day: 'Fri', hour: 9 },
+  { day: 'Sat', hour: 1 },
+  { day: 'Sun', hour: 0 },
 ];
+
+export const xAxis = { valueType: 'Category' as ValueType };
+export const yAxis = { labelFormat: '{value} hr' as ValueType };
 
 export const noteData = [
   {
     name: 'Master',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: true,
     pdf: true,
     type: 'lecture',
   },
   {
     name: 'Lecture 1',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: true,
     pdf: false,
     type: 'lecture',
   },
   {
     name: 'Lecture 2',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: true,
     pdf: true,
     type: 'lecture',
   },
   {
     name: 'Lecture 3',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: true,
     pdf: true,
     type: 'lecture',
   },
   {
     name: 'Lecture 4',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: true,
     pdf: false,
     type: 'lecture',
   },
   {
     name: 'Lecture 5',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: true,
     pdf: true,
     type: 'lecture',
   },
   {
     name: 'Lecture 6',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: true,
     pdf: true,
     type: 'lecture',
   },
   {
     name: 'Lecture 7',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: true,
     pdf: true,
     type: 'lecture',
   },
   {
     name: 'Lecture 8',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: true,
     pdf: false,
     type: 'lecture',
   },
   {
     name: 'Lecture 9',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: true,
     pdf: false,
     type: 'lecture',
   },
   {
     name: 'Lecture 10',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: true,
     pdf: true,
     type: 'lecture',
   },
   {
     name: 'Lecture 1',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: false,
     pdf: true,
     type: 'online',
   },
   {
     name: 'Lecture 2',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: false,
     pdf: true,
     type: 'online',
   },
   {
     name: 'Lecture 3',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: false,
     pdf: true,
     type: 'online',
   },
   {
     name: 'Lecture 4',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: false,
     pdf: true,
     type: 'online',
   },
   {
     name: 'Lecture 5',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: false,
     pdf: true,
     type: 'online',
   },
   {
     name: 'Lecture 6',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: false,
     pdf: true,
     type: 'online',
   },
   {
     name: 'Lecture 7',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: false,
     pdf: true,
     type: 'online',
   },
   {
     name: 'Lecture 8',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: false,
     pdf: true,
     type: 'online',
   },
   {
     name: 'Lecture 9',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: false,
     pdf: true,
     type: 'online',
   },
   {
     name: 'Lecture 10',
-    tex_path: '',
-    pdf_path: '',
+    texPath: '',
+    pdfPath: '',
     tex: false,
     pdf: true,
     type: 'online',
@@ -182,7 +187,7 @@ export const noteData = [
 export const examData = [
   {
     name: 'Exam 1',
-    due_date: '2023-04-20',
+    dueDate: '2023-04-20',
     grade: '100%',
     sections: [
       { name: 'Section 1', status: 2 },
@@ -199,7 +204,7 @@ export const examData = [
   },
   {
     name: 'Exam 2',
-    due_date: '2023-05-27',
+    dueDate: '2023-05-27',
     grade: 'NA',
     sections: [
       { name: 'Section 11', status: 0 },
@@ -216,57 +221,106 @@ export const examData = [
 ];
 
 export const assignmentData = [
-  { name: 'Graded Assignment 1', submitted: true, due_date: '2023-04-25' },
-  { name: 'Graded Assignment 2', submitted: false, due_date: '2023-04-25' },
-  { name: 'Graded Assignment 3', submitted: true, due_date: '2023-04-25' },
-  { name: 'Graded Assignment 4', submitted: false, due_date: '2023-04-25' },
-  { name: 'Graded Assignment 5', submitted: true, due_date: '2023-04-25' },
-  { name: 'Graded Assignment 6', submitted: false, due_date: '2023-04-25' },
-  { name: 'Graded Assignment 7', submitted: false, due_date: '2023-04-25' },
-  { name: 'Graded Assignment 8', submitted: false, due_date: '2023-04-25' },
-  { name: 'Graded Assignment 9', submitted: true, due_date: '2023-04-25' },
-  { name: 'Graded Assignment 10', submitted: true, due_date: '2023-04-25' },
+  {
+    name: 'Graded Assignment 1',
+    submitted: true,
+    dueDate: '2023-03-01',
+    grade: '100',
+  },
+  {
+    name: 'Graded Assignment 2',
+    submitted: true,
+    dueDate: '2023-03-02',
+    grade: 'NA',
+  },
+  {
+    name: 'Graded Assignment 3',
+    submitted: true,
+    dueDate: '2023-03-03',
+    grade: 'NA',
+  },
+  {
+    name: 'Graded Assignment 4',
+    submitted: true,
+    dueDate: '2023-03-04',
+    grade: 'NA',
+  },
+  {
+    name: 'Graded Assignment 5',
+    submitted: false,
+    dueDate: '2023-04-27',
+    grade: 'NA',
+  },
+  {
+    name: 'Graded Assignment 6',
+    submitted: false,
+    dueDate: '2023-04-02',
+    grade: 'NA',
+  },
+  {
+    name: 'Graded Assignment 7',
+    submitted: false,
+    dueDate: '2023-04-03',
+    grade: 'NA',
+  },
+  {
+    name: 'Graded Assignment 8',
+    submitted: false,
+    dueDate: '2023-05-04',
+    grade: 'NA',
+  },
+  {
+    name: 'Graded Assignment 9',
+    submitted: false,
+    dueDate: '2023-05-05',
+    grade: 'NA',
+  },
+  {
+    name: 'Graded Assignment 10',
+    submitted: false,
+    dueDate: '2023-05-06',
+    grade: 'NA',
+  },
 ];
 
 export const figureData = [
   {
     title: 'Figure 1',
-    figure_path:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
+    figurePath: '../../data/figures/antipode-preserving-maps.svg',
   },
   {
     title: 'Figure 2',
-    figure_path:
+    figurePath:
       'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
   },
   {
     title: 'Figure 3',
-    figure_path:
+    figurePath:
       'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
   },
   {
     title: 'Figure 4',
-    figure_path:
+    figurePath:
       'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
   },
   {
     title: 'Figure 5',
-    figure_path:
+    figurePath:
       'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
   },
   {
     title: 'Figure 6',
-    figure_path:
+    figurePath:
       'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
   },
   {
     title: 'Figure 7',
-    figure_path:
+    figurePath:
       'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
   },
   {
     title: 'Figure 8',
-    figure_path:
+    figurePath:
       'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
   },
 ];

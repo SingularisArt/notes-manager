@@ -8,8 +8,8 @@ import SubItemTitle from "../../../components/common/SubItemTitle";
 type NoteProp = {
   data: {
     name: string;
-    tex_path: string;
-    pdf_path: string;
+    texPath: string;
+    pdfPath: string;
     tex: boolean;
     pdf: boolean;
     type: string;
@@ -33,11 +33,11 @@ const DisplayNotes: React.FC<NoteProp> = ({ data }) => {
                       paddingRight: (note.pdf && note.tex) ? "10px" : "0px",
                       verticalAlign: "middle"
                     }}>
-                    <PDFSymbol onClick={() => sendData(note.pdf_path)} />
+                    <PDFSymbol onClick={() => sendData(note.pdfPath)} />
                   </span>}
                 {note.tex &&
                   <span style={{ verticalAlign: "middle" }}>
-                    <TEXSymbol onClick={() => sendData(note.tex_path)} />
+                    <TEXSymbol onClick={() => sendData(note.texPath)} />
                   </span>}
               </span>
             </td>

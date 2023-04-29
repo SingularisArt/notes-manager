@@ -120,6 +120,7 @@
     "react-icons": "^4.8.0",
     "react-rainbow-components": "^1.32.0",
     "react-router-dom": "^6.8.1",
+    "react-svg": "^16.1.9",
     "recharts": "^2.5.0"
   },
   "devDependencies": {

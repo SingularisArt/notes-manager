@@ -4,18 +4,20 @@ import Box from '@mui/material/Box';
 import Item from '../../components/common/Item';
 import ItemTitle from '../../components/common/ItemTitle';
 
-import LineChart from '../../components/common/Charts/LineChart';
-
 import WeekCounter from '../../components/common/WeekCounter';
 
+import Graph from './Sections/Graph';
 import Exam from './Sections/Exam';
 import Note from './Sections/Note';
 import Assignment from './Sections/Assignment';
-import Figure from './Sections/Figure';
+import Figure from './Sections/Figure/Figure';
 import Todos from './Sections/Todos';
 
 import {
   graphData,
+  xAxis,
+  yAxis,
+  tooltip,
   noteData,
   examData,
   assignmentData,
@@ -31,20 +33,24 @@ const CoursePage = () => {
     <>
       <Box sx={{ width: '100%' }}>
         <Grid container rowSpacing={1.2} columnSpacing={1.2}>
-          <Grid item xs={6}>
+          <Grid item xs={100}>
             <Item className="card-container">
               <ItemTitle title="Study Graph" settingIcon={false} />
 
-              <div className="study-graph">
-                <LineChart
-                  data={graphData}
-                  dataKey="Hours Studied"
-                  width={540}
-                  height={540}
-                  stroke="#49B49D"
-                  legend={false}
-                />
-              </div>
+              <Graph
+                data={graphData}
+                height="450px"
+                xAxis={xAxis}
+                yAxis={yAxis}
+                name="Study Graph"
+                xName="day"
+                yName="hour"
+              />
+            </Item>
+          </Grid>
+          <Grid item xs={6}>
+            <Item className="card-container">
+              <ItemTitle title="Announcments" />
             </Item>
           </Grid>
           <Grid item xs={6}>

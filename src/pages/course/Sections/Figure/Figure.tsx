@@ -1,14 +1,15 @@
 import React from "react";
-import "./FigureCard.css";
 
-type FigureCardProps = {
-  cards: {
+import "./Figure.css";
+
+type FigureProps = {
+  data: {
     title: string;
-    figure_path: string;
+    figurePath: string;
   }[];
 };
 
-const FigureCard: React.FC<FigureCardProps> = ({ cards }) => {
+const Figure: React.FC<FigureProps> = ({ data }) => {
   return (
     <>
       <div className="create-card">
@@ -19,10 +20,13 @@ const FigureCard: React.FC<FigureCardProps> = ({ cards }) => {
       </div>
 
       <div className="card-grid">
-        {cards.map((card, index) => (
+        {data.map((card, index) => (
           <div key={index} className="card" style={{ gridRowStart: index === 0 ? "1" : "auto" }}>
             <div className="card-title">{card.title}</div>
-            <div className="card-content"></div>
+            <div className="card-content">
+
+              <img src={card.figurePath} alt={card.title}/>
+            </div>
           </div>
         ))}
       </div>
@@ -30,4 +34,4 @@ const FigureCard: React.FC<FigureCardProps> = ({ cards }) => {
   );
 };
 
-export default FigureCard;
+export default Figure;
