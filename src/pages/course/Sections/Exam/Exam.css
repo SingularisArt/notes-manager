@@ -1,0 +1,7 @@
+/* To change color, font family and font size */
+.e-inplaceeditor .e-editable-value-wrapper .e-editable-value {
+    border-bottom: 2px dotted green;
+    color: red;
+    font-size: 12px;
+    font-family: Segoe UI
+}

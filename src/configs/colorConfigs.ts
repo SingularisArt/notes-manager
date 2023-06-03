@@ -4,6 +4,7 @@ const colorConfigs = {
     color: "#EEEEEE",
     hoverBg: "#33445A",
     activeBg: "#33445A",
+    headingBg: "#8A8A8A",
   },
   topbar: {
     bg: "#EEEDEF",

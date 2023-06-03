@@ -7,7 +7,7 @@ import ItemTitle from '../../components/common/ItemTitle';
 import WeekCounter from '../../components/common/WeekCounter';
 
 import Graph from './Sections/Graph';
-import Exam from './Sections/Exam';
+import Exam from './Sections/Exam/Exam';
 import Note from './Sections/Note';
 import Assignment from './Sections/Assignment';
 import Figure from './Sections/Figure/Figure';
@@ -31,9 +31,9 @@ import './CoursePage.css';
 const CoursePage = () => {
   return (
     <>
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: "100%" }}>
         <Grid container rowSpacing={1.2} columnSpacing={1.2}>
-          <Grid item xs={100}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
             <Item className="card-container">
               <ItemTitle title="Study Graph" settingIcon={false} />
 
@@ -48,40 +48,38 @@ const CoursePage = () => {
               />
             </Item>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
             <Item className="card-container">
               <ItemTitle title="Announcments" />
             </Item>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
             <Item className="card-container">
-              <ItemTitle title="Exams" />
-
               <Exam data={examData} />
             </Item>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
             <Item className="card-container">
               <ItemTitle title="Notes" />
 
               <Note data={noteData} />
             </Item>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={12} md={6} lg={6}>
             <Item className="card-container">
               <ItemTitle title="Assignments" />
 
               <Assignment data={assignmentData} />
             </Item>
           </Grid>
-          <Grid item xs={100}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
             <Item>
               <ItemTitle title="Figures" />
 
               <Figure data={figureData} />
             </Item>
           </Grid>
-          <Grid item xs={100}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
             <Item>
               <ItemTitle title="Todos" settingIcon={false} />
 
@@ -91,7 +89,7 @@ const CoursePage = () => {
         </Grid>
       </Box>
 
-      <div style={{ height: '30px' }}></div>
+      <div style={{ height: "30px" }}></div>
 
       <WeekCounter currentWeek={1} maxWeeks={12} />
     </>

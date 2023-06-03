@@ -20,7 +20,7 @@ const appRoutes: RouteType[] = [
     state: "home",
     sidebarProps: {
       displayText: "Home",
-      icon: <HomeOutlinedIcon />
+      icon: <HomeOutlinedIcon />,
     }
   },
   {
@@ -29,7 +29,7 @@ const appRoutes: RouteType[] = [
     state: "email",
     sidebarProps: {
       displayText: "Email",
-      icon: <MarkunreadOutlinedIcon />
+      icon: <MarkunreadOutlinedIcon />,
     }
   },
   {
@@ -38,17 +38,43 @@ const appRoutes: RouteType[] = [
     state: "calendar",
     sidebarProps: {
       displayText: "Calendar",
-      icon: <CalendarMonthOutlinedIcon />
+      icon: <CalendarMonthOutlinedIcon />,
     }
   },
   {
-    path: "/course",
-    element: <CoursePage />,
-    state: "course",
     sidebarProps: {
       displayText: "Course",
-      icon: <ClassOutlinedIcon />
-    }
+      icon: <ClassOutlinedIcon />,
+    },
+    child: [
+      {
+        path: "/course/mth-253",
+        element: <CoursePage />,
+        state: "mth-253",
+        sidebarProps: {
+          displayText: "MTH-253",
+          icon: <CalendarMonthOutlinedIcon />,
+        },
+      },
+      {
+        path: "/course/phy-123",
+        element: <CoursePage />,
+        state: "phy-123",
+        sidebarProps: {
+          displayText: "PHY-123",
+          icon: <CalendarMonthOutlinedIcon />,
+        }
+      },
+      {
+        path: "/course/PSY-202a",
+        element: <CoursePage />,
+        state: "psy-202a",
+        sidebarProps: {
+          displayText: "PSY-202A",
+          icon: <CalendarMonthOutlinedIcon />,
+        }
+      },
+    ],
   },
 ];
 

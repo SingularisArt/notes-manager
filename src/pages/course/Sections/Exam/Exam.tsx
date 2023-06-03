@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import Stack from '@mui/material/Stack';
 
+import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
+import { InPlaceEditorComponent } from '@syncfusion/ej2-react-inplace-editor';
+
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
-import SubItemTitle from '../../../components/common/SubItemTitle';
-import Button from '../../../components/common/Button';
+import ItemTitle from '../../../../components/common/ItemTitle';
 
-import colorConfigs from '../../../configs/colorConfigs';
+import SubItemTitle from '../../../../components/common/SubItemTitle';
+import Button from '../../../../components/common/Button';
+
+import './Exam.css';
+
+import colorConfigs from '../../../../configs/colorConfigs';
 
 type ExamProp = {
   data: {
@@ -168,7 +175,26 @@ const DisplayExam: React.FC<DisplayExamProp> = ({
   data,
   date = true,
   grade = false,
+  editMode = false,
 }) => {
+  const handleExamTitleChange = (examIndex: number, newTitle: string) => {};
+
+  const handleExamScoreChange = (examIndex: number, newScore: string) => {};
+
+  const handleSectionTitleChange = (examIndex: number, sectionIndex: number, newTitle: string) => {};
+
+  const handleDeleteExam = (examIndex: number) => {};
+
+  const handleDeleteSection = (examIndex: number, sectionIndex: number) => {};
+
+  const handleCreateExam = (examIndex: number, title: string) => {};
+
+  const handleCreateSection = (examIndex: number, title: string) => {};
+
+  const elementModel = { placeholder: "Enter your name" };
+  const statusOptions = ["Master", "Noob", "None"];
+  const statusModel = { dataSource: statusOptions };
+
   return (
     <table style={{ width: '100%' }}>
       <tbody>
@@ -182,23 +208,59 @@ const DisplayExam: React.FC<DisplayExamProp> = ({
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div style={{ fontWeight: 'bold' }}>{exam.name}</div>
-                {date === true ? (
-                  <div>{DisplayDate(exam.dueDate)}</div>
+                <div style={{ fontWeight: 'bold' }}>
+                  {/* {exam.name} */}
+                  <InPlaceEditorComponent
+                    type='Text'
+                    mode='Inline'
+                    id='examName'
+                    data-underline={false}
+                    value={exam.name}
+                  />
+                </div>
+                {date ? (
+                  <div>
+                    {editMode ? DisplayDate(exam.dueDate) : (
+                      <></>
+                    )}
+                  </div>
                 ) : (
-                  <></>
-                )}
+                    <></>
+                  )}
                 {grade === true ? <div>{exam.grade}</div> : <></>}
               </div>
               <table style={{ width: '100%' }}>
                 <tbody>
-                  {exam.sections.map((section) => (
+                  {exam.sections.map((section, sectionIndex) => (
                     <tr key={section.name}>
-                      <td style={{ paddingLeft: '25px' }}>{section.name}</td>
-                      <td style={{ textAlign: 'center' }}>
-                        <ToggleButtons toggle={section.status} />
+                      <td style={{ paddingLeft: '25px', textAlign: 'left' }}>
+                        <InPlaceEditorComponent
+                          type='Text'
+                          mode='Inline'
+                          id='sectionName'
+                          data-underline={false}
+                          value={section.name}
+                        />
                       </td>
-                      <td style={{ textAlign: 'right' }}></td>
+                      <td style={{ textAlign: 'center' }}>
+                        <InPlaceEditorComponent
+                          type='DropDownList'
+                          mode='Inline'
+                          id='sectionStatus'
+                          data-underline={false}
+                          value={statusOptions[section.status]}
+                          model={statusModel}
+                        />
+                      </td>
+                      <td style={{ textAlign: 'right' }}>
+                        <InPlaceEditorComponent
+                          type='Date'
+                          mode='Inline'
+                          id='sectionDate'
+                          data-underline={false}
+                          value={new Date(section.date)}
+                        />
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -212,6 +274,8 @@ const DisplayExam: React.FC<DisplayExamProp> = ({
 };
 
 const Exam: React.FC<ExamProp> = ({ data }) => {
+  const [editMode, setMode] = useState(false);
+
   if (data.length === 0) {
     return (
       <div style={{ paddingTop: '20px' }}>
@@ -228,23 +292,27 @@ const Exam: React.FC<ExamProp> = ({ data }) => {
   );
 
   return (
-    <div style={{ lineHeight: 2.5 }}>
-      <SubItemTitle title="Future Exams" />
+    <>
+      <ItemTitle title="Exams" onIconClick={() => setMode(!editMode) } />
 
-      {futureExams.length === 0 ? (
-        <div>No future exams.</div>
-      ) : (
-        DisplayExam({ data: futureExams })
-      )}
+      <div style={{ lineHeight: 2.5 }}>
+        <SubItemTitle title="Future Exams" />
 
-      <SubItemTitle title="Past Exams" />
+        {futureExams.length === 0 ? (
+          <div>No future exams.</div>
+        ) : (
+          <DisplayExam data={futureExams} editMode={editMode} />
+        )}
 
-      {pastExams.length === 0 ? (
-        <div>No past exams.</div>
-      ) : (
-        DisplayExam({ data: pastExams, date: false, grade: true })
-      )}
-    </div>
+        <SubItemTitle title="Past Exams" />
+
+        {pastExams.length === 0 ? (
+          <div>No past exams.</div>
+        ) : (
+          <DisplayExam data={pastExams} date={false} grade={true} editMode={editMode} />
+        )}
+      </div>
+    </>
   );
 };
 

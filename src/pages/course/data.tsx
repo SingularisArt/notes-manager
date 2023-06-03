@@ -190,16 +190,16 @@ export const examData = [
     dueDate: '2023-04-20',
     grade: '100%',
     sections: [
-      { name: 'Section 1', status: 2 },
-      { name: 'Section 2', status: 2 },
-      { name: 'Section 3', status: 2 },
-      { name: 'Section 4', status: 2 },
-      { name: 'Section 5', status: 2 },
-      { name: 'Section 6', status: 2 },
-      { name: 'Section 7', status: 2 },
-      { name: 'Section 8', status: 2 },
-      { name: 'Section 9', status: 2 },
-      { name: 'Section 10', status: 2 },
+      { name: 'Section 1', status: 2, date: '2023-04-20' },
+      { name: 'Section 2', status: 2, date: '2023-04-20' },
+      { name: 'Section 3', status: 2, date: '2023-04-20' },
+      { name: 'Section 4', status: 2, date: '2023-04-20' },
+      { name: 'Section 5', status: 2, date: '2023-04-20' },
+      { name: 'Section 6', status: 2, date: '2023-04-20' },
+      { name: 'Section 7', status: 2, date: '2023-04-20' },
+      { name: 'Section 8', status: 2, date: '2023-04-20' },
+      { name: 'Section 9', status: 2, date: '2023-04-20' },
+      { name: 'Section 10', status: 2, date: '2023-04-20' },
     ],
   },
   {
@@ -207,15 +207,15 @@ export const examData = [
     dueDate: '2023-05-27',
     grade: 'NA',
     sections: [
-      { name: 'Section 11', status: 0 },
-      { name: 'Section 12', status: 0 },
-      { name: 'Section 13', status: 0 },
-      { name: 'Section 14', status: 0 },
-      { name: 'Section 15', status: 0 },
-      { name: 'Section 16', status: 0 },
-      { name: 'Section 17', status: 0 },
-      { name: 'Section 18', status: 0 },
-      { name: 'Section 19', status: 0 },
+      { name: 'Section 11', status: 0, date: '2023-04-20' },
+      { name: 'Section 12', status: 0, date: '2023-04-20' },
+      { name: 'Section 13', status: 0, date: '2023-04-20' },
+      { name: 'Section 14', status: 0, date: '2023-04-20' },
+      { name: 'Section 15', status: 0, date: '2023-04-20' },
+      { name: 'Section 16', status: 0, date: '2023-04-20' },
+      { name: 'Section 17', status: 0, date: '2023-04-20' },
+      { name: 'Section 18', status: 0, date: '2023-04-20' },
+      { name: 'Section 19', status: 0, date: '2023-04-20' },
     ],
   },
 ];
@@ -290,38 +290,31 @@ export const figureData = [
   },
   {
     title: 'Figure 2',
-    figurePath:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
+    figurePath: '',
   },
   {
     title: 'Figure 3',
-    figurePath:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
+    figurePath: '',
   },
   {
     title: 'Figure 4',
-    figurePath:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
+    figurePath: '',
   },
   {
     title: 'Figure 5',
-    figurePath:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
+    figurePath: '',
   },
   {
     title: 'Figure 6',
-    figurePath:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
+    figurePath: '',
   },
   {
     title: 'Figure 7',
-    figurePath:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
+    figurePath: '',
   },
   {
     title: 'Figure 8',
-    figurePath:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.',
+    figurePath: '',
   },
 ];
 
