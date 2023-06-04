@@ -1,8 +1,12 @@
+import Topbar from "../../components/common/Topbar";
+
 type Props = {};
 
 const EmailPage = (props: Props) => {
   return (
-    <div>HomePage</div>
+    <div>
+      <Topbar title="Email" />
+    </div>
   );
 };
 

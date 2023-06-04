@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import { ValueType } from '@syncfusion/ej2-react-charts';
+import { ValueType } from "@syncfusion/ej2-react-charts";
 
-import LineChart from '../../../components/common/Charts/LineChart';
+import LineChart from "../../../components/common/Charts/LineChart";
 
 type GraphProp = {
   data: {

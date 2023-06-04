@@ -1,5 +1,3 @@
-import { RouteType } from "./config";
-
 // Pages
 import HomePage from "../pages/home/HomePage";
 import EmailPage from "../pages/email/EmailPage";
@@ -10,18 +8,16 @@ import CoursePage from "../pages/course/CoursePage";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined";
 
-const appRoutes: RouteType[] = [
+const generalRoutes = [
   {
-    index: true,
-    path: "/home",
+    path: "/",
     element: <HomePage />,
     state: "home",
     sidebarProps: {
       displayText: "Home",
       icon: <HomeOutlinedIcon />,
-    }
+    },
   },
   {
     path: "/email",
@@ -41,41 +37,42 @@ const appRoutes: RouteType[] = [
       icon: <CalendarMonthOutlinedIcon />,
     }
   },
+];
+
+const courseRoutes = [
   {
+    path: "/course/mth-253",
+    element: <CoursePage
+      topbar_title="Calculus 3"
+      course="mth-253"
+    />,
+    state: "mth-253",
     sidebarProps: {
-      displayText: "Course",
-      icon: <ClassOutlinedIcon />,
+      displayText: "Calculus 3 (MTH-253)",
     },
-    child: [
-      {
-        path: "/course/mth-253",
-        element: <CoursePage />,
-        state: "mth-253",
-        sidebarProps: {
-          displayText: "MTH-253",
-          icon: <CalendarMonthOutlinedIcon />,
-        },
-      },
-      {
-        path: "/course/phy-123",
-        element: <CoursePage />,
-        state: "phy-123",
-        sidebarProps: {
-          displayText: "PHY-123",
-          icon: <CalendarMonthOutlinedIcon />,
-        }
-      },
-      {
-        path: "/course/PSY-202a",
-        element: <CoursePage />,
-        state: "psy-202a",
-        sidebarProps: {
-          displayText: "PSY-202A",
-          icon: <CalendarMonthOutlinedIcon />,
-        }
-      },
-    ],
+  },
+  {
+    path: "/course/phy-123",
+    element: <CoursePage
+      topbar_title="Physics 123"
+      course="phy-123"
+    />,
+    state: "phy-123",
+    sidebarProps: {
+      displayText: "Physics 123 (PHY-123)",
+    }
+  },
+  {
+    path: "/course/psy-202",
+    element: <CoursePage
+      topbar_title="Psychology 202"
+      course="psy-202"
+    />,
+    state: "psy-202",
+    sidebarProps: {
+      displayText: "Psychology 202 (PSY-202)",
+    }
   },
 ];
 
-export default appRoutes;
+export { generalRoutes, courseRoutes };

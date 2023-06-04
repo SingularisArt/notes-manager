@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Category,
   ChartComponent,
@@ -11,7 +11,7 @@ import {
   Legend,
   AxisModel,
   ValueType,
-} from '@syncfusion/ej2-react-charts';
+} from "@syncfusion/ej2-react-charts";
 
 type LineChartProps = {
   data: {
@@ -33,8 +33,8 @@ type LineChartProps = {
 
 const LineChart: React.FC<LineChartProps> = ({
   data,
-  id = '',
-  height = '450px',
+  id = "",
+  height = "450px",
   width = 0,
   thickness=3,
   xAxis,

@@ -1,26 +1,42 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { Drawer, List, Stack, Toolbar } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
-import { Sidebar as ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-import { Link } from 'react-router-dom';
+import { Sidebar as ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { Link } from "react-router-dom";
 
 import colorConfigs from "../../configs/colorConfigs";
 import sizeConfigs from "../../configs/sizeConfigs";
-import appRoutes from "../../routes/appRoutes";
+
+import { generalRoutes, courseRoutes } from "../../routes/appRoutes";
 
 import SidebarItem from "./SidebarItem";
-import SidebarItemCollapse from "./SidebarItemCollapse";
+
+import HomePage from "../../pages/home/HomePage";
+import EmailPage from "../../pages/email/EmailPage";
+import CalendarPage from "../../pages/calendar/CalendarPage";
+import CoursePage from "../../pages/course/CoursePage";
+
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+
+import { IconButton } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const handleToggleSidebar = () => {
+    setOpen(!open);
+  };
 
   const menuItemStyles = {
     button: ({ level, active, disabled }) => {
       return {
         color: colorConfigs.sidebar.color,
         backgroundColor: active ? colorConfigs.sidebar.activeBg : colorConfigs.sidebar.bg,
-        '&:hover': {
+        "&:hover": {
           backgroundColor: colorConfigs.sidebar.hoverBg,
         }
       };
@@ -28,34 +44,42 @@ const Sidebar = () => {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100%' }}>
+    <div style={{
+      position: "sticky",
+      top: "0",
+    }} >
       <ProSidebar
         backgroundColor={colorConfigs.sidebar.bg}
-        collapsed={collapsed}
+        open={open}
         breakPoint="md"
+        rootStyles={{
+          height: "100vh !important",
+        }}
       >
+        <div style={{ marginTop: "10px" }}>
+          <Link to="/" element={<HomePage />} style={{ textDecoration: "none" }}>
+            <Toolbar>
+              <Stack
+                sx={{ width: "100%", color: colorConfigs.sidebar.color }}
+                direction="row"
+                justifyContent="center"
+              >
+                <Typography variant="h5">
+                  LaTNote Manager
+                  <hr />
+                </Typography>
+              </Stack>
+            </Toolbar>
+          </Link>
 
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-          <Toolbar>
-            <Stack
-              sx={{ width: "100%", color: colorConfigs.sidebar.color }}
-              direction="row"
-              justifyContent="center"
-            >
-              <Typography variant="h5">
-                LaTNote Manager
-              </Typography>
-            </Stack>
-          </Toolbar>
-
-          <div style={{ flex: 1, marginBottom: '32px', marginTop: '15px' }}>
-            <div style={{ padding: '0 24px', marginBottom: '8px' }}>
+          <div style={{ flex: 1, marginBottom: "32px", marginTop: "15px" }}>
+            <div style={{ padding: "0 24px", marginBottom: "8px" }}>
               <Typography
                 variant="body2"
                 fontWeight={600}
                 style={{
-                  opacity: collapsed ? 0 : 0.7,
-                  letterSpacing: '0.5px',
+                  opacity: open ? 0 : 0.7,
+                  letterSpacing: "0.5px",
                   color: colorConfigs.sidebar.headingBg
                 }}
               >
@@ -64,25 +88,29 @@ const Sidebar = () => {
             </div>
 
             <Menu menuItemStyles={menuItemStyles}>
-              <MenuItem component={<Link to="/home" />}>Home</MenuItem>
-              <MenuItem component={<Link to="/email" />}>Email</MenuItem>
-              <MenuItem component={<Link to="/calendar" />}>Calendar</MenuItem>
+              {generalRoutes.map((route, index) => (
+                <SidebarItem item={route} key={index} />
+              ))}
             </Menu>
 
-            <div style={{ padding: '0 24px', marginBottom: '8px', marginTop: '32px' }}>
+            <div style={{ padding: "0 24px", marginBottom: "8px", marginTop: "32px" }}>
               <Typography
                 variant="body2"
                 fontWeight={600}
-                style={{ opacity: collapsed ? 0 : 0.7, letterSpacing: '0.5px', color: colorConfigs.sidebar.headingBg }}
+                style={{
+                  opacity: open ? 0 : 0.7,
+                  letterSpacing: "0.5px",
+                  color: colorConfigs.sidebar.headingBg
+                }}
               >
-                Extra
+                Courses
               </Typography>
             </div>
 
             <Menu menuItemStyles={menuItemStyles}>
-              <MenuItem component={<Link to="/course" />}>Calculus 3 (MTH-253)</MenuItem>
-              <MenuItem component={<Link to="/calendar" />}>Psychology 202 (PSY-202)</MenuItem>
-              <MenuItem component={<Link to="/calendar" />}>Physics 123 (PHY-123)</MenuItem>
+              {courseRoutes.map((route, index) => (
+                <SidebarItem item={route} key={index} />
+              ))}
             </Menu>
           </div>
         </div>

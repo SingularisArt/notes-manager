@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 import {
   KanbanComponent,
   ColumnsDirective,
   ColumnDirective,
-} from '@syncfusion/ej2-react-kanban';
+} from "@syncfusion/ej2-react-kanban";
 
-import { FaCalendar, FaClock } from 'react-icons/fa';
+import { FaCalendar, FaClock } from "react-icons/fa";
 
-import SubItemTitle from '../../../components/common/SubItemTitle';
+import SubItemTitle from "../../../components/common/SubItemTitle";
 
 type TodosProp = {
   data: {
@@ -32,7 +32,7 @@ const Todos: React.FC<TodosProp> = ({ data, grid }) => {
         id="kanban"
         keyField="Status"
         dataSource={data}
-        cardSettings={{ contentField: 'Summary', headerField: 'Id' }}
+        cardSettings={{ contentField: "Summary", headerField: "Id" }}
       >
         <ColumnsDirective>
           {grid.map((item, index) => (

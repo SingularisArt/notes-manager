@@ -1,14 +1,15 @@
 import { Outlet } from "react-router-dom";
+
 import { Box, Toolbar } from "@mui/material";
+
 import colorConfigs from "../../configs/colorConfigs";
 import sizeConfigs from "../../configs/sizeConfigs";
+
 import Sidebar from "../common/Sidebar";
-import Topbar from "../common/Topbar";
 
 const MainLayout = () => {
   return (
     <Box sx={{ display: "flex" }}>
-      <Topbar title="Course" />
       <Box
         component="nav"
         sx={{

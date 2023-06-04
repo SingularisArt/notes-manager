@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import Stack from '@mui/material/Stack';
+import React, { useState } from "react";
+import Stack from "@mui/material/Stack";
 
-import { DropDownListComponent } from '@syncfusion/ej2-react-dropdowns';
-import { InPlaceEditorComponent } from '@syncfusion/ej2-react-inplace-editor';
+import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
+import { InPlaceEditorComponent } from "@syncfusion/ej2-react-inplace-editor";
 
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
-import ItemTitle from '../../../../components/common/ItemTitle';
+import ItemTitle from "../../../../components/common/ItemTitle";
 
-import SubItemTitle from '../../../../components/common/SubItemTitle';
-import Button from '../../../../components/common/Button';
+import SubItemTitle from "../../../../components/common/SubItemTitle";
+import Button from "../../../../components/common/Button";
 
-import './Exam.css';
+import "./Exam.css";
 
-import colorConfigs from '../../../../configs/colorConfigs';
+import colorConfigs from "../../../../configs/colorConfigs";
 
 type ExamProp = {
   data: {
@@ -47,15 +47,15 @@ type DisplayExamProp = {
 };
 
 const ToggleButtons: React.FC<ToggleButtonsProps> = ({ toggle }) => {
-  let initialSelectedValue = 'none';
+  let initialSelectedValue = "none";
   if (toggle === 1) {
-    initialSelectedValue = 'noob';
+    initialSelectedValue = "noob";
   } else if (toggle === 2) {
-    initialSelectedValue = 'master';
+    initialSelectedValue = "master";
   }
 
   const [selectedValue, setSelectedValue] = useState(initialSelectedValue);
-  const [alignment, setAlignment] = React.useState('web');
+  const [alignment, setAlignment] = React.useState("web");
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -96,30 +96,30 @@ const ToggleButtons: React.FC<ToggleButtonsProps> = ({ toggle }) => {
 
 const DisplayDate = (dueDate: string) => {
   const daysOfWeek = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
   const monthsOfYear = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
-  const dateParts = dueDate.split('-');
+  const dateParts = dueDate.split("-");
   const year = dateParts[0];
   const month = monthsOfYear[parseInt(dateParts[1]) - 1];
   const dayOfMonth = parseInt(dateParts[2]);
@@ -135,22 +135,22 @@ const DisplayDate = (dueDate: string) => {
       ? `${daysDiff} day remaining`
       : daysDiff > 1
         ? `${daysDiff} days remaining`
-        : '';
+        : "";
 
   const suffix = (() => {
     switch (dayOfMonth) {
       case 1:
       case 21:
       case 31:
-        return 'st';
+        return "st";
       case 2:
       case 22:
-        return 'nd';
+        return "nd";
       case 3:
       case 23:
-        return 'rd';
+        return "rd";
       default:
-        return 'th';
+        return "th";
     }
   })();
 
@@ -196,28 +196,19 @@ const DisplayExam: React.FC<DisplayExamProp> = ({
   const statusModel = { dataSource: statusOptions };
 
   return (
-    <table style={{ width: '100%' }}>
+    <table style={{ width: "100%" }}>
       <tbody>
         {data.map((exam) => (
           <tr key={exam.name}>
             <td
               style={{
-                width: '50%',
-                paddingLeft: '25px',
-                verticalAlign: 'top',
+                width: "50%",
+                paddingLeft: "25px",
+                verticalAlign: "top",
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div style={{ fontWeight: 'bold' }}>
-                  {/* {exam.name} */}
-                  <InPlaceEditorComponent
-                    type='Text'
-                    mode='Inline'
-                    id='examName'
-                    data-underline={false}
-                    value={exam.name}
-                  />
-                </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ fontWeight: "bold" }}>{exam.name}</div>
                 {date ? (
                   <div>
                     {editMode ? DisplayDate(exam.dueDate) : (
@@ -227,36 +218,44 @@ const DisplayExam: React.FC<DisplayExamProp> = ({
                 ) : (
                     <></>
                   )}
-                {grade === true ? <div>{exam.grade}</div> : <></>}
+                {grade === true ? <div>
+                  <InPlaceEditorComponent
+                    type="Text"
+                    mode="Inline"
+                    id="sectionName"
+                    data-underline={false}
+                    value={exam.grade}
+                  />
+                </div> : <></>}
               </div>
-              <table style={{ width: '100%' }}>
+              <table style={{ width: "100%" }}>
                 <tbody>
                   {exam.sections.map((section, sectionIndex) => (
                     <tr key={section.name}>
-                      <td style={{ paddingLeft: '25px', textAlign: 'left' }}>
+                      <td style={{ paddingLeft: "25px", textAlign: "left" }}>
                         <InPlaceEditorComponent
-                          type='Text'
-                          mode='Inline'
-                          id='sectionName'
+                          type="Text"
+                          mode="Inline"
+                          id="sectionName"
                           data-underline={false}
                           value={section.name}
                         />
                       </td>
-                      <td style={{ textAlign: 'center' }}>
+                      <td style={{ textAlign: "center" }}>
                         <InPlaceEditorComponent
-                          type='DropDownList'
-                          mode='Inline'
-                          id='sectionStatus'
+                          type="DropDownList"
+                          mode="Inline"
+                          id="sectionStatus"
                           data-underline={false}
                           value={statusOptions[section.status]}
                           model={statusModel}
                         />
                       </td>
-                      <td style={{ textAlign: 'right' }}>
+                      <td style={{ textAlign: "right" }}>
                         <InPlaceEditorComponent
-                          type='Date'
-                          mode='Inline'
-                          id='sectionDate'
+                          type="Date"
+                          mode="Inline"
+                          id="sectionDate"
                           data-underline={false}
                           value={new Date(section.date)}
                         />
@@ -278,7 +277,7 @@ const Exam: React.FC<ExamProp> = ({ data }) => {
 
   if (data.length === 0) {
     return (
-      <div style={{ paddingTop: '20px' }}>
+      <div style={{ paddingTop: "20px" }}>
         <SubItemTitle title="No Exams" />
       </div>
     );

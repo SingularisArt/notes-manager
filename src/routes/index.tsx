@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Route } from "react-router-dom";
 import PageWrapper from "../components/layout/PageWrapper";
-import appRoutes from "./appRoutes";
+import { generalRoutes, courseRoutes } from "./appRoutes";
 import { RouteType } from "./config";
 
 const generateRoute = (routes: RouteType[]): ReactNode => {
@@ -33,4 +33,7 @@ const generateRoute = (routes: RouteType[]): ReactNode => {
   ));
 };
 
-export const routes: ReactNode = generateRoute(appRoutes);
+const general = generateRoute(generalRoutes);
+const course = generateRoute(courseRoutes);
+
+export { general, course }

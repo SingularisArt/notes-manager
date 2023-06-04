@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import SubItemTitle from '../../../components/common/SubItemTitle';
+import SubItemTitle from "../../../components/common/SubItemTitle";
 
 type Duration = {
   hours: number;
@@ -58,9 +58,9 @@ const displayDuration = () => {
 
   const duration = getDuration(startDate, endDate);
 
-  const hours = String(duration.hours).padStart(2, '0');
-  const minutes = String(duration.minutes).padStart(2, '0');
-  const seconds = String(duration.seconds).padStart(2, '0');
+  const hours = String(duration.hours).padStart(2, "0");
+  const minutes = String(duration.minutes).padStart(2, "0");
+  const seconds = String(duration.seconds).padStart(2, "0");
 
   return `${hours}:${minutes}:${seconds}`;
 };
@@ -72,30 +72,30 @@ const DisplayDate = (
   dueToday?: boolean
 ) => {
   const daysOfWeek = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
   const monthsOfYear = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
-  const dateParts = dueDate.split('-');
+  const dateParts = dueDate.split("-");
   const year = dateParts[0];
   const month = monthsOfYear[parseInt(dateParts[1]) - 1];
   const dayOfMonth = parseInt(dateParts[2]);
@@ -110,8 +110,8 @@ const DisplayDate = (
   let daysRemaining;
 
   if (overdue) {
-    daysRemaining = daysDiff > 0 ? `${daysDiff - 1} days late` : '';
-  } else daysRemaining = daysDiff > 0 ? `${daysDiff} days remaining` : '';
+    daysRemaining = daysDiff > 0 ? `${daysDiff - 1} days late` : "";
+  } else daysRemaining = daysDiff > 0 ? `${daysDiff} days remaining` : "";
 
   if (submitted) return `${month} ${dayOfMonth}, ${dayOfWeek}, ${year}`;
   if (dueToday) {
@@ -144,19 +144,19 @@ const DisplayAssignments: React.FC<AssignmentProp> = ({
   today,
 }) => {
   return (
-    <table style={{ width: '100%' }}>
+    <table style={{ width: "100%" }}>
       <tbody>
         {data.map((assignment) => (
           <tr key={assignment.name}>
             <td
               style={{
-                width: '50%',
-                paddingLeft: '25px',
-                verticalAlign: 'top',
+                width: "50%",
+                paddingLeft: "25px",
+                verticalAlign: "top",
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div style={{ fontWeight: 'bold' }}>{assignment.name}</div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ fontWeight: "bold" }}>{assignment.name}</div>
                 <div>
                   {assignment.submitted === true
                     ? GetGrade(assignment.grade)
@@ -179,7 +179,7 @@ const DisplayAssignments: React.FC<AssignmentProp> = ({
 const Assignment: React.FC<AssignmentProp> = ({ data }) => {
   if (data.length === 0) {
     return (
-      <div style={{ paddingTop: '20px' }}>
+      <div style={{ paddingTop: "20px" }}>
         <SubItemTitle title="No Exams" />
       </div>
     );

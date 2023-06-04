@@ -1,5 +1,5 @@
-import React from 'react';
-import ToggleButton from '@mui/material/ToggleButton';
+import React from "react";
+import ToggleButton from "@mui/material/ToggleButton";
 
 interface ButtonProps {
   value: string;
@@ -16,7 +16,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const handleButtonClick = () => {
     if (selectedValue === value) {
-      if (onClick) onClick('none');
+      if (onClick) onClick("none");
     } else {
       if (onClick) onClick(value);
     }
@@ -29,13 +29,13 @@ const Button: React.FC<ButtonProps> = ({
       selected={selectedValue === value}
       color="primary"
       style={{
-        borderRadius: '10px',
-        marginLeft: value !== 'master' ? '10px' : '0',
-        marginRight: value !== 'none' ? '10px' : '0',
+        borderRadius: "10px",
+        marginLeft: value !== "master" ? "10px" : "0",
+        marginRight: value !== "none" ? "10px" : "0",
       }}
       onClick={handleButtonClick}
     >
-      <div style={{ fontSize: '12px' }}>{label}</div>
+      <div style={{ fontSize: "12px" }}>{label}</div>
     </ToggleButton>
   );
 };

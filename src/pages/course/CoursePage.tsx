@@ -1,17 +1,19 @@
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 
-import Item from '../../components/common/Item';
-import ItemTitle from '../../components/common/ItemTitle';
+import Item from "../../components/common/Item";
+import ItemTitle from "../../components/common/ItemTitle";
 
-import WeekCounter from '../../components/common/WeekCounter';
+import WeekCounter from "../../components/common/WeekCounter";
 
-import Graph from './Sections/Graph';
-import Exam from './Sections/Exam/Exam';
-import Note from './Sections/Note';
-import Assignment from './Sections/Assignment';
-import Figure from './Sections/Figure/Figure';
-import Todos from './Sections/Todos';
+import Graph from "./Sections/Graph";
+import Exam from "./Sections/Exam/Exam";
+import Note from "./Sections/Note";
+import Assignment from "./Sections/Assignment";
+import Figure from "./Sections/Figure/Figure";
+import Todos from "./Sections/Todos";
+
+import Topbar from "../../components/common/Topbar";
 
 import {
   graphData,
@@ -24,13 +26,15 @@ import {
   figureData,
   gridData,
   todoData,
-} from './data';
+} from "./data";
 
-import './CoursePage.css';
+import "./CoursePage.css";
 
-const CoursePage = () => {
+const CoursePage = ({ topbar_title, course }) => {
   return (
     <>
+      <Topbar title={topbar_title} />
+
       <Box sx={{ width: "100%" }}>
         <Grid container rowSpacing={1.2} columnSpacing={1.2}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
