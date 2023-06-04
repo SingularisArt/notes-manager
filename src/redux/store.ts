@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import appStateSlice from "./features/appStateSlice";
+import sidebarActivePageSlice from "./sidebarActivePage";
+import isSidebarEnabledSlice from "./isSidebarEnabled";
 
 export const store = configureStore({
   reducer: {
-    appState: appStateSlice
+    sidebarActivePage: sidebarActivePageSlice.reducer,
+    isSidebarEnabled: isSidebarEnabledSlice.reducer,
   }
 });
 

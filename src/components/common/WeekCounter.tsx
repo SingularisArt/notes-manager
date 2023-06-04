@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+
+import sizeConfigs from "../../configs/sizeConfigs";
 
 interface Props {
   currentWeek: number;
@@ -21,6 +25,10 @@ const WeekCounter: React.FC<Props> = ({ currentWeek, maxWeeks }) => {
     }
   };
 
+  const isSidebarEnabled = useSelector((state: RootState) => state.isSidebarEnabled.enabled);
+  const mainContentWidth = isSidebarEnabled ? `calc(100% - ${sizeConfigs.sidebar.width})` : "100%";
+  const shift = isSidebarEnabled ? sizeConfigs.sidebar.width : "0px";
+
   return (
     <footer
       style={{
@@ -30,13 +38,14 @@ const WeekCounter: React.FC<Props> = ({ currentWeek, maxWeeks }) => {
         textAlign: "center",
         paddingTop: "0.5em",
         paddingBottom: "0.5em",
-        width: "calc(100% - 250px)",
-        left: "250px",
+        width: mainContentWidth,
+        left: shift,
         borderTop: "1px solid #8a8a8a",
         zIndex: 100,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        transition: "left 0.3s, width 0.3s",
       }}
     >
       <button

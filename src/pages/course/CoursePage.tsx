@@ -35,7 +35,7 @@ const CoursePage = ({ topbar_title, course }) => {
     <>
       <Topbar title={topbar_title} />
 
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%", transition: "width 0.3s" }}>
         <Grid container rowSpacing={1.2} columnSpacing={1.2}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Item className="card-container">

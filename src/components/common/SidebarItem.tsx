@@ -13,7 +13,7 @@ type Props = {
 };
 
 const SidebarItem = ({ item }: Props) => {
-  const { appState } = useSelector((state: RootState) => state.appState);
+  const activePage = useSelector((state: RootState) => state.sidebarActivePage.activePage);
 
   return (
     item.sidebarProps && item.path ? (
@@ -25,7 +25,7 @@ const SidebarItem = ({ item }: Props) => {
           "&: hover": {
             backgroundColor: colorConfigs.sidebar.hoverBg
           },
-          backgroundColor: appState === item.state ? colorConfigs.sidebar.activeBg : "unset",
+          backgroundColor: activePage === item.state ? colorConfigs.sidebar.activeBg : "unset",
           paddingY: "12px",
           paddingX: "24px",
         }}

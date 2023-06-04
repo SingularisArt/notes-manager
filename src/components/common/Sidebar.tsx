@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { useState } from "react";
 import { Drawer, List, Stack, Toolbar } from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -25,11 +26,7 @@ import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const Sidebar = () => {
-  const [open, setOpen] = useState(false);
-
-  const handleToggleSidebar = () => {
-    setOpen(!open);
-  };
+  const isSidebarEnabled = useSelector((state: RootState) => state.isSidebarEnabled.enabled);
 
   const menuItemStyles = {
     button: ({ level, active, disabled }) => {
@@ -43,24 +40,31 @@ const Sidebar = () => {
     },
   }
 
+  const sidebarWidth = isSidebarEnabled ? sizeConfigs.sidebar.width : "0px";
+
   return (
-    <div style={{
-      position: "sticky",
-      top: "0",
-    }} >
+    <div
+      style={{
+        position: "sticky",
+        top: "0",
+        width: sidebarWidth,
+      }}
+    >
       <ProSidebar
         backgroundColor={colorConfigs.sidebar.bg}
-        open={open}
+        collapsed={!isSidebarEnabled}
         breakPoint="md"
+        collapsedWidth="0px"
+        transitionDuration={300}
         rootStyles={{
           height: "100vh !important",
         }}
       >
-        <div style={{ marginTop: "10px" }}>
+        <div style={{ marginTop: "10px", whiteSpace: "nowrap" }}>
           <Link to="/" element={<HomePage />} style={{ textDecoration: "none" }}>
             <Toolbar>
               <Stack
-                sx={{ width: "100%", color: colorConfigs.sidebar.color }}
+                sx={{ color: colorConfigs.sidebar.color }}
                 direction="row"
                 justifyContent="center"
               >
@@ -78,7 +82,7 @@ const Sidebar = () => {
                 variant="body2"
                 fontWeight={600}
                 style={{
-                  opacity: open ? 0 : 0.7,
+                  opacity: 0.7,
                   letterSpacing: "0.5px",
                   color: colorConfigs.sidebar.headingBg
                 }}
@@ -98,7 +102,7 @@ const Sidebar = () => {
                 variant="body2"
                 fontWeight={600}
                 style={{
-                  opacity: open ? 0 : 0.7,
+                  opacity: 0.7,
                   letterSpacing: "0.5px",
                   color: colorConfigs.sidebar.headingBg
                 }}

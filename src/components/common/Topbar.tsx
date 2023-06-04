@@ -1,14 +1,12 @@
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { AppBar, IconButton, Toolbar, Typography, styled } from "@mui/material";
 import { Notifications } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
-
+import { isSidebarEnabledActions } from "../../redux/isSidebarEnabled";
+import { RootState } from "../../redux/store";
 import Notification from "./Notification";
-
 import colorConfigs from "../../configs/colorConfigs";
 import sizeConfigs from "../../configs/sizeConfigs";
-
-import { toggleSidebar } from "../../redux/features/appStateSlice";
 
 interface TopbarProps {
   title: string;
@@ -17,45 +15,42 @@ interface TopbarProps {
 const Topbar = ({ title }: TopbarProps) => {
   const dispatch = useDispatch();
 
-  const StyledIconButton = styled(IconButton)`
-    border-radius: 50%;
-    padding: 8px;
-    background-color: ${colorConfigs.topbar.iconBg};
-    color: ${colorConfigs.topbar.iconColor};
-    margin-right: 8px;
-    margin-left: -10px;
-  `;
+  const isSidebarEnabled = useSelector((state: RootState) => state.isSidebarEnabled.enabled);
+  const mainContentWidth = isSidebarEnabled ? `calc(100% - ${sizeConfigs.sidebar.width})` : "100%";
 
   const handleSidebarToggle = () => {
-    dispatch(toggleSidebar()); // Dispatch the toggleSidebar action
+    dispatch(isSidebarEnabledActions.toggleSidebar());
   };
 
   return (
     <AppBar
       position="fixed"
       sx={{
-        width: `calc(100% - ${sizeConfigs.sidebar.width})`,
+        width: mainContentWidth,
+        transition: "width 0.3s",
         ml: sizeConfigs.sidebar.width,
         boxShadow: "unset",
         backgroundColor: colorConfigs.topbar.bg,
-        color: colorConfigs.topbar.color
+        color: colorConfigs.topbar.color,
       }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <div>
-            <StyledIconButton
+            <IconButton
               edge="end"
               color="inherit"
               aria-label="toggle-sidebar"
-              onClick={handleSidebarToggle} // Call the handleSidebarToggle function on button click
+              onClick={handleSidebarToggle}
+              sx={{
+                marginRight: "8px",
+                marginLeft: "-10px",
+              }}
             >
               <MenuIcon />
-            </StyledIconButton>
+            </IconButton>
           </div>
-          <Typography variant="h4">
-            {title}
-          </Typography>
+          <Typography variant="h4">{title}</Typography>
         </div>
         <div>
           <Notification />
