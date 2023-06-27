@@ -1,20 +1,14 @@
 import React, { useState } from "react";
-import Stack from "@mui/material/Stack";
 
-import { DropDownListComponent } from "@syncfusion/ej2-react-dropdowns";
-import { InPlaceEditorComponent } from "@syncfusion/ej2-react-inplace-editor";
-
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { InPlaceEditorComponent, ActionEventArgs } from "@syncfusion/ej2-react-inplace-editor";
 
 import ItemTitle from "../../../../components/common/ItemTitle";
-
 import SubItemTitle from "../../../../components/common/SubItemTitle";
-import Button from "../../../../components/common/Button";
+
+import DisplayDate from "../../../../utils/DisplayDate";
+import CalculateDiffDate from "../../../../utils/CalculateDiffDate";
 
 import "./Exam.css";
-
-import colorConfigs from "../../../../configs/colorConfigs";
 
 type ExamProp = {
   data: {
@@ -24,12 +18,10 @@ type ExamProp = {
     sections: {
       name: string;
       status: number;
+      date: string;
     }[];
   }[];
-};
-
-type ToggleButtonsProps = {
-  toggle: number;
+  updateData: (updatedData: { [key: string]: any }[]) => void;
 };
 
 type DisplayExamProp = {
@@ -40,160 +32,108 @@ type DisplayExamProp = {
     sections: {
       name: string;
       status: number;
+      date: string;
     }[];
   }[];
   date?: boolean;
   grade?: boolean;
+  editMode?: boolean;
+  updateData: (updatedData: { [key: string]: any }[]) => void;
 };
 
-const ToggleButtons: React.FC<ToggleButtonsProps> = ({ toggle }) => {
-  let initialSelectedValue = "none";
-  if (toggle === 1) {
-    initialSelectedValue = "noob";
-  } else if (toggle === 2) {
-    initialSelectedValue = "master";
-  }
+type InPlaceEditorTemplateProps = {
+  type?: string;
+  mode?: string;
+  data_underline?: boolean;
+  model?: {
+    dataSource: string[];
+  }[];
+  id: string;
+  value: string;
+  updateData: (updatedValue: string, id: string) => void;
+};
 
-  const [selectedValue, setSelectedValue] = useState(initialSelectedValue);
-  const [alignment, setAlignment] = React.useState("web");
+type DisplayGradeProps = {
+  grade: string;
+};
 
-  const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: string
-  ) => {
-    setAlignment(newAlignment);
-  };
+const InPlaceEditorTemplate: React.FC<InPlaceEditorTemplateProps> = ({
+  type = "Text",
+  mode = "Inline",
+  data_underline = false,
+  model = null,
+  id,
+  value,
+  updateData,
+}) => {
+  const handleActionSuccess = (args: ActionEventArgs) => {
+    const updatedValue = args.value as string;
 
-  const handleButtonSelect = (value: string) => {
-    setSelectedValue(value);
+    updateData(updatedValue, id);
   };
 
   return (
-    <Stack spacing={2} alignItems="center">
-      <ToggleButtonGroup size="small" exclusive aria-label="Small sizes">
-        <Button
-          value="master"
-          label="Master"
-          onClick={handleButtonSelect}
-          selectedValue={selectedValue}
-        />
-        <Button
-          value="noob"
-          label="Noob"
-          onClick={handleButtonSelect}
-          selectedValue={selectedValue}
-        />
-        <Button
-          value="none"
-          label="None"
-          onClick={handleButtonSelect}
-          selectedValue={selectedValue}
-        />
-      </ToggleButtonGroup>
-    </Stack>
+    <InPlaceEditorComponent
+      type={type}
+      mode={mode}
+      id={id}
+      data-underline={data_underline}
+      value={value}
+      model={model}
+      onActionSuccess={handleActionSuccess}
+    />
   );
 };
 
-const DisplayDate = (dueDate: string) => {
-  const daysOfWeek = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-  const monthsOfYear = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const dateParts = dueDate.split("-");
-  const year = dateParts[0];
-  const month = monthsOfYear[parseInt(dateParts[1]) - 1];
-  const dayOfMonth = parseInt(dateParts[2]);
-
-  const dateObj = new Date(dueDate);
-  const dayOfWeek = daysOfWeek[dateObj.getDay()];
-
-  const today = new Date();
-  const timeDiff = Math.abs(dateObj.getTime() - today.getTime());
-  const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-  const daysRemaining =
-    daysDiff == 1
-      ? `${daysDiff} day remaining`
-      : daysDiff > 1
-        ? `${daysDiff} days remaining`
-        : "";
-
-  const suffix = (() => {
-    switch (dayOfMonth) {
-      case 1:
-      case 21:
-      case 31:
-        return "st";
-      case 2:
-      case 22:
-        return "nd";
-      case 3:
-      case 23:
-        return "rd";
-      default:
-        return "th";
-    }
-  })();
-
-  return `${month} ${dayOfMonth}${suffix}, ${dayOfWeek}, ${year} (${daysRemaining})`;
-};
-
-const CalculateDiffDate = (dueDate: string) => {
-  const today = new Date();
-  const oneDay = 24 * 60 * 60 * 1000;
-
-  const diffInMs = Date.parse(dueDate) - today.getTime();
-  const diffInDays = Math.round(Math.abs(diffInMs / oneDay));
-
-  if (diffInMs < 0) {
-    return -1 * diffInDays;
-  } else {
-    return diffInDays;
+const DisplayGrade: React.FC<DisplayGradeProps> = ({ grade }) => {
+  console.log(grade);
+  if (!grade || grade === "Empty") {
+    return <span>NA</span>;
   }
+
+  if (!isNaN(Number(grade)) && !grade.includes("%")) {
+    return <span>{grade}%</span>;
+  }
+
+  return <span>{grade}</span>;
 };
 
 const DisplayExam: React.FC<DisplayExamProp> = ({
   data,
+  updateData,
   date = true,
   grade = false,
   editMode = false,
 }) => {
-  const handleExamTitleChange = (examIndex: number, newTitle: string) => {};
-
-  const handleExamScoreChange = (examIndex: number, newScore: string) => {};
-
-  const handleSectionTitleChange = (examIndex: number, sectionIndex: number, newTitle: string) => {};
-
-  const handleDeleteExam = (examIndex: number) => {};
-
-  const handleDeleteSection = (examIndex: number, sectionIndex: number) => {};
-
-  const handleCreateExam = (examIndex: number, title: string) => {};
-
-  const handleCreateSection = (examIndex: number, title: string) => {};
-
-  const elementModel = { placeholder: "Enter your name" };
   const statusOptions = ["Master", "Noob", "None"];
   const statusModel = { dataSource: statusOptions };
+
+  const handleUpdate = (id: string, value: string) => {
+    const updatedData = data.map((exam) => {
+      const updatedSections = exam.sections.map((section) => {
+        if (section.name === id) {
+          return { ...section, name: value };
+        }
+        return section;
+      });
+
+      return { ...exam, sections: updatedSections };
+    });
+
+    const updatedDataArray = data.map((exam) => {
+      if (exam.name === id) {
+        return { ...exam, name: value };
+      }
+      return exam;
+    });
+
+    updateData([...updatedDataArray, ...updatedData]);
+  };
+
+  let numericModel = {
+    format: 'p0',
+    value: 0,
+  };
 
   return (
     <table style={{ width: "100%" }}>
@@ -208,57 +148,91 @@ const DisplayExam: React.FC<DisplayExamProp> = ({
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ fontWeight: "bold" }}>{exam.name}</div>
-                {date ? (
-                  <div>
-                    {editMode ? DisplayDate(exam.dueDate) : (
-                      <></>
-                    )}
-                  </div>
-                ) : (
-                    <></>
-                  )}
-                {grade === true ? <div>
+                <div style={{ fontWeight: "bold" }}>
                   <InPlaceEditorComponent
-                    type="Text"
+                    id="numericTextBoxEle"
                     mode="Inline"
-                    id="sectionName"
-                    data-underline={false}
-                    value={exam.grade}
-                  />
-                </div> : <></>}
+                    type="Numeric"
+                    value="10%"
+                    model={numericModel}
+                    emptyText="NA"
+                  ></InPlaceEditorComponent>
+
+
+                  {editMode ? (
+                    <InPlaceEditorTemplate
+                      id="examTitle"
+                      value={exam.name}
+                      updateData={handleUpdate}
+                    />
+                  ) : (
+                    exam.name
+                  )}
+                </div>
+
+                <div>
+                  {date ? (
+                    editMode ? (
+                      <InPlaceEditorTemplate
+                        id="examDate"
+                        value={exam.dueDate}
+                        type="Date"
+                        updateData={handleUpdate}
+                      />
+                    ) : (
+                      DisplayDate(exam.dueDate)
+                    )
+                  ) : null}
+
+                  {grade ? (
+                    editMode ? (
+                      <InPlaceEditorTemplate
+                        id="examGrade"
+                        value={exam.grade}
+                        updateData={handleUpdate}
+                      />
+                    ) : <DisplayGrade grade={exam.grade} />
+                  ) : null}
+                </div>
               </div>
               <table style={{ width: "100%" }}>
                 <tbody>
-                  {exam.sections.map((section, sectionIndex) => (
+                  {exam.sections.map((section, _) => (
                     <tr key={section.name}>
                       <td style={{ paddingLeft: "25px", textAlign: "left" }}>
-                        <InPlaceEditorComponent
-                          type="Text"
-                          mode="Inline"
-                          id="sectionName"
-                          data-underline={false}
-                          value={section.name}
-                        />
+                        {editMode ? (
+                          <InPlaceEditorTemplate
+                            id="sectionName"
+                            value={section.name}
+                            updateData={handleUpdate}
+                          />
+                        ) : (
+                          section.name
+                        )}
                       </td>
                       <td style={{ textAlign: "center" }}>
-                        <InPlaceEditorComponent
-                          type="DropDownList"
-                          mode="Inline"
-                          id="sectionStatus"
-                          data-underline={false}
-                          value={statusOptions[section.status]}
-                          model={statusModel}
-                        />
+                        {editMode ? (
+                          <InPlaceEditorTemplate
+                            id="sectionStatus"
+                            value={statusOptions[section.status]}
+                            model={statusModel}
+                            updateData={handleUpdate}
+                          />
+                        ) : (
+                          statusOptions[section.status]
+                        )}
                       </td>
                       <td style={{ textAlign: "right" }}>
-                        <InPlaceEditorComponent
-                          type="Date"
-                          mode="Inline"
-                          id="sectionDate"
-                          data-underline={false}
-                          value={new Date(section.date)}
-                        />
+                        {editMode ? (
+                          <InPlaceEditorTemplate
+                            id="sectionDate"
+                            value={section.date}
+                            type="Date"
+                            updateData={handleUpdate}
+                          />
+                        ) : (
+                          section.date
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -272,8 +246,8 @@ const DisplayExam: React.FC<DisplayExamProp> = ({
   );
 };
 
-const Exam: React.FC<ExamProp> = ({ data }) => {
-  const [editMode, setMode] = useState(false);
+const Exam: React.FC<ExamProp> = ({ data, updateData }) => {
+  const [editMode, setEditMode] = useState(false);
 
   if (data.length === 0) {
     return (
@@ -292,7 +266,10 @@ const Exam: React.FC<ExamProp> = ({ data }) => {
 
   return (
     <>
-      <ItemTitle title="Exams" onIconClick={() => setMode(!editMode) } />
+      <ItemTitle
+        title="Exams"
+        onIconClick={() => setEditMode(!editMode)}
+      />
 
       <div style={{ lineHeight: 2.5 }}>
         <SubItemTitle title="Future Exams" />
@@ -300,7 +277,11 @@ const Exam: React.FC<ExamProp> = ({ data }) => {
         {futureExams.length === 0 ? (
           <div>No future exams.</div>
         ) : (
-          <DisplayExam data={futureExams} editMode={editMode} />
+          <DisplayExam
+            data={futureExams}
+            editMode={editMode}
+            updateData={updateData}
+          />
         )}
 
         <SubItemTitle title="Past Exams" />
@@ -308,7 +289,7 @@ const Exam: React.FC<ExamProp> = ({ data }) => {
         {pastExams.length === 0 ? (
           <div>No past exams.</div>
         ) : (
-          <DisplayExam data={pastExams} date={false} grade={true} editMode={editMode} />
+          <DisplayExam data={pastExams} updateData={updateData} />
         )}
       </div>
     </>

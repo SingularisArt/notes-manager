@@ -204,7 +204,7 @@ export const examData = [
   },
   {
     name: "Exam 2",
-    dueDate: "2023-05-27",
+    dueDate: "2024-05-27",
     grade: "NA",
     sections: [
       { name: "Section 11", status: 0, date: "2023-04-20" },
