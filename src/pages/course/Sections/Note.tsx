@@ -40,9 +40,7 @@ function OpenPDF(path: string): void {
   const url = `http://localhost:3000/open-pdf/${pdfLocation}`;
 
   axios.get(url)
-    .then(response => {
-      console.log(response.data);
-    })
+    .then(response => { })
     .catch(error => {
       console.error("Error opening PDF:", error.message);
     });
@@ -53,15 +51,13 @@ function OpenFile(path: string): void {
   const url = `http://localhost:3000/open-file/${fileLocation}`;
 
   axios.get(url)
-    .then(response => {
-      console.log(response.data);
-    })
+    .then(response => { })
     .catch(error => {
       console.error("Error opening file:", error.message);
     });
 }
 
-function transformString(inputString: string) {
+function transformString(inputString: string): string {
   const newString = inputString.replace(/^.*[\\\/]/, "");
   const replacedNumbers = newString.replace(/(^|\D)0+(\d+)/g, "$1$2");
 
@@ -112,7 +108,7 @@ const DisplayNotes: React.FC<{ data: NoteItem[] }> = ({ data }) => {
   );
 };
 
-const Note: React.FC = () => {
+const Note: React.FC<{ courseID: string }> = ({ courseID }) => {
   const [data, setData] = useState<Data>({
     notes: [],
     onlineNotes: [],
@@ -121,80 +117,75 @@ const Note: React.FC = () => {
   const [lecOrChapNotes, setLecOrChapNotes] = useState<NoteItem[]>([]);
   const [onlineNotes, setOnlineNotes] = useState<NoteItem[]>([]);
   const [reviewNotes, setReviewNotes] = useState<NoteItem[]>([]);
-  const [key, setKey] = useState<string>("");
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const url = window.location.href;
-    const newKey = url.split("/").pop();
-    setKey(newKey ?? "");
-
-    const debounceTimeout = setTimeout(() => {
-      setIsLoading(true);
-      const fetchAllNotes = async () => {
-        const res = await axios.get<Data>(`http://localhost:3000/courses/${newKey}/notes`);
+    const fetchAllNotes = async () => {
+      try {
+        const res = await axios.get<Data>(`http://localhost:3000/courses/${courseID}/notes`);
         setData(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchAllNotes();
+  }, [courseID]);
 
-        const noteData: NoteItem[] = [];
-        data.notes.forEach((filePath) => {
-          const fileType = getFileType(filePath);
-          const tex = checkIfFileInArray(filePath, "pdf", "tex", data.notes);
-          const pdf = checkIfFileInArray(filePath, "tex", "pdf", data.notes);
+  useEffect(() => {
+    const noteData: NoteItem[] = [];
+    data.notes.forEach((filePath) => {
+      const fileType = getFileType(filePath);
+      const tex = checkIfFileInArray(filePath, "pdf", "tex", data.notes);
+      const pdf = checkIfFileInArray(filePath, "tex", "pdf", data.notes);
 
-          if (fileType === "pdf" && tex && pdf) return;
+      if (fileType === "pdf" && tex && pdf) return;
 
-          noteData.push({
-            name: transformString(filePath),
-            texPath: tex ? filePath.replace(".pdf", ".tex") : "",
-            pdfPath: pdf ? filePath.replace(".tex", ".pdf") : "",
-            tex: tex,
-            pdf: pdf,
-            type: "lecture",
-          });
-        });
+      noteData.push({
+        name: transformString(filePath),
+        texPath: tex ? filePath.replace(".pdf", ".tex") : "",
+        pdfPath: pdf ? filePath.replace(".tex", ".pdf") : "",
+        tex: tex,
+        pdf: pdf,
+        type: "lecture",
+      });
+    });
 
-        const onlineNotesData: NoteItem[] = [];
-        data.onlineNotes.forEach((filePath) => {
-          onlineNotesData.push({
-            name: transformString(filePath),
-            texPath: "",
-            pdfPath: filePath,
-            tex: false,
-            pdf: true,
-            type: "online",
-          });
-        });
+    const onlineNotesData: NoteItem[] = [];
+    data.onlineNotes.forEach((filePath) => {
+      onlineNotesData.push({
+        name: transformString(filePath),
+        texPath: "",
+        pdfPath: filePath,
+        tex: false,
+        pdf: true,
+        type: "online",
+      });
+    });
 
-        const reviewNotesData: NoteItem[] = [];
-        data.examReviews.forEach((filePath) => {
-          reviewNotesData.push({
-            name: transformString(filePath),
-            texPath: "",
-            pdfPath: filePath,
-            tex: false,
-            pdf: true,
-            type: "review",
-          });
-        });
+    const reviewNotesData: NoteItem[] = [];
+    data.examReviews.forEach((filePath) => {
+      reviewNotesData.push({
+        name: transformString(filePath),
+        texPath: "",
+        pdfPath: filePath,
+        tex: false,
+        pdf: true,
+        type: "review",
+      });
+    });
 
-        setLecOrChapNotes(noteData);
-        setOnlineNotes(onlineNotesData);
-        setReviewNotes(reviewNotesData);
-        setIsLoading(false);
-      };
-      fetchAllNotes();
-    }, 500);
-
-    return () => clearTimeout(debounceTimeout);
-  }, [key]);
+    setLecOrChapNotes(noteData);
+    setOnlineNotes(onlineNotesData);
+    setReviewNotes(reviewNotesData);
+    setIsLoading(false);
+  }, [data.notes]);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  console.log(lecOrChapNotes);
-  if (data.notes.length === 0 && lecOrChapNotes.length === 0 && onlineNotes.length === 0 && reviewNotes.length === 0) {
+  if (data.notes.length === 0) {
     return (
       <div style={{ paddingTop: "20px" }}>
         <SubItemTitle title="No Notes" />

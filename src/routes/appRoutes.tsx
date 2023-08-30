@@ -44,7 +44,7 @@ const courseRoutes = [
     path: "/course/mth-253",
     element: <CoursePage
       topbar_title="Calculus 3"
-      course="mth-253"
+      courseID="mth-253"
     />,
     state: "mth-253",
     sidebarProps: {
@@ -55,7 +55,7 @@ const courseRoutes = [
     path: "/course/phy-123",
     element: <CoursePage
       topbar_title="Physics 123"
-      course="phy-123"
+      courseID="phy-123"
     />,
     state: "phy-123",
     sidebarProps: {
@@ -63,14 +63,14 @@ const courseRoutes = [
     }
   },
   {
-    path: "/course/psy-202",
+    path: "/course/psy-202a",
     element: <CoursePage
       topbar_title="Psychology 202"
-      course="psy-202"
+      courseID="psy-202a"
     />,
     state: "psy-202",
     sidebarProps: {
-      displayText: "Psychology 202 (PSY-202)",
+      displayText: "Psychology 202A (PSY-202)",
     }
   },
 ];

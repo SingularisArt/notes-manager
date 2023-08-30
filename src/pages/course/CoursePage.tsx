@@ -19,7 +19,6 @@ import {
   graphData,
   xAxis,
   yAxis,
-  noteData,
   examData,
   assignmentData,
   figureData,
@@ -29,7 +28,7 @@ import {
 
 import "./CoursePage.css";
 
-const CoursePage = ({ topbar_title, course }) => {
+const CoursePage = ({ topbar_title, courseID }) => {
   return (
     <>
       <Topbar title={topbar_title} />
@@ -55,7 +54,7 @@ const CoursePage = ({ topbar_title, course }) => {
             <Item className="card-container">
               <ItemTitle title="Notes" />
 
-              <Note data={noteData} />
+              <Note courseID={courseID}/>
             </Item>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>

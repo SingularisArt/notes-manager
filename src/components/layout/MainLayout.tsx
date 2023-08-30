@@ -19,7 +19,7 @@ const MainLayout = () => {
           sx={{
             width: sidebarWidth,
             flexShrink: 0,
-            transition: "width 0.3s", // Apply transition to the sidebar width
+            transition: "width 0.3s",
           }}
         >
           <Sidebar />
@@ -30,7 +30,7 @@ const MainLayout = () => {
             p: 3,
             width: mainContentWidth,
             minHeight: "100vh",
-            transition: "width 0.3s", // Apply transition to the main content width
+            transition: "width 0.3s",
           }}
         >
           <Toolbar />

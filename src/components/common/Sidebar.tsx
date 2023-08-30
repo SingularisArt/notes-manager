@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
-import { useState } from "react";
-import { Drawer, List, Stack, Toolbar } from "@mui/material";
+import { Stack, Toolbar } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 import { Sidebar as ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
@@ -14,16 +13,16 @@ import { generalRoutes, courseRoutes } from "../../routes/appRoutes";
 import SidebarItem from "./SidebarItem";
 
 import HomePage from "../../pages/home/HomePage";
-import EmailPage from "../../pages/email/EmailPage";
-import CalendarPage from "../../pages/calendar/CalendarPage";
-import CoursePage from "../../pages/course/CoursePage";
+// import EmailPage from "../../pages/email/EmailPage";
+// import CalendarPage from "../../pages/calendar/CalendarPage";
+// import CoursePage from "../../pages/course/CoursePage";
 
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+// import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+// import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
+// import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 
-import { IconButton } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+// import { IconButton } from "@mui/material";
+// import MenuIcon from "@mui/icons-material/Menu";
 
 const Sidebar = () => {
   const isSidebarEnabled = useSelector((state: RootState) => state.isSidebarEnabled.enabled);
