@@ -28,10 +28,15 @@ import {
 
 import "./CoursePage.css";
 
-const CoursePage = ({ topbar_title, courseID }) => {
+type CoursePageProps = {
+  topbarTitle: string;
+  courseID: string;
+};
+
+const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
   return (
     <>
-      <Topbar title={topbar_title} />
+      <Topbar title={topbarTitle} />
 
       <Box sx={{ width: "100%", transition: "width 0.3s" }}>
         <Grid container rowSpacing={1.2} columnSpacing={1.2}>
@@ -54,7 +59,7 @@ const CoursePage = ({ topbar_title, courseID }) => {
             <Item className="card-container">
               <ItemTitle title="Notes" />
 
-              <Note courseID={courseID}/>
+              <Note courseID={courseID} />
             </Item>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
@@ -73,7 +78,7 @@ const CoursePage = ({ topbar_title, courseID }) => {
             <Item>
               <ItemTitle title="Figures" />
 
-              <Figure data={figureData} />
+              <Figure courseID={courseID} />
             </Item>
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12}>

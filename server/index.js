@@ -182,12 +182,17 @@ app.get("/courses/:courseName/figures", async (req, res) => {
     const figures = {};
     const figuresList = await getItemsInFolder(figuresPath, "", false);
     for (const figure of figuresList) {
-      const figureItems = await getItemsInFolder(path.join(figuresPath, figure), "");
+      const figureItems = await getItemsInFolder(figure, "");
+      const figureList = [];
+      const number = Number(figure.slice(-2));
+
       figureItems.forEach(item => {
         if (item.slice(-3) === "svg") {
-          figures[figure.slice(-2)] = path.join(figuresPath, figure, item);
+          figureList.push(path.join(figure, item));
         }
       })
+
+      if (figureList.length !== 0) figures[number] = figureList;
     }
 
     res.send(figures);

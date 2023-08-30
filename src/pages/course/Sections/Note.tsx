@@ -40,7 +40,7 @@ function OpenPDF(path: string): void {
   const url = `http://localhost:3000/open-pdf/${pdfLocation}`;
 
   axios.get(url)
-    .then(response => { })
+    .then(_ => { })
     .catch(error => {
       console.error("Error opening PDF:", error.message);
     });
@@ -51,7 +51,7 @@ function OpenFile(path: string): void {
   const url = `http://localhost:3000/open-file/${fileLocation}`;
 
   axios.get(url)
-    .then(response => { })
+    .then(_ => { })
     .catch(error => {
       console.error("Error opening file:", error.message);
     });
