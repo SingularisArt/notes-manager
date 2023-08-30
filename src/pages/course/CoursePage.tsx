@@ -19,7 +19,6 @@ import {
   graphData,
   xAxis,
   yAxis,
-  tooltip,
   noteData,
   examData,
   assignmentData,
@@ -54,7 +53,9 @@ const CoursePage = ({ topbar_title, course }) => {
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Item className="card-container">
-              <ItemTitle title="Announcments" />
+              <ItemTitle title="Notes" />
+
+              <Note data={noteData} />
             </Item>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
@@ -62,14 +63,7 @@ const CoursePage = ({ topbar_title, course }) => {
               <Exam data={examData} />
             </Item>
           </Grid>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Item className="card-container">
-              <ItemTitle title="Notes" />
-
-              <Note data={noteData} />
-            </Item>
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} lg={6}>
+          <Grid item xs={12} sm={12} md={12} lg={12}>
             <Item className="card-container">
               <ItemTitle title="Assignments" />
 

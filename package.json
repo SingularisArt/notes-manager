@@ -116,6 +116,7 @@
     "@syncfusion/ej2-react-popups": "^21.1.41",
     "@syncfusion/ej2-react-richtexteditor": "^21.1.41",
     "@syncfusion/ej2-react-schedule": "^21.1.41",
+    "axios": "^1.5.0",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
@@ -132,6 +133,7 @@
     "react-router-dom": "^6.8.1",
     "react-svg": "^16.1.9",
     "recharts": "^2.5.0",
+    "stream-http": "^3.2.0",
     "tailwind-merge": "^1.13.0",
     "tailwindcss-animate": "^1.0.5"
   },
