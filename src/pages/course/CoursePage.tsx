@@ -21,7 +21,6 @@ import {
   yAxis,
   examData,
   assignmentData,
-  figureData,
   gridData,
   todoData,
 } from "./data";
@@ -34,7 +33,6 @@ type CoursePageProps = {
 };
 
 const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
-
   return (
     <>
       <Topbar title={topbarTitle} />
@@ -77,8 +75,6 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Item>
-              <ItemTitle title="Figures" />
-
               <Figure courseID={courseID} />
             </Item>
           </Grid>

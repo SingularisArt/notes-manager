@@ -8,3 +8,10 @@ export const SidebarData = () => {
 
   return { sidebarData, dispatch };
 };
+
+export const CourseData = () => {
+  const courseData = useSelector((state: RootState) => state.course);
+  const dispatch = useDispatch();
+
+  return { courseData, dispatch };
+};
