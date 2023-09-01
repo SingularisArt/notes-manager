@@ -34,6 +34,7 @@ type CoursePageProps = {
 };
 
 const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
+
   return (
     <>
       <Topbar title={topbarTitle} />

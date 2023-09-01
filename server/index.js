@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import cheerio from "cheerio";
 
 import { spawn } from "child_process";
 
@@ -34,7 +35,7 @@ function getCourseInfo(courseName) {
   return YAML.load(path.join(coursePath, "info.yaml"));
 }
 
-async function getItemsInFolder(directoryPath, abbr, getFiles = true) {
+async function getItemsInFolder(directoryPath, getFiles = true) {
   try {
     const files = await fs.promises.readdir(directoryPath);
 
@@ -95,10 +96,10 @@ app.get("/courses/:courseName/notes", async (req, res) => {
     const examReviewAnswersPath = path.join(coursePath, "exam-review", "answers");
     const examReviewPracticePath = path.join(coursePath, "exam-review", "practice");
 
-    const notesList = await getItemsInFolder(notesPath, `${notesType}/`);
-    const onlineNotesList = await getItemsInFolder(onlineNotesPath, "");
-    const examReviewList = await getItemsInFolder(examReviewAnswersPath, "answers/")
-    const examReviewPracticeList = await getItemsInFolder(examReviewPracticePath, "practice/")
+    const notesList = await getItemsInFolder(notesPath);
+    const onlineNotesList = await getItemsInFolder(onlineNotesPath);
+    const examReviewList = await getItemsInFolder(examReviewAnswersPath)
+    const examReviewPracticeList = await getItemsInFolder(examReviewPracticePath)
 
     const masterTexExists = fs.existsSync(path.join(coursePath, "master.tex"));
     const masterPdfExists = fs.existsSync(path.join(coursePath, "master.pdf"));
@@ -142,16 +143,16 @@ app.get("/courses/:courseName/assignments", async (req, res) => {
     const myPath = path.join(coursePath, replaceString(myAss, courseSearchString));
     const onlinePath = path.join(coursePath, replaceString(onlineAss, courseSearchString));
 
-    const gradedList = await getItemsInFolder(gradedPath, "");
-    const onlineList = await getItemsInFolder(onlinePath, "");
+    const gradedList = await getItemsInFolder(gradedPath);
+    const onlineList = await getItemsInFolder(onlinePath);
 
     const latexPath = path.join(myPath, replaceString(latexAss, myAssignmentsSearchString));
     const yamlPath = path.join(myPath, replaceString(yamlAss, myAssignmentsSearchString));
     const pdfPath = path.join(myPath, replaceString(pdfAss, myAssignmentsSearchString));
 
-    const latexList = await getItemsInFolder(latexPath, "");
-    const yamlList = await getItemsInFolder(yamlPath, "");
-    const pdfList = await getItemsInFolder(pdfPath, "");
+    const latexList = await getItemsInFolder(latexPath);
+    const yamlList = await getItemsInFolder(yamlPath);
+    const pdfList = await getItemsInFolder(pdfPath);
 
     const notes = {
       gradedAssignments: gradedList,
@@ -177,22 +178,32 @@ app.get("/courses/:courseName/figures", async (req, res) => {
     const coursePath = getPath(courseName);
 
     const courseSearchString = "current-course/";
-    const figuresPath = path.join(coursePath, replaceString(config.figures_dir, courseSearchString));
+    const figuresPath = path.join(
+      coursePath,
+      replaceString(config.figures_dir, courseSearchString)
+    );
 
     const figures = {};
-    const figuresList = await getItemsInFolder(figuresPath, "", false);
+    const figuresList = await getItemsInFolder(figuresPath, false);
     for (const figure of figuresList) {
-      const figureItems = await getItemsInFolder(figure, "");
-      const figureList = [];
+      const figureItems = await getItemsInFolder(figure);
+      const figureData = [];
       const number = Number(figure.slice(-2));
 
-      figureItems.forEach(item => {
+      for (const item of figureItems) {
         if (item.slice(-3) === "svg") {
-          figureList.push(path.join(figure, item));
-        }
-      })
+          const svgCode = fs.readFileSync(item, "utf8");
+          const title = item.replace(/^.*[\\\/]/, "").replace(".svg", "").replace(/-/gi, " ");
+          const uppercaseTitle = title.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
 
-      if (figureList.length !== 0) figures[number] = figureList;
+          figureData.push({
+            title: uppercaseTitle,
+            content: svgCode,
+          });
+        }
+      }
+
+      if (figureData.length !== 0) figures[number] = figureData;
     }
 
     res.send(figures);

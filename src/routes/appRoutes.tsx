@@ -1,3 +1,5 @@
+import axios from "axios";
+
 // Pages
 import HomePage from "../pages/home/HomePage";
 import EmailPage from "../pages/email/EmailPage";
@@ -39,40 +41,41 @@ const generalRoutes = [
   },
 ];
 
-const courseRoutes = [
-  {
-    path: "/course/mth-253",
-    element: <CoursePage
-      topbarTitle="Calculus 3"
-      courseID="mth-253"
-    />,
-    state: "mth-253",
-    sidebarProps: {
-      displayText: "Calculus 3 (MTH-253)",
-    },
-  },
-  {
-    path: "/course/phy-123",
-    element: <CoursePage
-      topbarTitle="Physics 123"
-      courseID="phy-123"
-    />,
-    state: "phy-123",
-    sidebarProps: {
-      displayText: "Physics 123 (PHY-123)",
-    }
-  },
-  {
-    path: "/course/psy-202a",
-    element: <CoursePage
-      topbarTitle="Psychology 202"
-      courseID="psy-202a"
-    />,
-    state: "psy-202",
-    sidebarProps: {
-      displayText: "Psychology 202A (PSY-202)",
-    }
-  },
-];
+const API_BASE_URL = "http://localhost:3000/courses/";
+
+const generateCourseRoutes = async () => {
+  try {
+    // Fetch the list of courses
+    const response = await axios.get(API_BASE_URL);
+    const courses = response.data;
+
+    // Fetch data for each course and create the route objects
+    const routePromises = courses.map(async (course: any) => {
+      const courseDataResponse = await axios.get(`${API_BASE_URL}${course.name}`);
+      const courseData = courseDataResponse.data;
+      const title = courseData.title.length > 15 ? courseData.title.substring(0, 15) + "..." : courseData.title;
+
+      return {
+        path: `/course/${course.name}`,
+        element: (
+          <CoursePage topbarTitle={courseData.title} courseID={course.name} />
+        ),
+        state: course.name,
+        sidebarProps: {
+          displayText: `${title} (${course.name.toUpperCase()})`,
+        },
+      };
+    });
+
+    const routes = await Promise.all(routePromises);
+
+    return routes;
+  } catch (error) {
+    console.error("Error generating course routes: ", error);
+    return [];
+  }
+};
+
+const courseRoutes = await generateCourseRoutes();
 
 export { generalRoutes, courseRoutes };

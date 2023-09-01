@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 import sizeConfigs from "../../configs/sizeConfigs";
+import { SidebarData } from "../../utils/redux";
 
 interface Props {
   currentWeek: number;
@@ -11,6 +10,7 @@ interface Props {
 }
 
 const WeekCounter: React.FC<Props> = ({ currentWeek, maxWeeks }) => {
+  const { sidebarData } = SidebarData();
   const [week, setWeek] = useState(currentWeek);
 
   const handlePrevWeek = () => {
@@ -25,7 +25,7 @@ const WeekCounter: React.FC<Props> = ({ currentWeek, maxWeeks }) => {
     }
   };
 
-  const isSidebarEnabled = useSelector((state: RootState) => state.isSidebarEnabled.enabled);
+  const isSidebarEnabled = sidebarData.isSidebarEnabled;
   const mainContentWidth = isSidebarEnabled ? `calc(100% - ${sizeConfigs.sidebar.width})` : "100%";
   const shift = isSidebarEnabled ? sizeConfigs.sidebar.width : "0px";
 

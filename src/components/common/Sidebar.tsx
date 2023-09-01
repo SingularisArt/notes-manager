@@ -1,8 +1,8 @@
-import { useSelector } from "react-redux";
+import React from "react";
 import { Stack, Toolbar } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
-import { Sidebar as ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { Sidebar as ProSidebar, Menu } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 
 import colorConfigs from "../../configs/colorConfigs";
@@ -13,31 +13,25 @@ import { generalRoutes, courseRoutes } from "../../routes/appRoutes";
 import SidebarItem from "./SidebarItem";
 
 import HomePage from "../../pages/home/HomePage";
-// import EmailPage from "../../pages/email/EmailPage";
-// import CalendarPage from "../../pages/calendar/CalendarPage";
-// import CoursePage from "../../pages/course/CoursePage";
+import { toggleSidebar } from "../../store/actions/sidebarActions";
+import { SidebarData } from "../../utils/redux";
 
-// import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-// import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
-// import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-
-// import { IconButton } from "@mui/material";
-// import MenuIcon from "@mui/icons-material/Menu";
-
-const Sidebar = () => {
-  const isSidebarEnabled = useSelector((state: RootState) => state.isSidebarEnabled.enabled);
+const Sidebar: React.FC = () => {
+  const [collapsed, setCollapsed] = React.useState(false);
+  const { sidebarData, dispatch } = SidebarData();
+  const isSidebarEnabled = sidebarData.isSidebarEnabled;
 
   const menuItemStyles = {
-    button: ({ level, active, disabled }) => {
+    button: ({ active }: { active: boolean }) => {
       return {
         color: colorConfigs.sidebar.color,
         backgroundColor: active ? colorConfigs.sidebar.activeBg : colorConfigs.sidebar.bg,
         "&:hover": {
           backgroundColor: colorConfigs.sidebar.hoverBg,
-        }
+        },
       };
     },
-  }
+  };
 
   const sidebarWidth = isSidebarEnabled ? sizeConfigs.sidebar.width : "0px";
 
@@ -50,8 +44,12 @@ const Sidebar = () => {
       }}
     >
       <ProSidebar
+        collapsed={collapsed}
         backgroundColor={colorConfigs.sidebar.bg}
         collapsed={!isSidebarEnabled}
+        onBreakPoint={() => {
+          if (isSidebarEnabled) dispatch(toggleSidebar())
+        }}
         breakPoint="md"
         collapsedWidth="0px"
         transitionDuration={300}
@@ -83,7 +81,7 @@ const Sidebar = () => {
                 style={{
                   opacity: 0.7,
                   letterSpacing: "0.5px",
-                  color: colorConfigs.sidebar.headingBg
+                  color: colorConfigs.sidebar.headingBg,
                 }}
               >
                 General
@@ -103,7 +101,7 @@ const Sidebar = () => {
                 style={{
                   opacity: 0.7,
                   letterSpacing: "0.5px",
-                  color: colorConfigs.sidebar.headingBg
+                  color: colorConfigs.sidebar.headingBg,
                 }}
               >
                 Courses

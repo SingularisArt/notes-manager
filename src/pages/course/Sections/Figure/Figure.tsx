@@ -10,32 +10,25 @@ type FigureProps = {
 
 type FigureData = {
   title: string;
-  figurePath: string;
+  content: string | null;
+};
+
+type FigureDataMap = {
+  [key: string]: FigureData[];
 };
 
 const Figure: React.FC<FigureProps> = ({ courseID }) => {
-  const [data, setData] = useState<{ [key: string]: FigureData[] }>({});
+  const [data, setData] = useState<FigureDataMap>({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchAllNotes = async () => {
       try {
-        const res = await axios.get<{ [key: string]: string[] }>(
+        const res = await axios.get<FigureDataMap>(
           `http://localhost:3000/courses/${courseID}/figures`
         );
 
-        const figureData: { [key: string]: FigureData[] } = {};
-
-        for (const key in res.data) {
-          const figurePaths = res.data[key];
-          const figures: FigureData[] = figurePaths.map((figurePath) => ({
-            title: figurePath.replace(/^.*[\\\/]/, "").replace(".svg", ""),
-            figurePath,
-          }));
-          figureData[key] = figures;
-        }
-
-        setData(figureData);
+        setData(res.data);
         setIsLoading(false);
       } catch (err) {
         console.error(err);
@@ -50,28 +43,40 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
 
   return (
     <>
-      <div className="create-card">
-        <div className="card-title">
-          <input
-            className="create-card-text"
-            type="text"
-            spellCheck={false}
-            placeholder="New Figure"
-          />
-        </div>
-        <div className="card-content"></div>
-      </div>
-
       <Grid container spacing={0} className="card-grid">
-        {Object.keys(data).map((key) =>
-          data[key].map((card, index) => (
-            <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
+        <Grid item xs={12} sm={6} md={6} lg={4}>
+          <div className="create-card">
+            <div className="card-title">
+              <input
+                className="create-card-text"
+                type="text"
+                spellCheck={false}
+                placeholder="New Figure"
+              />
+            </div>
+            <div className="card-content"></div>
+          </div>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} className="card-grid">
+        {Object.keys(data).map((number) =>
+          data[number].map((card, index) => (
+            <Grid item key={index} xs={12} sm={6} md={6} lg={4}>
               <div className="card">
                 <div className="card-title">{card.title}</div>
                 <div className="card-content">
-                  <object data={card.figurePath} type="image/svg+xml">
-                    <img src={card.figurePath} alt={card.title} />
-                  </object>
+                  <img
+                    src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                      card.content || ""
+                    )}`}
+                    alt={card.title}
+                    className="card-image"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  />
                 </div>
               </div>
             </Grid>

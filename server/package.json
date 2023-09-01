@@ -19,6 +19,7 @@
   "main": "index.ts",
   "type": "module",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "mysql": "^2.18.1",

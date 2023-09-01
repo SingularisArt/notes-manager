@@ -1,12 +1,15 @@
-import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { Box, Toolbar } from "@mui/material";
+
+import { SidebarData } from "../../utils/redux";
+
 import colorConfigs from "../../configs/colorConfigs";
 import sizeConfigs from "../../configs/sizeConfigs";
 import Sidebar from "../common/Sidebar";
 
 const MainLayout = () => {
-  const isSidebarEnabled = useSelector((state: RootState) => state.isSidebarEnabled.enabled);
+  const { sidebarData } = SidebarData();
+  const isSidebarEnabled = sidebarData.isSidebarEnabled;
 
   const mainContentWidth = isSidebarEnabled ? `calc(100% - ${sizeConfigs.sidebar.width})` : "100%";
   const sidebarWidth = isSidebarEnabled ? sizeConfigs.sidebar.width : "0px";

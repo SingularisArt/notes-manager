@@ -1,26 +1,19 @@
-import { useSelector, useDispatch } from "react-redux";
-import { AppBar, IconButton, Toolbar, Typography, styled } from "@mui/material";
-import { Notifications } from "@mui/icons-material";
+import React from "react";
+import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { isSidebarEnabledActions } from "../../redux/isSidebarEnabled";
-import { RootState } from "../../redux/store";
+import { toggleSidebar } from "../../store/actions/sidebarActions";
 import Notification from "./Notification";
 import colorConfigs from "../../configs/colorConfigs";
 import sizeConfigs from "../../configs/sizeConfigs";
+import { SidebarData } from "../../utils/redux";
 
 interface TopbarProps {
   title: string;
 }
 
-const Topbar = ({ title }: TopbarProps) => {
-  const dispatch = useDispatch();
-
-  const isSidebarEnabled = useSelector((state: RootState) => state.isSidebarEnabled.enabled);
-  const mainContentWidth = isSidebarEnabled ? `calc(100% - ${sizeConfigs.sidebar.width})` : "100%";
-
-  const handleSidebarToggle = () => {
-    dispatch(isSidebarEnabledActions.toggleSidebar());
-  };
+const Topbar: React.FC<TopbarProps> = ({ title }) => {
+  const { sidebarData, dispatch } = SidebarData();
+  const mainContentWidth = sidebarData.isSidebarEnabled ? `calc(100% - ${sizeConfigs.sidebar.width})` : "100%";
 
   return (
     <AppBar
@@ -41,7 +34,7 @@ const Topbar = ({ title }: TopbarProps) => {
               edge="end"
               color="inherit"
               aria-label="toggle-sidebar"
-              onClick={handleSidebarToggle}
+              onClick={() => dispatch(toggleSidebar())}
               sx={{
                 marginRight: "8px",
                 marginLeft: "-10px",
