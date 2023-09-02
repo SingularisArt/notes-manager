@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import cheerio from "cheerio";
 
 import { spawn } from "child_process";
 
@@ -185,6 +184,7 @@ app.get("/courses/:courseName/figures", async (req, res) => {
 
     const figures = {};
     const figuresList = await getItemsInFolder(figuresPath, false);
+    const tempPath = figuresList[0].slice(0, -2);
     for (const figure of figuresList) {
       const figureItems = await getItemsInFolder(figure);
       const figureData = [];
@@ -206,7 +206,19 @@ app.get("/courses/:courseName/figures", async (req, res) => {
       if (figureData.length !== 0) figures[number] = figureData;
     }
 
+    figures["figuresTempPath"] = tempPath;
     res.send(figures);
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/courses/:courseName/figures/:path", async (req, res) => {
+  try {
+    const figurePath = req.params.path;
+    const svgCode = fs.readFileSync(figurePath, "utf8");
+    res.send(svgCode);
   } catch (err) {
     console.error("Error:", err);
     res.status(500).send("Internal Server Error");
@@ -217,7 +229,7 @@ app.get("/courses/:courseName/figures", async (req, res) => {
 // TODO: Work on getting the information from the mariadb database.
 
 // Open a pdf
-app.get("/open-pdf/:pdfLocation", (req, res) => {
+app.get("/cmd/open-pdf/:pdfLocation", (req, res) => {
   const pdfLocation = req.params.pdfLocation;
   const zathura = spawn("zathura", [pdfLocation], {
     detached: true,
@@ -230,7 +242,7 @@ app.get("/open-pdf/:pdfLocation", (req, res) => {
 });
 
 // Open a file
-app.get("/open-file/:fileLocation", (req, res) => {
+app.get("/cmd/open-file/:fileLocation", (req, res) => {
   const fileLocation = req.params.fileLocation;
   const kitty = spawn("sh", ["-c", `kitty nvim "${fileLocation}"`], {
     detached: true,
@@ -240,6 +252,35 @@ app.get("/open-file/:fileLocation", (req, res) => {
   kitty.unref();
 
   res.send("Opening file in the background with kitty nvim");
+});
+
+// Run a bash command
+app.get("/cmd/command/:cmd", (req, res) => {
+  const cmd = req.params.cmd;
+  const process = spawn("sh", ["-c", cmd], {
+    detached: true,
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  let output = "";
+
+  process.stdout.on("data", (data) => {
+    output += data.toString();
+  });
+
+  process.stderr.on("data", (data) => {
+    output += data.toString();
+  });
+
+  process.on("exit", (code) => {
+    if (code === 0) {
+      res.send(`Command executed successfully:\n${output}`);
+    } else {
+      res.status(500).send(`Command failed with error code ${code}:\n${output}`);
+    }
+  });
+
+  process.unref();
 });
 
 app.listen(3000);

@@ -37,7 +37,7 @@ function checkIfFileInArray(filePath: string, fileTypeToReplace: string, fileTyp
 
 function OpenPDF(path: string): void {
   const pdfLocation = encodeURIComponent(path.replace("tex", "pdf"));
-  const url = `http://localhost:3000/open-pdf/${pdfLocation}`;
+  const url = `http://localhost:3000/cmd/open-pdf/${pdfLocation}`;
 
   axios.get(url)
     .then(_ => { })
@@ -48,7 +48,7 @@ function OpenPDF(path: string): void {
 
 function OpenFile(path: string): void {
   const fileLocation = encodeURIComponent(path);
-  const url = `http://localhost:3000/open-file/${fileLocation}`;
+  const url = `http://localhost:3000/cmd/open-file/${fileLocation}`;
 
   axios.get(url)
     .then(_ => { })

@@ -39,6 +39,7 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
 
       <Box sx={{ width: "100%", transition: "width 0.3s" }}>
         <Grid container rowSpacing={1.2} columnSpacing={1.2}>
+          {/*
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Item className="card-container">
               <ItemTitle title="Study Graph" settingIcon={false} />
@@ -73,11 +74,13 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
               <Assignment data={assignmentData} />
             </Item>
           </Grid>
+          */}
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Item>
               <Figure courseID={courseID} />
             </Item>
           </Grid>
+          {/*
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Item>
               <ItemTitle title="Todos" settingIcon={false} />
@@ -85,6 +88,7 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
               <Todos grid={gridData} data={todoData} />
             </Item>
           </Grid>
+          */}
         </Grid>
       </Box>
 
