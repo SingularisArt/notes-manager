@@ -1,0 +1,23 @@
+.note-table {
+  width: 100%;
+}
+
+.note-table-note {
+  padding-left: 25px;
+}
+
+.note-table-icon-container {
+  text-align: right;
+}
+
+.note-table-icon {
+  vertical-align: middle;
+}
+
+.no-notes {
+  padding-top: 20px;
+}
+
+.notes {
+  line-height: 2.5;
+}

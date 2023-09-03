@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import SubItemTitle from "../../../components/common/SubItemTitle/SubItemTitle";
+import SubItemTitle from "components/common/SubItemTitle/SubItemTitle";
+import "./Assignment.css";
 
 type Duration = {
   hours: number;
@@ -144,19 +145,13 @@ const DisplayAssignments: React.FC<AssignmentProp> = ({
   today,
 }) => {
   return (
-    <table style={{ width: "100%" }}>
+    <table className="assignment-table">
       <tbody>
         {data.map((assignment) => (
           <tr key={assignment.name}>
-            <td
-              style={{
-                width: "50%",
-                paddingLeft: "25px",
-                verticalAlign: "top",
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ fontWeight: "bold" }}>{assignment.name}</div>
+            <td className="assignment-table-row">
+              <div className="assignment-table-row-content">
+                <div className="assignment-table-row-content-name">{assignment.name}</div>
                 <div>
                   {assignment.submitted === true
                     ? GetGrade(assignment.grade)
@@ -179,8 +174,8 @@ const DisplayAssignments: React.FC<AssignmentProp> = ({
 const Assignment: React.FC<AssignmentProp> = ({ data }) => {
   if (data.length === 0) {
     return (
-      <div style={{ paddingTop: "20px" }}>
-        <SubItemTitle title="No Exams" />
+      <div className="no-assignments">
+        <SubItemTitle title="No Assignments" />
       </div>
     );
   }
@@ -206,7 +201,7 @@ const Assignment: React.FC<AssignmentProp> = ({ data }) => {
   const submitted = data.filter((assignment) => assignment.submitted);
 
   return (
-    <div style={{ lineHeight: 2.5 }}>
+    <div className="assignments">
       <SubItemTitle title="Assignments Overdue" />
 
       {overdue.length === 0 ? (

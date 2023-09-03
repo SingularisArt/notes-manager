@@ -1,0 +1,19 @@
+.main-layout {
+  background-color: var(--main-bg);
+}
+
+.main-layout-container {
+  display: flex;
+}
+
+.sidebar {
+  flex-shrink: 0;
+  transition: width 0.3s;
+}
+
+.main-content {
+  flex-grow: 1;
+  min-height: 100vh;
+  transition: width 0.3s;
+  padding: 20px;
+}

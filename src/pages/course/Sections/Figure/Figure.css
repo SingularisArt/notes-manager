@@ -1,36 +1,33 @@
-.card-grid {
-  justify-content: center;
-  align-items: stretch;
-  padding-bottom: 10px;
-}
-
 .card {
+  background-color: var(--figure-bg);
+  color: var(--figure-color);
   border: none;
   display: flex;
   flex-direction: column;
 }
 
 .card-title {
+  background-color: var(--figure-title-bg);
+  color: var(--figure-title-color);
   padding: 5px;
   text-align: center;
   margin-bottom: -10px;
 }
 
+.card-grid {
+  justify-content: center;
+  align-items: stretch;
+  padding-bottom: 10px;
+}
+
 .card-content {
+  background-color: var(--figure-content-bg);
+  color: var(--figure-content-color);
   position: relative;
   padding: 10px;
   flex-grow: 1;
   margin-top: 10px;
   height: 200px;
-}
-
-.delete-icon {
-  width: 80%;
-  height: 80%;
-  overflow: auto;
-  margin: auto;
-  position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
 }
 
 .image-container {
@@ -75,9 +72,19 @@
   text-align: center;
 }
 
-/* .create-card-text::placeholder { */
-/*   color: #606877; */
-/* } */
+.delete-icon {
+  color: red;
+  width: 80%;
+  height: 80%;
+  overflow: auto;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.create-card-text::placeholder {
+  color: var(--figure-title-placeholder);
+}
 
 input,
 select,

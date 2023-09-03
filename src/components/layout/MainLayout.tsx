@@ -7,6 +7,8 @@ import colorConfigs from "../../configs/colorConfigs";
 import sizeConfigs from "../../configs/sizeConfigs";
 import Sidebar from "../common/Sidebar/Sidebar";
 
+import "./MainLayout.css";
+
 const MainLayout = () => {
   const { sidebarData } = SidebarData();
   const isSidebarEnabled = sidebarData.isSidebarEnabled;
@@ -15,27 +17,12 @@ const MainLayout = () => {
   const sidebarWidth = isSidebarEnabled ? sizeConfigs.sidebar.width : "0px";
 
   return (
-    <div style={{ backgroundColor: colorConfigs.mainBg }}>
-      <Box sx={{ display: "flex" }}>
-        <Box
-          component="nav"
-          sx={{
-            width: sidebarWidth,
-            flexShrink: 0,
-            transition: "width 0.3s",
-          }}
-        >
+    <div className="main-layout">
+      <Box className="main-layout-container">
+        <Box className="sidebar" sx={{ width: sidebarWidth }}>
           <Sidebar />
         </Box>
-        <Box
-          sx={{
-            flexGrow: 1,
-            p: 3,
-            width: mainContentWidth,
-            minHeight: "100vh",
-            transition: "width 0.3s",
-          }}
-        >
+        <Box className="main-content" sx={{ width: mainContentWidth }}>
           <Toolbar />
           <Outlet />
         </Box>

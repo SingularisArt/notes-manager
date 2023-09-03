@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import createCourseRouters from "./routes/courses.js";
-import cmdRouters from "./routes/cmd.js";
 import path from "path";
 import YAML from "yamljs";
 
@@ -22,6 +21,5 @@ app.get("/yaml", (_, res) => {
 });
 
 app.use("/courses", createCourseRouters(config));
-app.use("/cmd", cmdRouters);
 
 app.listen(3000);

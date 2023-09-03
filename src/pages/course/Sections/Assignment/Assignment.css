@@ -1,0 +1,26 @@
+.assignment-table {
+  width: 100%;
+}
+
+.assignment-table-row {
+  width: 50%;
+  padding-left: 25px;
+  vertical-align: top;
+}
+
+.assignment-table-row-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.assignment-table-row-content-name {
+  font-weight: bold;
+}
+
+.no-assignments {
+  padding-top: 20px;
+}
+
+.assignments {
+  line-height: 2.5;
+}

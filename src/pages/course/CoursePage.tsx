@@ -8,10 +8,10 @@ import WeekCounter from "../../components/common/WeekCounter/WeekCounter";
 
 import Graph from "./Sections/Graph";
 import Exam from "./Sections/Exam/Exam";
-import Note from "./Sections/Note";
-import Assignment from "./Sections/Assignment";
+import Note from "./Sections/Note/Note";
+import Assignment from "./Sections/Assignment/Assignment";
 import Figure from "./Sections/Figure/Figure";
-import Todos from "./Sections/Todos";
+import Todos from "./Sections/Todos/Todos";
 
 import Topbar from "../../components/common/Topbar/Topbar";
 
@@ -37,7 +37,7 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
     <>
       <Topbar title={topbarTitle} />
 
-      <Box sx={{ width: "100%", transition: "width 0.3s" }}>
+      <Box className="container">
         <Grid container rowSpacing={1.2} columnSpacing={1.2}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Item className="card-container">
@@ -88,7 +88,7 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
         </Grid>
       </Box>
 
-      <div style={{ height: "30px" }}></div>
+      <div className="bottom-space"></div>
 
       <WeekCounter currentWeek={1} maxWeeks={12} />
     </>

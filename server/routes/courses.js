@@ -55,6 +55,41 @@ function getFigurePath(config, courseName, figureName, week) {
   return path.join(figureDirectoryPath, figureName);
 }
 
+function getNumFolders(fullPath, numFolders = 2) {
+  const pathComponents = fullPath.split('/');
+  const numComponents = Math.max(0, pathComponents.length - numFolders);
+  const resultPath = pathComponents.slice(numComponents).join('/');
+
+  return resultPath;
+};
+
+function processFileList(fileList, type, numFolders = 2) {
+  return fileList.map((file) => {
+    const currentFile = file.replace(/\.[^/.]+$/, "");
+    const tex = fs.existsSync(currentFile + ".tex");
+    const yaml = fs.existsSync(currentFile + ".yaml");
+    const pdf = fs.existsSync(currentFile + ".pdf");
+
+    let name = "";
+    if (tex) {
+      const texContent = fs.readFileSync(currentFile + ".tex", 'utf8').split("\n")[0];
+      const match = texContent.match(/\\nte\[[^\]]*\]{[^}]*}{([^}]*)}/);
+      name = match ? match[1] : "";
+    }
+
+    return {
+      name: name,
+      tex,
+      texPath: tex ? getNumFolders(currentFile + ".tex", numFolders) : "",
+      yaml,
+      yamlPath: yaml ? getNumFolders(currentFile + ".yaml", numFolders) : "",
+      pdf,
+      pdfPath: pdf ? getNumFolders(currentFile + ".pdf", numFolders) : "",
+      type: type,
+    };
+  });
+}
+
 export default function createCourseRouters(config) {
   courseRouters.get("/", (_, res) => {
     const expandedDirectory = getPath(config, "");
@@ -93,27 +128,57 @@ export default function createCourseRouters(config) {
     const examReviewAnswersPath = path.join(coursePath, "exam-review", "answers");
     const examReviewPracticePath = path.join(coursePath, "exam-review", "practice");
 
-    const notesList = await getItemsInFolder(notesPath);
-    const onlineNotesList = await getItemsInFolder(onlineNotesPath);
-    const examReviewList = await getItemsInFolder(examReviewAnswersPath)
-    const examReviewPracticeList = await getItemsInFolder(examReviewPracticePath)
+    const [notesList, onlineNotesList, examReviewList, examReviewPracticeList] = await Promise.all([
+      getItemsInFolder(notesPath),
+      getItemsInFolder(onlineNotesPath),
+      getItemsInFolder(examReviewAnswersPath),
+      getItemsInFolder(examReviewPracticePath),
+    ]);
+
+    const notesData = processFileList(notesList, "lecture");
+    const onlineNotesData = processFileList(onlineNotesList, "online-lecture");
+    const examReviewPracticeData = processFileList(examReviewList, "practice", 3);
+    const examReviewAnswersData = processFileList(examReviewPracticeList, "answer", 3);
 
     const masterTexExists = fs.existsSync(path.join(coursePath, "master.tex"));
     const masterPdfExists = fs.existsSync(path.join(coursePath, "master.pdf"));
 
-    if (masterTexExists) notesList.push(path.join(coursePath, "master.tex"));
-    if (masterPdfExists) notesList.push(path.join(coursePath, "master.pdf"));
+    if (masterTexExists) notesData.push({
+      name: "Master Note",
+      tex: masterTexExists,
+      texPath: getNumFolders("master.tex"),
+      pdf: masterPdfExists,
+      pdfPath: getNumFolders("master.pdf"),
+      yaml: false,
+      yamlPath: "",
+      type: "",
+    });
 
     const notes = {
-      notes: notesList,
-      onlineNotes: onlineNotesList,
-      examReviews: [
-        ...examReviewList,
-        ...examReviewPracticeList
-      ]
+      notesData: { ...notesData },
+      onlineNotesData: { ...onlineNotesData },
+      examReviewNotesData: { ...examReviewPracticeData,...examReviewAnswersData },
     };
 
     res.send(notes);
+  });
+
+  courseRouters.get("/:courseName/notes/open-note", async (req, res) => {
+    const courseName = req.params.courseName;
+    const coursePath = getPath(config, courseName);
+    const noteName = req.query["note-name"];
+    const type = req.query["type"];
+    const notePath = path.join(coursePath, noteName);
+
+    const cmd = type === "pdf" ? "zathura" : "kitty nvim";
+    const process = spawn("sh", ["-c", `${cmd} "${notePath}"`], {
+      detached: true,
+      stdio: "ignore",
+    });
+
+    process.unref();
+
+    res.send(`Opening note in the background with ${cmd}`);
   });
 
   // Get the assignments for a course

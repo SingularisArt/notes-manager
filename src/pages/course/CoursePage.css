@@ -1,5 +1,14 @@
+.container {
+  width: 100%;
+  transition: width 0.3s;
+}
+
 .card-container {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+.bottom-space {
+  height: 30px;
 }

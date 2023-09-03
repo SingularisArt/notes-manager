@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
 import Zoom from "react-medium-image-zoom";
-import colorConfigs from "../../../../configs/colorConfigs";
 import { BsTrash } from "react-icons/bs";
 
-import ItemTitle from "../../../../components/common/ItemTitle/ItemTitle";
+import ItemTitle from "components/common/ItemTitle/ItemTitle";
 
 import "react-medium-image-zoom/dist/styles.css";
 
-import { CourseData } from "../../../../utils/redux";
+import { CourseData } from "utils/redux";
 
 import "./Figure.css";
 
@@ -36,18 +35,13 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
 
   const cardData = (card: FigureData, drawTrash: boolean) => {
     return (
-      <div className="card" style={{ backgroundColor: colorConfigs.figure.bg, color: colorConfigs.figure.color }}>
-        <div className="card-title" style={{ backgroundColor: colorConfigs.figure.title.bg, color: colorConfigs.figure.title.color }}>
+      <div className="card">
+        <div className="card-title">
           {card.title}
         </div>
-        <div className="card-content" style={{ backgroundColor: colorConfigs.figure.content.bg, color: colorConfigs.figure.content.color }}>
+        <div className="card-content">
           {drawTrash && (
-            <BsTrash
-              className="delete-icon"
-              style={{
-                color: "red",
-              }}
-            />
+            <BsTrash className="delete-icon" />
           )}
           <img
             className="card-image"
@@ -125,10 +119,7 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
       <Grid container spacing={0} className="card-grid">
         <Grid item xs={12} sm={6} md={6} lg={4}>
           <div className="create-card">
-            <div className="card-title" style={{
-              backgroundColor: colorConfigs.figure.title.bg,
-              color: colorConfigs.figure.title.color
-            }}>
+            <div className="card-title">
               <input
                 className="create-card-text"
                 type="text"
@@ -142,7 +133,7 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
                 }}
               />
             </div>
-            <div className="card-content" style={{ backgroundColor: colorConfigs.figure.content.bg, color: colorConfigs.figure.content.color }}></div>
+            <div className="card-content"></div>
           </div>
         </Grid>
       </Grid>

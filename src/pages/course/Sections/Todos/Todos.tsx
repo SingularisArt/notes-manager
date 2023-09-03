@@ -7,7 +7,7 @@ import {
 
 import { FaCalendar, FaClock } from "react-icons/fa";
 
-import SubItemTitle from "../../../components/common/SubItemTitle/SubItemTitle";
+import SubItemTitle from "components/common/SubItemTitle/SubItemTitle";
 
 type TodosProp = {
   data: {

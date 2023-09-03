@@ -1,7 +1,43 @@
-/* To change color, font family and font size */
-.e-inplaceeditor .e-editable-value-wrapper .e-editable-value {
-    border-bottom: 2px dotted green;
-    color: red;
-    font-size: 12px;
-    font-family: Segoe UI
+.exam-table {
+  width: 100%;
+}
+
+.exam-table-row {
+  width: 50%;
+  padding-left: 25px;
+  vertical-align: top;
+}
+
+.exam-table-row-name {
+  display: flex;
+  justify-content: space-between;
+}
+
+.exam-table-row-name-title {
+  font-weight: bold;
+}
+
+.exam-table-row-sections {
+  width: 100%;
+}
+
+.exam-table-row-sections-name {
+  padding-left: 25px;
+  text-align: left;
+}
+
+.exam-table-row-sections-status {
+  text-align: center;
+}
+
+.exam-table-row-sections-date {
+  text-align: right;
+}
+
+.no-exams {
+  padding-top: 20px;
+}
+
+.exams {
+  line-height: 2.5;
 }
