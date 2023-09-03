@@ -1,0 +1,21 @@
+.sidebar-button,
+.sidebar-button-active {
+  color: var(--sidebar-color) !important;
+  padding: 12px 24px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  background-color: var(--sidebar-bg);
+}
+
+.sidebar-button.active {
+  background-color: var(--sidebar-active-bg);
+}
+
+.sidebar-button:hover {
+  background-color: var(--sidebar-hover-bg);
+}
+
+.sidebar-icon {
+  color: var(--sidebar-color) !important;
+}

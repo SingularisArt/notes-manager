@@ -1,0 +1,13 @@
+.item-title {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  padding-top: 10px;
+  z-index: 2;
+  border-bottom: 1px solid #8a8a8a;
+}
+
+.title-div {
+ display: flex;
+ align-items: center;
+}

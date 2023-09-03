@@ -1,0 +1,40 @@
+.sidebar {
+  position: sticky;
+  top: 0;
+}
+
+.sidebar-header {
+  margin-top: 10px;
+  white-space: nowrap;
+}
+
+.sidebar-header-link {
+  text-decoration: none;
+}
+
+.sidebar-title {
+  color: var(--sidebar-color);
+}
+
+.sidebar-content {
+  flex: 1;
+  margin-bottom: 32px;
+  margin-top: 15px;
+}
+
+.sidebar-general-container {
+  padding: 0 24px;
+  margin-bottom: 8px;
+}
+
+.sidebar-general, .sidebar-courses {
+  opacity: 0.7;
+  letter-spacing: 0.5px;
+  color: var(--sidebar-heading-bg);
+}
+
+.sidebar-courses-container {
+  padding: 0 24px;
+  margin-bottom: 8px;
+  margin-top: 32px;
+}

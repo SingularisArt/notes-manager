@@ -5,7 +5,7 @@ import { SidebarData } from "../../utils/redux";
 
 import colorConfigs from "../../configs/colorConfigs";
 import sizeConfigs from "../../configs/sizeConfigs";
-import Sidebar from "../common/Sidebar";
+import Sidebar from "../common/Sidebar/Sidebar";
 
 const MainLayout = () => {
   const { sidebarData } = SidebarData();

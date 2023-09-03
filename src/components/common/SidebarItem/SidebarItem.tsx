@@ -1,10 +1,9 @@
 import { ListItemButton, ListItemIcon } from "@mui/material";
 import { Link } from "react-router-dom";
-import { RouteType } from "../../routes/config";
-import { setActivePage } from "../../store/actions/sidebarActions";
-
-import colorConfigs from "../../configs/colorConfigs";
-import { SidebarData } from "../../utils/redux";
+import { RouteType } from "../../../routes/config";
+import { setActivePage } from "../../../store/actions/sidebarActions";
+import { SidebarData } from "../../../utils/redux";
+import "./SidebarItem.css";
 
 type Props = {
   item: RouteType;
@@ -24,19 +23,11 @@ const SidebarItem: React.FC<Props> = ({ item }) => {
         component={Link}
         to={item.path}
         onClick={handleItemClick}
-        sx={{
-          color: colorConfigs.sidebar.color,
-          "&:hover": {
-            backgroundColor: colorConfigs.sidebar.hoverBg,
-          },
-          backgroundColor: activePage === item.state ? colorConfigs.sidebar.activeBg : "unset",
-          paddingY: "12px",
-          paddingX: "24px",
-        }}
+        className={`sidebar-button ${activePage == item.state ? 'active' : ''}`}
       >
         {
           item.sidebarProps.icon ? (
-            <ListItemIcon sx={{ color: colorConfigs.sidebar.color }}>
+            <ListItemIcon className="sidebar-icon">
               {item.sidebarProps.icon && item.sidebarProps.icon}
             </ListItemIcon>
           ) : null

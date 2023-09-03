@@ -4,7 +4,7 @@ import axios from "axios";
 import TEXSymbol from "../../../components/common/Symbols/TEX";
 import PDFSymbol from "../../../components/common/Symbols/PDF";
 
-import SubItemTitle from "../../../components/common/SubItemTitle";
+import SubItemTitle from "../../../components/common/SubItemTitle/SubItemTitle";
 
 interface NoteItem {
   name: string;

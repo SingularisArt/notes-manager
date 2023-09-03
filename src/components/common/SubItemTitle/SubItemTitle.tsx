@@ -1,15 +1,13 @@
 import React from "react";
+import "./SubItemTitle.css";
 
-interface SubItemTitleProps {
+type SubItemTitleProps = {
   title: string;
 }
 
 const SubItemTitle: React.FC<SubItemTitleProps> = ({ title }) => {
   return (
-    <div style={{
-      fontSize: "17px",
-      color: "#9E9C9E",
-    }}>
+    <div className="sub-item-title">
       {title}
     </div>
   );

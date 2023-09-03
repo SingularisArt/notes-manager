@@ -2,7 +2,7 @@ import React from "react";
 
 import { SkeletonComponent } from '@syncfusion/ej2-react-notifications';
 
-import Topbar from "../../components/common/Topbar";
+import Topbar from "../../components/common/Topbar/Topbar";
 
 type Props = {};
 

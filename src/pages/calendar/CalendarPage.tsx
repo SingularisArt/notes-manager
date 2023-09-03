@@ -16,7 +16,7 @@ import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
 
 import { scheduleData } from "./data";
 
-import Topbar from "../../components/common/Topbar";
+import Topbar from "../../components/common/Topbar/Topbar";
 
 const PropertyPane = (props) => <div className="mt-5">{props.children}</div>;
 

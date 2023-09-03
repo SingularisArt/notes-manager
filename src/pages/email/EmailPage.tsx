@@ -1,4 +1,4 @@
-import Topbar from "../../components/common/Topbar";
+import Topbar from "../../components/common/Topbar/Topbar";
 
 type Props = {};
 

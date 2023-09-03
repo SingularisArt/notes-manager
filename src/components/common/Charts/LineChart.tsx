@@ -1,4 +1,5 @@
 import React from "react";
+import colorConfigs from "../../../configs/colorConfigs";
 import {
   Category,
   ChartComponent,
@@ -10,7 +11,6 @@ import {
   SeriesDirective,
   Legend,
   AxisModel,
-  ValueType,
 } from "@syncfusion/ej2-react-charts";
 
 type LineChartProps = {
@@ -22,8 +22,8 @@ type LineChartProps = {
   height?: string;
   width?: number;
   thickness?: number;
-  xAxis: ValueType;
-  yAxis: ValueType;
+  xAxis: AxisModel;
+  yAxis: AxisModel;
   name: string;
   xName: string;
   yName: string;
@@ -42,7 +42,11 @@ const LineChart: React.FC<LineChartProps> = ({
   name,
   xName,
   yName,
-  marker = { dataLabel: { visible: false } },
+  marker = {
+    dataLabel: {
+      visible: false,
+    },
+  },
   legend = { visible: false },
 }) => {
   return (
@@ -65,6 +69,7 @@ const LineChart: React.FC<LineChartProps> = ({
           name={name}
           marker={marker}
           width={thickness}
+          fill={colorConfigs.graph.stroke}
         />
       </SeriesCollectionDirective>
     </ChartComponent>

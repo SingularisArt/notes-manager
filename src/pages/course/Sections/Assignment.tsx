@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import SubItemTitle from "../../../components/common/SubItemTitle";
+import SubItemTitle from "../../../components/common/SubItemTitle/SubItemTitle";
 
 type Duration = {
   hours: number;

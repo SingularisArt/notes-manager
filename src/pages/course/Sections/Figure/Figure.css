@@ -11,8 +11,6 @@
 }
 
 .card-title {
-  background-color: #2C3F55;
-  color: #fff;
   padding: 5px;
   text-align: center;
   margin-bottom: -10px;
@@ -21,7 +19,6 @@
 .card-content {
   position: relative;
   padding: 10px;
-  background-color: #EEEDEF;
   flex-grow: 1;
   margin-top: 10px;
   height: 200px;
@@ -78,9 +75,9 @@
   text-align: center;
 }
 
-.create-card-text::placeholder {
-  color: #606877;
-}
+/* .create-card-text::placeholder { */
+/*   color: #606877; */
+/* } */
 
 input,
 select,

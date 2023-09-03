@@ -1,0 +1,21 @@
+.container .topbar {
+  transition: width 0.3s;
+  box-shadow: unset;
+  background-color: var(--topbar-bg);
+  color: var(--topbar-color);
+}
+
+.container .toolbar {
+ display: flex;
+  justify-content: space-between;
+}
+
+.container .toolbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.container .toggle-sidebar {
+  margin-right: 8px;
+  margin-left: -10px;
+}
