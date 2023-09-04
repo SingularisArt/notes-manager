@@ -135,7 +135,7 @@ export default function createCourseFigureRouters(config, courseName) {
 
     const currentModuleURL = import.meta.url;
     const currentModulePath = fileURLToPath(currentModuleURL);
-    const src = path.join(path.dirname(currentModulePath), "../../src/data/template-figure.svg");
+    const src = path.join(path.dirname(currentModulePath), "../../../src/data/template-figure.svg");
     const base = path.basename(figurePath).replace(".svg", "");
 
     fs.mkdirSync(path.dirname(figurePath), { recursive: true });
