@@ -1,44 +1,118 @@
 import { ValueType } from "@syncfusion/ej2-react-charts";
 
-export const graphData = [
-  { day: "Mon", hour: 5 },
-  { day: "Tue", hour: 3 },
-  { day: "Wed", hour: 7 },
-  { day: "Thu", hour: 4 },
-  { day: "Fri", hour: 9 },
-  { day: "Sat", hour: 1 },
-  { day: "Sun", hour: 0 },
-];
+export const graphData = {
+  1: [
+    { day: 'Mon', hour: 9 },
+    { day: 'Tue', hour: 1 },
+    { day: 'Wed', hour: 6 },
+    { day: 'Thu', hour: 0 },
+    { day: 'Fri', hour: 2 },
+    { day: 'Sat', hour: 4 },
+    { day: 'Sun', hour: 2 }
+  ],
+  2: [
+    { day: 'Mon', hour: 8 },
+    { day: 'Tue', hour: 8 },
+    { day: 'Wed', hour: 1 },
+    { day: 'Thu', hour: 5 },
+    { day: 'Fri', hour: 4 },
+    { day: 'Sat', hour: 6 },
+    { day: 'Sun', hour: 5 }
+  ],
+  3: [
+    { day: 'Mon', hour: 2 },
+    { day: 'Tue', hour: 0 },
+    { day: 'Wed', hour: 1 },
+    { day: 'Thu', hour: 2 },
+    { day: 'Fri', hour: 5 },
+    { day: 'Sat', hour: 2 },
+    { day: 'Sun', hour: 2 }
+  ],
+  4: [
+    { day: 'Mon', hour: 9 },
+    { day: 'Tue', hour: 4 },
+    { day: 'Wed', hour: 1 },
+    { day: 'Thu', hour: 7 },
+    { day: 'Fri', hour: 2 },
+    { day: 'Sat', hour: 7 },
+    { day: 'Sun', hour: 7 }
+  ],
+  5: [
+    { day: 'Mon', hour: 9 },
+    { day: 'Tue', hour: 2 },
+    { day: 'Wed', hour: 9 },
+    { day: 'Thu', hour: 9 },
+    { day: 'Fri', hour: 9 },
+    { day: 'Sat', hour: 3 },
+    { day: 'Sun', hour: 8 }
+  ],
+  6: [
+    { day: 'Mon', hour: 6 },
+    { day: 'Tue', hour: 1 },
+    { day: 'Wed', hour: 6 },
+    { day: 'Thu', hour: 9 },
+    { day: 'Fri', hour: 2 },
+    { day: 'Sat', hour: 5 },
+    { day: 'Sun', hour: 6 }
+  ],
+  7: [
+    { day: 'Mon', hour: 1 },
+    { day: 'Tue', hour: 2 },
+    { day: 'Wed', hour: 8 },
+    { day: 'Thu', hour: 5 },
+    { day: 'Fri', hour: 9 },
+    { day: 'Sat', hour: 3 },
+    { day: 'Sun', hour: 1 }
+  ],
+  8: [
+    { day: 'Mon', hour: 4 },
+    { day: 'Tue', hour: 6 },
+    { day: 'Wed', hour: 7 },
+    { day: 'Thu', hour: 9 },
+    { day: 'Fri', hour: 0 },
+    { day: 'Sat', hour: 7 },
+    { day: 'Sun', hour: 0 }
+  ],
+  9: [
+    { day: 'Mon', hour: 4 },
+    { day: 'Tue', hour: 2 },
+    { day: 'Wed', hour: 7 },
+    { day: 'Thu', hour: 1 },
+    { day: 'Fri', hour: 5 },
+    { day: 'Sat', hour: 5 },
+    { day: 'Sun', hour: 7 }
+  ],
+  10: [
+    { day: 'Mon', hour: 1 },
+    { day: 'Tue', hour: 4 },
+    { day: 'Wed', hour: 4 },
+    { day: 'Thu', hour: 8 },
+    { day: 'Fri', hour: 4 },
+    { day: 'Sat', hour: 9 },
+    { day: 'Sun', hour: 7 }
+  ],
+  11: [
+    { day: 'Mon', hour: 4 },
+    { day: 'Tue', hour: 6 },
+    { day: 'Wed', hour: 5 },
+    { day: 'Thu', hour: 8 },
+    { day: 'Fri', hour: 4 },
+    { day: 'Sat', hour: 6 },
+    { day: 'Sun', hour: 3 }
+  ],
+  12: [
+    { day: 'Mon', hour: 9 },
+    { day: 'Tue', hour: 1 },
+    { day: 'Wed', hour: 1 },
+    { day: 'Thu', hour: 1 },
+    { day: 'Fri', hour: 4 },
+    { day: 'Sat', hour: 3 },
+    { day: 'Sun', hour: 7 }
+  ]
+};
 
 export const xAxis = { valueType: "Category" as ValueType };
 export const yAxis = { labelFormat: "{value} hr" as ValueType };
-
-export const noteData = [
-  {
-    name: "Type 1",
-    texPath: "",
-    pdfPath: "",
-    tex: true,
-    pdf: true,
-    type: "lecture",
-  },
-  {
-    name: "Type 2",
-    texPath: "",
-    pdfPath: "",
-    tex: true,
-    pdf: true,
-    type: "online",
-  },
-  {
-    name: "Type 3",
-    texPath: "",
-    pdfPath: "",
-    tex: true,
-    pdf: true,
-    type: "review",
-  },
-];
 
 export const examData = [
   {
@@ -83,95 +157,6 @@ export const assignmentData = [
     dueDate: "2023-03-01",
     grade: "100",
   },
-  {
-    name: "Graded Assignment 2",
-    submitted: true,
-    dueDate: "2023-03-02",
-    grade: "NA",
-  },
-  {
-    name: "Graded Assignment 3",
-    submitted: true,
-    dueDate: "2023-03-03",
-    grade: "NA",
-  },
-  {
-    name: "Graded Assignment 4",
-    submitted: true,
-    dueDate: "2023-03-04",
-    grade: "NA",
-  },
-  {
-    name: "Graded Assignment 5",
-    submitted: false,
-    dueDate: "2023-04-27",
-    grade: "NA",
-  },
-  {
-    name: "Graded Assignment 6",
-    submitted: false,
-    dueDate: "2023-04-02",
-    grade: "NA",
-  },
-  {
-    name: "Graded Assignment 7",
-    submitted: false,
-    dueDate: "2023-04-03",
-    grade: "NA",
-  },
-  {
-    name: "Graded Assignment 8",
-    submitted: false,
-    dueDate: "2023-05-04",
-    grade: "NA",
-  },
-  {
-    name: "Graded Assignment 9",
-    submitted: false,
-    dueDate: "2023-05-05",
-    grade: "NA",
-  },
-  {
-    name: "Graded Assignment 10",
-    submitted: false,
-    dueDate: "2023-05-06",
-    grade: "NA",
-  },
-];
-
-export const figureData = [
-  {
-    title: "Figure 1",
-    figurePath: "../../data/figures/antipode-preserving-maps.svg",
-  },
-  {
-    title: "Figure 2",
-    figurePath: "",
-  },
-  {
-    title: "Figure 3",
-    figurePath: "",
-  },
-  {
-    title: "Figure 4",
-    figurePath: "",
-  },
-  {
-    title: "Figure 5",
-    figurePath: "",
-  },
-  {
-    title: "Figure 6",
-    figurePath: "",
-  },
-  {
-    title: "Figure 7",
-    figurePath: "",
-  },
-  {
-    title: "Figure 8",
-    figurePath: "",
-  },
 ];
 
 export const gridData = [
@@ -183,39 +168,20 @@ export const gridData = [
 export const todoData = [
   {
     Id: "Task 1",
-    Title: "Finish Graded Assignment 1",
-    Summary: "Complete Graded Assignment 1 for the Calculus 3 class",
+    Title: "In Progress Task",
+    Summary: "Complete the task that is in progress",
     Status: "In Progress",
   },
   {
     Id: "Task 2",
-    Title: "Finish Graded Assignment 2",
-    Summary: "Complete Graded Assignment 2 for the Calculus 3 class",
-    Status: "In Progress",
-  },
-  {
-    Id: "Task 3",
-    Title: "Finish Graded Assignment 3",
-    Summary: "Complete Graded Assignment 3 for the Calculus 3 class",
-    Status: "In Progress",
-  },
-  {
-    Id: "Task 4",
-    Title: "Study for Exam",
-    Summary: "Start studying for the upcoming exam for the MTH-253 class",
+    Title: "Todo Task",
+    Summary: "Complete the task that is in todo",
     Status: "Todo",
   },
   {
-    Id: "Task 5",
-    Title: "Complete Journal Assignment",
-    Summary: "Complete the Weekly Journal assignment for my PHY-202A class",
-    Status: "Done",
-  },
-  {
-    Id: "Task 6",
-    Title: "Complete Lab 4",
-    Summary:
-      "Complete lab 4, which deals with dark matter for my PHY-123 class",
+    Id: "Task 3",
+    Title: "Done Task",
+    Summary: "Complete the task that is in done.",
     Status: "Done",
   },
 ];

@@ -33,30 +33,6 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
   const { courseData } = CourseData();
   const currentWeek = courseData.week;
 
-  const cardData = (card: FigureData, drawTrash: boolean) => {
-    return (
-      <div className="card">
-        <div className="card-title">
-          {card.title}
-        </div>
-        <div className="card-content">
-          {drawTrash && (
-            <BsTrash className="delete-icon" />
-          )}
-          <img
-            className="card-image"
-            src={`data:image/svg+xml;utf8,${encodeURIComponent(card.content || "")}`}
-            alt={card.title}
-            onContextMenu={(e) => {
-              e.preventDefault();
-              openFigure(card.title);
-            }}
-          />
-        </div>
-      </div>
-    );
-  };
-
   useEffect(() => {
     const fetchAllNotes = async () => {
       try {
@@ -77,22 +53,43 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
     return <div>Loading...</div>;
   }
 
-  const openFigure = async (figureName: string) => {
-    const fileName = encodeURIComponent(figureName.toLowerCase().replace(/\s/g, "-") + ".svg")
+  const openFigure = async (card: FigureData) => {
+    const fileName = encodeURIComponent(card.title.toLowerCase().replace(/\s/g, "-") + ".svg");
     const encodedFigurePath = encodeURIComponent(fileName);
-    await axios.get(`http://localhost:3000/courses/${courseID}/figures/open-figure?figure-name=${encodedFigurePath}&week-number=${currentWeek}`)
+
+    const newFigureData = await axios.get(`http://localhost:3000/courses/${courseID}/figures/open-figure?figure-name=${encodedFigurePath}&week-number=${currentWeek}`);
+    const newContent = newFigureData.data;
+
+    const currentWeekData = data[currentWeek];
+    const selectedFigureIndex = currentWeekData.findIndex((figure) => figure.title === card.title);
+
+    if (selectedFigureIndex !== -1) {
+      const updatedWeekData = [...currentWeekData];
+      updatedWeekData[selectedFigureIndex] = {
+        ...updatedWeekData[selectedFigureIndex],
+        content: newContent,
+      };
+
+      setData((prevData) => ({
+        ...prevData,
+        [currentWeek]: updatedWeekData,
+      }));
+    }
   };
 
   const createFigure = async (title: string) => {
-    const fileName = encodeURIComponent(title.toLowerCase().replace(/\s/g, "-") + ".svg")
-    const searchParams = `?figure-name=${fileName}&week-number=${currentWeek}`
+    const fileName = encodeURIComponent(title.toLowerCase().replace(/\s/g, "-") + ".svg");
+    const searchParams = `figure-name=${fileName}&week-number=${currentWeek}`;
 
-    await axios.get(`http://localhost:3000/courses/${courseID}/figures/create-figure${searchParams}`)
-    let figureData = await axios.get(`http://localhost:3000/courses/${courseID}/figures/get-figure-data${searchParams}`)
+    const beautifulTitleResponse = await axios.get(`http://localhost:3000/courses/${courseID}/figures/create-figure?${searchParams}`);
+    const beautifulTitle = beautifulTitleResponse.data;
 
-    let newFigureData: FigureData = {
-      title: title,
-      content: figureData.data || "",
+    const templateDataResponse = await axios.get(`http://localhost:3000/courses/${courseID}/figures/get-figure-data?${searchParams}`);
+    const templateData = templateDataResponse.data;
+
+    const newFigureData: FigureData = {
+      title: beautifulTitle,
+      content: templateData,
     };
 
     setData((prevData) => {
@@ -102,12 +99,24 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
         newData[currentWeek] = [];
       }
       newData[currentWeek].push(newFigureData);
+      newData[currentWeek] = [...new Set(newData[currentWeek])];
 
       return newData;
     });
 
-    await axios.get(`http://localhost:3000/courses/${courseID}/figures/open-figure${searchParams}`)
-  }
+    const contentResponse = await axios.get(`http://localhost:3000/courses/${courseID}/figures/open-figure?${searchParams}`);
+    const newContent = contentResponse.data;
+    newFigureData.content = newContent;
+
+    setData((prevData) => {
+      const newData = { ...prevData };
+      newData[currentWeek][newData[currentWeek].length - 1] = newFigureData;
+
+      return newData;
+    });
+
+    console.log(data);
+  };
 
   return (
     <>
@@ -142,11 +151,26 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
         {data[currentWeek] &&
           data[currentWeek].map((card, index) => (
             <Grid item key={index} xs={12} sm={6} md={6} lg={4}>
-              {!deleteFigureState ? (
-                <Zoom>{cardData(card, false)}</Zoom>
-              ) : (
-                cardData(card, true)
-              )}
+              <Zoom>
+                <div className="card">
+                  <div className="card-title">
+                    {card.title}
+                  </div>
+                  <div className="card-content">
+                    <BsTrash className={`delete-icon ${deleteFigureState ? "yes-delete" : "no-delete"}`} />
+                    <img
+                      className="card-image"
+                      src={`data:image/svg+xml;utf8,${encodeURIComponent(card.content || "")}`}
+                      alt={card.title}
+                      onContextMenu={(e) => {
+                        e.preventDefault();
+                        openFigure(card);
+                      }}
+                    />
+                  </div>
+                </div>
+              </Zoom>
+
             </Grid>
           ))}
       </Grid>

@@ -1,4 +1,4 @@
-import { SidebarActionType } from "../types/SidebarType";
+import { SidebarActionType } from "store/types/SidebarType";
 
 export const toggleSidebar = () => {
   return {

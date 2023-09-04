@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-import sizeConfigs from "../../../configs/sizeConfigs";
-import { updateCourseData } from "../../../store/actions/courseActions";
-import { CourseData, SidebarData } from "../../../utils/redux";
+import sizeConfigs from "configs/sizeConfigs";
+import { updateCourseData } from "store/actions/courseActions";
+import { CourseData, SidebarData } from "utils/redux";
 
 import "./WeekCounter.css";
 

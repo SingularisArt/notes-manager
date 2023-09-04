@@ -1,5 +1,5 @@
 import React from "react";
-import colorConfigs from "../../../configs/colorConfigs";
+import colorConfigs from "configs/colorConfigs";
 import {
   Category,
   ChartComponent,

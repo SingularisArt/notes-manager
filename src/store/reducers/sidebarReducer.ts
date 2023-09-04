@@ -1,4 +1,4 @@
-import { SidebarActionType, SidebarState } from "../types/SidebarType";
+import { SidebarActionType, SidebarState } from "store/types/SidebarType";
 
 const initialState: SidebarState = {
   isSidebarEnabled: true,

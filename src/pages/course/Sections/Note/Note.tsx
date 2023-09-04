@@ -3,7 +3,6 @@ import axios from "axios";
 
 import TEXSymbol from "components/common/Symbols/TEX";
 import PDFSymbol from "components/common/Symbols/PDF";
-import YAMLSymbol from "components/common/Symbols/YAML";
 
 import SubItemTitle from "components/common/SubItemTitle/SubItemTitle";
 
@@ -13,10 +12,8 @@ type NoteItem = {
   name: string;
   texPath: string;
   pdfPath: string;
-  yamlPath: string;
   tex: boolean;
   pdf: boolean;
-  yaml: boolean;
   type: string;
 };
 
@@ -46,44 +43,34 @@ const DisplayNotes: React.FC<{ courseID: string; data: { [key: string]: NoteItem
       <tbody>
         {Object.values(data).map((note, index) => (
           <tr key={index}>
-            {note.type === "lecture" && (
-              <>
-                {note.texPath && convertFileNameToDisplayName(note.texPath)}
-                {note.name && `: ${note.name}`}
-              </>
-            ) || note.type === "online-lecture" && (
-              convertFileNameToDisplayName(note.pdfPath)
-            ) || note.type === "practice" && (
-              <>
-                Practice: {convertFileNameToDisplayName(note.pdfPath)}
-              </>
-            ) || note.type === "answer" && (
-              <>
-                Answer: {convertFileNameToDisplayName(note.pdfPath)}
-              </>
-            ) || note.name}
+            <td>
+              {note.type === "lecture" && (
+                <>
+                  {note.texPath && convertFileNameToDisplayName(note.texPath)}
+                  {note.name && `: ${note.name}`}
+                </>
+              ) || note.type === "online-lecture" && (
+                convertFileNameToDisplayName(note.pdfPath)
+              ) || note.type === "practice" && (
+                <>
+                  Practice: {convertFileNameToDisplayName(note.pdfPath)}
+                </>
+              ) || note.type === "answer" && (
+                <>
+                  Answer: {convertFileNameToDisplayName(note.pdfPath)}
+                </>
+              ) || note.name}
+            </td>
             <td className="note-table-icon-container">
               <span>
                 {note.tex && (
                   <span
                     className="note-table-icon"
                     style={{
-                      paddingRight: note.yaml ? "20px" : note.pdf && !note.yaml ? "70px" : "100px",
+                      paddingRight: note.pdf ? "20px" : "54px",
                     }}
                   >
                     <TEXSymbol onClick={() => openNote(note.texPath, "file")} />
-                  </span>
-                )}
-              </span>
-              <span>
-                {note.yaml && (
-                  <span
-                    className="note-table-icon"
-                    style={{
-                      paddingRight: note.pdf ? "20px" : "50px",
-                    }}
-                  >
-                    <YAMLSymbol onClick={() => openNote(note.yamlPath, "file")} />
                   </span>
                 )}
               </span>

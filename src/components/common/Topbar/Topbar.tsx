@@ -1,10 +1,10 @@
 import React from "react";
 import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { toggleSidebar } from "../../../store/actions/sidebarActions";
-import Search from "../Search/Search";
-import sizeConfigs from "../../../configs/sizeConfigs";
-import { SidebarData } from "../../../utils/redux";
+import { toggleSidebar } from "store/actions/sidebarActions";
+import Search from "components/common/Search/Search";
+import sizeConfigs from "configs/sizeConfigs";
+import { SidebarData } from "utils/redux";
 import "./Topbar.css";
 
 type TopbarProps = {

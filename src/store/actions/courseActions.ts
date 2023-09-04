@@ -1,4 +1,4 @@
-import { CourseActionType, CourseState } from "../types/CourseType";
+import { CourseActionType, CourseState } from "store/types/CourseType";
 
 export const updateCourseData = (data: Partial<CourseState>) => {
   return {

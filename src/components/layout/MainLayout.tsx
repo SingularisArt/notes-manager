@@ -1,11 +1,10 @@
 import { Outlet } from "react-router-dom";
 import { Box, Toolbar } from "@mui/material";
 
-import { SidebarData } from "../../utils/redux";
+import { SidebarData } from "utils/redux";
 
-import colorConfigs from "../../configs/colorConfigs";
-import sizeConfigs from "../../configs/sizeConfigs";
-import Sidebar from "../common/Sidebar/Sidebar";
+import sizeConfigs from "configs/sizeConfigs";
+import Sidebar from "components/common/Sidebar/Sidebar";
 
 import "./MainLayout.css";
 

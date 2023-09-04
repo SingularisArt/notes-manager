@@ -5,16 +5,16 @@ import Typography from "@mui/material/Typography";
 import { Sidebar as ProSidebar, Menu } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 
-import colorConfigs from "../../../configs/colorConfigs";
-import sizeConfigs from "../../../configs/sizeConfigs";
+import colorConfigs from "configs/colorConfigs";
+import sizeConfigs from "configs/sizeConfigs";
 
-import { generalRoutes, courseRoutes } from "../../../routes/appRoutes";
+import { generalRoutes, courseRoutes } from "routes/appRoutes";
 
-import SidebarItem from "../SidebarItem/SidebarItem";
+import SidebarItem from "components/common/SidebarItem/SidebarItem";
 
-import HomePage from "../../../pages/home/HomePage";
-import { toggleSidebar } from "../../../store/actions/sidebarActions";
-import { SidebarData } from "../../../utils/redux";
+import HomePage from "pages/home/HomePage";
+import { toggleSidebar } from "store/actions/sidebarActions";
+import { SidebarData } from "utils/redux";
 
 import "./Sidebar.css";
 

@@ -1,4 +1,4 @@
-import { CourseActionType, CourseState } from "../types/CourseType";
+import { CourseActionType, CourseState } from "store/types/CourseType";
 
 const initialState: CourseState = {
   week: 1,

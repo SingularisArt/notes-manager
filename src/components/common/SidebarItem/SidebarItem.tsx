@@ -1,8 +1,8 @@
 import { ListItemButton, ListItemIcon } from "@mui/material";
 import { Link } from "react-router-dom";
-import { RouteType } from "../../../routes/config";
-import { setActivePage } from "../../../store/actions/sidebarActions";
-import { SidebarData } from "../../../utils/redux";
+import { RouteType } from "routes/config";
+import { setActivePage } from "store/actions/sidebarActions";
+import { SidebarData } from "utils/redux";
 import "./SidebarItem.css";
 
 type Props = {

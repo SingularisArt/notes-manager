@@ -1,10 +1,11 @@
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 
-import Item from "../../components/common/Item";
-import ItemTitle from "../../components/common/ItemTitle/ItemTitle";
+import Item from "components/common/Item";
+import ItemTitle from "components/common/ItemTitle/ItemTitle";
 
-import WeekCounter from "../../components/common/WeekCounter/WeekCounter";
+import Add from "components/common/Add";
+import WeekCounter from "components/common/WeekCounter/WeekCounter";
 
 import Graph from "./Sections/Graph";
 import Exam from "./Sections/Exam/Exam";
@@ -13,7 +14,7 @@ import Assignment from "./Sections/Assignment/Assignment";
 import Figure from "./Sections/Figure/Figure";
 import Todos from "./Sections/Todos/Todos";
 
-import Topbar from "../../components/common/Topbar/Topbar";
+import Topbar from "components/common/Topbar/Topbar";
 
 import {
   graphData,
@@ -39,6 +40,7 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
 
       <Box className="container">
         <Grid container rowSpacing={1.2} columnSpacing={1.2}>
+          {/*
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Item className="card-container">
               <ItemTitle title="Study Graph" settingIcon={false} />
@@ -73,11 +75,13 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
               <Assignment data={assignmentData} />
             </Item>
           </Grid>
+          */}
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Item>
               <Figure courseID={courseID} />
             </Item>
           </Grid>
+          {/*
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <Item>
               <ItemTitle title="Todos" settingIcon={false} />
@@ -85,6 +89,7 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
               <Todos grid={gridData} data={todoData} />
             </Item>
           </Grid>
+          */}
         </Grid>
       </Box>
 

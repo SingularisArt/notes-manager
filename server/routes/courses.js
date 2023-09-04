@@ -1,10 +1,11 @@
 import express from "express";
-import { spawn } from "child_process";
+import { spawn, spawnSync } from "child_process";
 import { fileURLToPath } from "url";
 import path from "path";
 import YAML from "yamljs";
 import fs from "fs";
 import os from "os";
+import clipboardy from "clipboardy";
 
 const courseRouters = express.Router();
 
@@ -67,7 +68,6 @@ function processFileList(fileList, type, numFolders = 2) {
   return fileList.map((file) => {
     const currentFile = file.replace(/\.[^/.]+$/, "");
     const tex = fs.existsSync(currentFile + ".tex");
-    const yaml = fs.existsSync(currentFile + ".yaml");
     const pdf = fs.existsSync(currentFile + ".pdf");
 
     let name = "";
@@ -81,13 +81,17 @@ function processFileList(fileList, type, numFolders = 2) {
       name: name,
       tex,
       texPath: tex ? getNumFolders(currentFile + ".tex", numFolders) : "",
-      yaml,
-      yamlPath: yaml ? getNumFolders(currentFile + ".yaml", numFolders) : "",
       pdf,
       pdfPath: pdf ? getNumFolders(currentFile + ".pdf", numFolders) : "",
       type: type,
     };
   });
+}
+
+function beautifyFileName(base) {
+  const name = base.replace(/-/gi, " ").replace(/_/gi, " ");
+  const uppercaseName = name.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
+  return uppercaseName;
 }
 
 export default function createCourseRouters(config) {
@@ -128,36 +132,35 @@ export default function createCourseRouters(config) {
     const examReviewAnswersPath = path.join(coursePath, "exam-review", "answers");
     const examReviewPracticePath = path.join(coursePath, "exam-review", "practice");
 
-    const [notesList, onlineNotesList, examReviewList, examReviewPracticeList] = await Promise.all([
+    const [notesList, onlineNotesList, examReviewPracticesList, examReviewAnswersList] = await Promise.all([
       getItemsInFolder(notesPath),
       getItemsInFolder(onlineNotesPath),
-      getItemsInFolder(examReviewAnswersPath),
       getItemsInFolder(examReviewPracticePath),
+      getItemsInFolder(examReviewAnswersPath),
     ]);
 
     const notesData = processFileList(notesList, "lecture");
     const onlineNotesData = processFileList(onlineNotesList, "online-lecture");
-    const examReviewPracticeData = processFileList(examReviewList, "practice", 3);
-    const examReviewAnswersData = processFileList(examReviewPracticeList, "answer", 3);
+    const examReviewPracticeData = processFileList(examReviewPracticesList, "practice", 3);
+    const examReviewAnswersData = processFileList(examReviewAnswersList, "answer", 3);
+    const examReviewNotesData = examReviewPracticeData.concat(examReviewAnswersData);
 
     const masterTexExists = fs.existsSync(path.join(coursePath, "master.tex"));
     const masterPdfExists = fs.existsSync(path.join(coursePath, "master.pdf"));
 
-    if (masterTexExists) notesData.push({
+    if (masterTexExists) notesData.unshift({
       name: "Master Note",
       tex: masterTexExists,
       texPath: getNumFolders("master.tex"),
       pdf: masterPdfExists,
       pdfPath: getNumFolders("master.pdf"),
-      yaml: false,
-      yamlPath: "",
       type: "",
     });
 
     const notes = {
       notesData: { ...notesData },
       onlineNotesData: { ...onlineNotesData },
-      examReviewNotesData: { ...examReviewPracticeData,...examReviewAnswersData },
+      examReviewNotesData: { ...examReviewNotesData },
     };
 
     res.send(notes);
@@ -269,14 +272,12 @@ export default function createCourseRouters(config) {
     const formattedWeekNumber = weekNumber < 10 ? `0${weekNumber}` : weekNumber;
     const figurePath = getFigurePath(config, courseName, figureName, formattedWeekNumber);
 
-    const inkscape = spawn("inkscape", [figurePath], {
-      detached: true,
-      stdio: "ignore",
+    spawnSync("inkscape", [figurePath], {
+      stdio: "pipe",
+      encoding: "utf-8",
     });
 
-    inkscape.unref();
-
-    res.send("Opening figure in the background with Inkscape");
+    res.send(fs.readFileSync(figurePath, "utf8"));
   });
 
   courseRouters.get("/:courseName/figures/get-figure-data", async (req, res) => {
@@ -302,11 +303,22 @@ export default function createCourseRouters(config) {
     const currentModuleURL = import.meta.url;
     const currentModulePath = fileURLToPath(currentModuleURL);
     const src = path.join(path.dirname(currentModulePath), "../../src/data/template-figure.svg");
+    const base = path.basename(figurePath).replace(".svg", "");
 
     fs.mkdirSync(path.dirname(figurePath), { recursive: true });
     fs.copyFileSync(src, figurePath);
 
-    res.send(figurePath);
+    const incfigCommand = [
+      "\\begin{figure}[ht]",
+      "  \\centering",
+      `  \\incfig{${base}}`,
+      `  \\caption{${beautifyFileName(base)}}`,
+      `  \\label{fig:${base.replace(/-/gi, "_")}}`,
+      "\\end{figure}",
+    ];
+    clipboardy.writeSync(incfigCommand.join("\n"));
+
+    res.send(beautifyFileName(base));
   });
 
   // Get the todo's for a course

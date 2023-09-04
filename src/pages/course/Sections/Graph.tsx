@@ -1,26 +1,36 @@
 import React from "react";
 
-import { ValueType } from "@syncfusion/ej2-react-charts";
-
+import { AxisModel } from "@syncfusion/ej2-react-charts";
 import LineChart from "components/common/Charts/LineChart";
+import { CourseData } from "utils/redux";
+
+type GraphDataItem = {
+  day: string;
+  hour: number;
+};
+
+type GraphData = {
+  [key: string]: GraphDataItem[];
+};
 
 type GraphProp = {
-  data: {
-    day: string;
-    hour: number;
-  }[];
+  data: GraphData;
   height: string;
-  xAxis: ValueType;
-  yAxis: ValueType;
+  xAxis: AxisModel;
+  yAxis: AxisModel;
   name: string;
   xName: string;
   yName: string;
 };
 
 const Graph: React.FC<GraphProp> = ({ data, height, xAxis, yAxis, name, xName, yName }) => {
+  const { courseData } = CourseData();
+  let currentWeekData = data[courseData.week];
+  if (data[courseData.week] === undefined) currentWeekData = {};
+
   return (
     <LineChart
-      data={data}
+      data={currentWeekData}
       height={height}
       xAxis={xAxis}
       yAxis={yAxis}

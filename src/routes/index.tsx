@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Route } from "react-router-dom";
-import PageWrapper from "../components/layout/PageWrapper";
+import PageWrapper from "components/layout/PageWrapper";
 import { generalRoutes, courseRoutes } from "./appRoutes";
 import { RouteType } from "./config";
 

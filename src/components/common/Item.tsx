@@ -1,6 +1,6 @@
 import styled from "@mui/material/styles/styled";
 import Paper from "@mui/material/Paper";
-import colorConfigs from "../../configs/colorConfigs";
+import colorConfigs from "configs/colorConfigs";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: colorConfigs.card.bg,

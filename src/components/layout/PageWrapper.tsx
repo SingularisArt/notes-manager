@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setActivePage } from "../../store/actions/sidebarActions";
+import { setActivePage } from "store/actions/sidebarActions";
 
 type Props = {
   state?: string;
