@@ -27,7 +27,7 @@ type FigureDataMap = {
 
 const Figure: React.FC<FigureProps> = ({ courseID }) => {
   const [data, setData] = useState<FigureDataMap>({});
-  const [deleteFigureState, setDeleteFigureState] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { courseData } = CourseData();
@@ -35,16 +35,12 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
 
   useEffect(() => {
     const fetchAllNotes = async () => {
-      try {
-        const res = await axios.get<FigureDataMap>(
-          `http://localhost:3000/courses/${courseID}/figures`
-        );
+      const res = await axios.get<FigureDataMap>(
+        `http://localhost:3000/courses/${courseID}/figures`
+      );
 
-        setData(res.data);
-        setIsLoading(false);
-      } catch (err) {
-        console.error(err);
-      }
+      setData(res.data);
+      setIsLoading(false);
     };
     fetchAllNotes();
   }, [courseID]);
@@ -53,15 +49,28 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
     return <div>Loading...</div>;
   }
 
-  const openFigure = async (card: FigureData) => {
-    const fileName = encodeURIComponent(card.title.toLowerCase().replace(/\s/g, "-") + ".svg");
+  const sortDataAlphabetically = () => {
+    setData((prevData) => {
+      const sortedData: FigureDataMap = { ...prevData };
+      sortedData[currentWeek].sort((a, b) => a.title.localeCompare(b.title));
+      return sortedData;
+    });
+  };
+
+  const titleText = (title: string): string => {
+    return title.replace(/\b\w/g, (match) => match.toUpperCase());
+  };
+
+  const openFigure = async (figure: FigureData) => {
+    const fileName = encodeURIComponent(figure.title.toLowerCase().replace(/\s/g, "-") + ".svg");
     const encodedFigurePath = encodeURIComponent(fileName);
 
-    const newFigureData = await axios.get(`http://localhost:3000/courses/${courseID}/figures/open-figure?figure-name=${encodedFigurePath}&week-number=${currentWeek}`);
+    const searchParams = `figure-name=${encodedFigurePath}&week-number=${currentWeek}`
+    const newFigureData = await axios.get(`http://localhost:3000/courses/${courseID}/figures/open-figure?${searchParams}`);
     const newContent = newFigureData.data;
 
     const currentWeekData = data[currentWeek];
-    const selectedFigureIndex = currentWeekData.findIndex((figure) => figure.title === card.title);
+    const selectedFigureIndex = currentWeekData.findIndex((figure) => figure.title === figure.title);
 
     if (selectedFigureIndex !== -1) {
       const updatedWeekData = [...currentWeekData];
@@ -75,6 +84,8 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
         [currentWeek]: updatedWeekData,
       }));
     }
+
+    sortDataAlphabetically();
   };
 
   const createFigure = async (title: string) => {
@@ -104,6 +115,8 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
       return newData;
     });
 
+    sortDataAlphabetically();
+
     const contentResponse = await axios.get(`http://localhost:3000/courses/${courseID}/figures/open-figure?${searchParams}`);
     const newContent = contentResponse.data;
     newFigureData.content = newContent;
@@ -114,23 +127,46 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
 
       return newData;
     });
+  };
 
-    console.log(data);
+  const renameFigure = async (oldTitle: string, newTitle: string) => {
+    const oldFileName = encodeURIComponent(oldTitle.toLowerCase().replace(/\s/g, "-") + ".svg");
+    const newFileName = encodeURIComponent(newTitle.toLowerCase().replace(/\s/g, "-") + ".svg");
+    const searchParams = `old-name=${oldFileName}&new-name=${newFileName}&week-number=${currentWeek}`;
+
+    await axios.get(`http://localhost:3000/courses/${courseID}/figures/rename-figure?${searchParams}`);
+
+    const currentWeekData = data[currentWeek];
+    const selectedFigureIndex = currentWeekData.findIndex((figure) => figure.title === oldTitle);
+    if (selectedFigureIndex !== -1) {
+      const updatedWeekData = [...currentWeekData];
+      updatedWeekData[selectedFigureIndex] = {
+        ...updatedWeekData[selectedFigureIndex],
+        title: titleText(newTitle),
+      };
+
+      setData((prevData) => ({
+        ...prevData,
+        [currentWeek]: updatedWeekData,
+      }));
+
+      sortDataAlphabetically();
+    }
   };
 
   return (
     <>
       <ItemTitle
         title="Figures"
-        onIconClick={() => setDeleteFigureState(!deleteFigureState)}
+        onIconClick={() => setEditMode(!editMode)}
       />
 
-      <Grid container spacing={0} className="card-grid">
+      <Grid container spacing={0} className="figure-grid">
         <Grid item xs={12} sm={6} md={6} lg={4}>
-          <div className="create-card">
-            <div className="card-title">
+          <div className="create-figure">
+            <div className="figure-title">
               <input
-                className="create-card-text"
+                className="create-figure-text"
                 type="text"
                 spellCheck={false}
                 placeholder="New Figure"
@@ -142,34 +178,53 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
                 }}
               />
             </div>
-            <div className="card-content"></div>
+            <div className="figure-content"></div>
           </div>
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} className="card-grid">
+      <Grid container spacing={2} className="figure-grid">
         {data[currentWeek] &&
-          data[currentWeek].map((card, index) => (
+          data[currentWeek].map((figure, index) => (
             <Grid item key={index} xs={12} sm={6} md={6} lg={4}>
-              <Zoom>
-                <div className="card">
-                  <div className="card-title">
-                    {card.title}
-                  </div>
-                  <div className="card-content">
-                    <BsTrash className={`delete-icon ${deleteFigureState ? "yes-delete" : "no-delete"}`} />
-                    <img
-                      className="card-image"
-                      src={`data:image/svg+xml;utf8,${encodeURIComponent(card.content || "")}`}
-                      alt={card.title}
-                      onContextMenu={(e) => {
-                        e.preventDefault();
-                        openFigure(card);
+              {/* <Zoom zoomMargin={50}> */}
+              <div className="figure">
+                <div className="figure-title">
+                  {editMode ? (
+                    <input
+                      className="figure-name"
+                      placeholder="Figure Name"
+                      type="text"
+                      spellCheck={false}
+                      defaultValue={figure.title}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          renameFigure(figure.title, e.currentTarget.value);
+
+                          e.currentTarget.value = titleText(e.currentTarget.value);
+                          e.currentTarget.blur();
+                          setEditMode(false);
+                        }
                       }}
                     />
-                  </div>
+                  ) : (
+                    figure.title
+                  )}
                 </div>
-              </Zoom>
+                <div className="figure-content">
+                  <img
+                    className="figure-image"
+                    src={`data:image/svg+xml;utf8,${encodeURIComponent(figure.content || "")}`}
+                    alt={figure.title}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      openFigure(figure);
+                    }}
+                  />
+                  <BsTrash className={`delete-icon ${editMode ? "yes-delete" : "no-delete"}`} />
+                </div>
+              </div>
+              {/* </Zoom> */}
 
             </Grid>
           ))}

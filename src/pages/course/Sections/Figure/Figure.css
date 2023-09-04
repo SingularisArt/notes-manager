@@ -1,26 +1,46 @@
-.card {
+.figure {
   background-color: var(--figure-bg);
   color: var(--figure-color);
   border: none;
   display: flex;
   flex-direction: column;
+  min-height: 200px;
+  height: auto;
 }
 
-.card-title {
+.figure-title,
+.figure-name {
   background-color: var(--figure-title-bg);
   color: var(--figure-title-color);
   padding: 5px;
   text-align: center;
   margin-bottom: -10px;
+  border: none;
+  font-size: 16px;
 }
 
-.card-grid {
+.figure-name {
+  margin: -5px;
+  white-space: normal;
+  width: 100%;
+}
+
+.figure-name:focus {
+  outline: none;
+}
+
+.figure-name:placeholder,
+.create-figure-text:placeholder {
+  color: var(--figure-title-placeholder);
+}
+
+.figure-grid {
   justify-content: center;
   align-items: stretch;
   padding-bottom: 10px;
 }
 
-.card-content {
+.figure-content {
   background-color: var(--figure-content-bg);
   color: var(--figure-content-color);
   position: relative;
@@ -46,7 +66,7 @@
   max-height: 100%;
 }
 
-.card-image {
+.figure-image {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,13 +74,13 @@
   height: 100%;
 }
 
-.create-card {
+.create-figure {
   padding-top: 20px;
   padding-bottom: 20px;
   justify-content: center;
 }
 
-.create-card-text {
+.create-figure-text {
   height: 100%;
   width: 100%;
   font-family: Arial, sans-serif;
@@ -79,7 +99,10 @@
   overflow: auto;
   margin: auto;
   position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
 .yes-delete {
@@ -90,7 +113,7 @@
   visibility: hidden;
 }
 
-.create-card-text::placeholder {
+.create-figure-text::placeholder {
   color: var(--figure-title-placeholder);
 }
 
