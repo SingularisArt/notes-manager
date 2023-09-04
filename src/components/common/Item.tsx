@@ -8,6 +8,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
   border: `1px solid ${colorConfigs.card.border}`,
   maxHeight: "600px",
+  minHeight: "600px",
   overflow: "auto",
   paddingLeft: "20px",
   paddingRight: "20px",

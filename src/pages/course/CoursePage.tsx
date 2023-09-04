@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import Item from "components/common/Item";
 import ItemTitle from "components/common/ItemTitle/ItemTitle";
 
-import Add from "components/common/Add";
 import WeekCounter from "components/common/WeekCounter/WeekCounter";
 
 import Graph from "./Sections/Graph";
@@ -41,7 +40,7 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
       <Box className="container">
         <Grid container rowSpacing={1.2} columnSpacing={1.2}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Item className="card-container">
+            <Item className="graph-container">
               <ItemTitle title="Study Graph" settingIcon={false} />
 
               <Graph
@@ -56,19 +55,19 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
             </Item>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Item className="card-container">
+            <Item>
               <ItemTitle title="Notes" />
 
               <Note courseID={courseID} />
             </Item>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Item className="card-container">
+            <Item>
               <Exam data={examData} />
             </Item>
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Item className="card-container">
+            <Item>
               <ItemTitle title="Assignments" />
 
               <Assignment data={assignmentData} />
@@ -80,7 +79,7 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
             </Item>
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Item>
+            <Item className="todo-container">
               <ItemTitle title="Todos" settingIcon={false} />
 
               <Todos grid={gridData} data={todoData} />

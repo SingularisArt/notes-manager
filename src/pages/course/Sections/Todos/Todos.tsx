@@ -5,17 +5,22 @@ import {
   ColumnDirective,
 } from "@syncfusion/ej2-react-kanban";
 
-import { FaCalendar, FaClock } from "react-icons/fa";
-
 import SubItemTitle from "components/common/SubItemTitle/SubItemTitle";
+import { CourseData } from "utils/redux";
 
-type TodosProp = {
+type TaskStatus = "In Progress" | "Todo" | "Done";
+
+type Task = {
+  Id: string;
+  Title: string;
+  Summary: string;
+  Status: TaskStatus;
+};
+
+type TodosProps = {
   data: {
-    Id: string;
-    Title: string;
-    Summary: string;
-    Status: string;
-  }[];
+    [week: number]: Task[];
+  };
   grid: {
     headerText: string;
     keyField: string;
@@ -23,7 +28,11 @@ type TodosProp = {
   }[];
 };
 
-const Todos: React.FC<TodosProp> = ({ data, grid }) => {
+const Todos: React.FC<TodosProps> = ({ data, grid }) => {
+  const { courseData } = CourseData();
+  const currentWeek = courseData.week;
+  const currentWeekData = data[currentWeek];
+
   return (
     <div style={{ lineHeight: 2.5 }}>
       <SubItemTitle title="Weekly To Do's" />
@@ -31,7 +40,7 @@ const Todos: React.FC<TodosProp> = ({ data, grid }) => {
       <KanbanComponent
         id="kanban"
         keyField="Status"
-        dataSource={data}
+        dataSource={currentWeekData}
         cardSettings={{ contentField: "Summary", headerField: "Id" }}
       >
         <ColumnsDirective>

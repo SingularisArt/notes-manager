@@ -15,10 +15,12 @@
   transition: width 0.3s;
 }
 
-.card-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+.graph-container {
+  min-height: 0px !important;
+}
+
+.todo-container {
+  min-height: 0px !important;
 }
 
 .bottom-space {
