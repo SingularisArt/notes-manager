@@ -1,19 +1,19 @@
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
-import Item from "components/common/Item";
-import ItemTitle from "components/common/ItemTitle/ItemTitle";
+import Item from 'components/common/Item';
+import ItemTitle from 'components/common/ItemTitle/ItemTitle';
 
-import WeekCounter from "components/common/WeekCounter/WeekCounter";
+import WeekCounter from 'components/common/WeekCounter/WeekCounter';
 
-import Graph from "./Sections/Graph";
-import Exam from "./Sections/Exam/Exam";
-import Note from "./Sections/Note/Note";
-import Assignment from "./Sections/Assignment/Assignment";
-import Figure from "./Sections/Figure/Figure";
-import Todos from "./Sections/Todos/Todos";
+import Graph from './Sections/Graph';
+import Exam from './Sections/Exam/Exam';
+import Note from './Sections/Note/Note';
+import Assignment from './Sections/Assignment/Assignment';
+import Figure from './Sections/Figure/Figure';
+import Todos from './Sections/Todos/Todos';
 
-import Topbar from "components/common/Topbar/Topbar";
+import Topbar from 'components/common/Topbar/Topbar';
 
 import {
   graphData,
@@ -23,9 +23,9 @@ import {
   assignmentData,
   gridData,
   todoData,
-} from "./data";
+} from './data';
 
-import "./CoursePage.css";
+import './CoursePage.css';
 
 type CoursePageProps = {
   topbarTitle: string;
@@ -56,8 +56,6 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Item>
-              <ItemTitle title="Notes" />
-
               <Note courseID={courseID} />
             </Item>
           </Grid>

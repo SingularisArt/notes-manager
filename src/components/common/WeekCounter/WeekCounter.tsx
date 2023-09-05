@@ -1,16 +1,15 @@
-import React, { useState } from "react";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-
-import sizeConfigs from "configs/sizeConfigs";
-import { updateCourseData } from "store/actions/courseActions";
-import { CourseData, SidebarData } from "utils/redux";
-
-import "./WeekCounter.css";
+import React from 'react';
+import sizeConfigs from 'configs/sizeConfigs';
+import { useState } from 'react';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { updateCourseData } from 'store/actions/courseActions';
+import { CourseData, SidebarData } from 'utils/redux';
+import './WeekCounter.css';
 
 type Props = {
   currentWeek: number;
   maxWeeks: number;
-}
+};
 
 const WeekCounter: React.FC<Props> = ({ currentWeek, maxWeeks }) => {
   const { sidebarData } = SidebarData();
@@ -32,25 +31,21 @@ const WeekCounter: React.FC<Props> = ({ currentWeek, maxWeeks }) => {
   };
 
   const isSidebarEnabled = sidebarData.isSidebarEnabled;
-  const mainContentWidth = isSidebarEnabled ? `calc(100% - ${sizeConfigs.sidebar.width})` : "100%";
-  const shift = isSidebarEnabled ? sizeConfigs.sidebar.width : "0px";
+  const mainContentWidth = isSidebarEnabled
+    ? `calc(100% - ${sizeConfigs.sidebar.width})`
+    : '100%';
+  const shift = isSidebarEnabled ? sizeConfigs.sidebar.width : '0px';
 
   return (
     <footer
       className="week-counter"
       style={{ width: mainContentWidth, left: shift }}
     >
-      <button
-        onClick={handlePrevWeek}
-        disabled={week === 1}
-      >
+      <button onClick={handlePrevWeek} disabled={week === 1}>
         <FaChevronLeft />
       </button>
       <span>Week {week}</span>
-      <button
-        onClick={handleNextWeek}
-        disabled={week === maxWeeks}
-      >
+      <button onClick={handleNextWeek} disabled={week === maxWeeks}>
         <FaChevronRight />
       </button>
     </footer>

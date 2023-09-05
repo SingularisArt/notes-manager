@@ -1,5 +1,5 @@
-import React from "react";
-import colorConfigs from "configs/colorConfigs";
+import React from 'react';
+import colorConfigs from 'configs/colorConfigs';
 import {
   Category,
   ChartComponent,
@@ -11,7 +11,7 @@ import {
   SeriesDirective,
   Legend,
   AxisModel,
-} from "@syncfusion/ej2-react-charts";
+} from '@syncfusion/ej2-react-charts';
 
 type LineChartProps = {
   data: {
@@ -33,10 +33,10 @@ type LineChartProps = {
 
 const LineChart: React.FC<LineChartProps> = ({
   data,
-  id = "",
-  height = "450px",
+  id = '',
+  height = '450px',
   width = 0,
-  thickness=3,
+  thickness = 3,
   xAxis,
   yAxis,
   name,

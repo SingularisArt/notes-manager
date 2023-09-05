@@ -27,7 +27,8 @@
   margin-bottom: 8px;
 }
 
-.sidebar-general, .sidebar-courses {
+.sidebar-general,
+.sidebar-courses {
   opacity: 0.7;
   letter-spacing: 0.5px;
   color: var(--sidebar-heading-bg);

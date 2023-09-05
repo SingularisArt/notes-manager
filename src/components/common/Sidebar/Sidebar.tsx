@@ -1,22 +1,16 @@
-import React from "react";
-import { Stack, Toolbar } from "@mui/material";
-import Typography from "@mui/material/Typography";
-
-import { Sidebar as ProSidebar, Menu } from "react-pro-sidebar";
-import { Link } from "react-router-dom";
-
-import colorConfigs from "configs/colorConfigs";
-import sizeConfigs from "configs/sizeConfigs";
-
-import { generalRoutes, courseRoutes } from "routes/appRoutes";
-
-import SidebarItem from "components/common/SidebarItem/SidebarItem";
-
-import HomePage from "pages/home/HomePage";
-import { toggleSidebar } from "store/actions/sidebarActions";
-import { SidebarData } from "utils/redux";
-
-import "./Sidebar.css";
+import React from 'react';
+import Typography from '@mui/material/Typography';
+import colorConfigs from 'configs/colorConfigs';
+import sizeConfigs from 'configs/sizeConfigs';
+import SidebarItem from 'components/common/SidebarItem/SidebarItem';
+import HomePage from 'pages/home/HomePage';
+import { Stack, Toolbar } from '@mui/material';
+import { Sidebar as ProSidebar, Menu } from 'react-pro-sidebar';
+import { Link } from 'react-router-dom';
+import { generalRoutes, courseRoutes } from 'routes/appRoutes';
+import { SidebarData } from 'utils/redux';
+import { toggleSidebar } from 'store/actions/sidebarActions';
+import './Sidebar.css';
 
 const Sidebar: React.FC = () => {
   const { sidebarData, dispatch } = SidebarData();
@@ -26,40 +20,35 @@ const Sidebar: React.FC = () => {
     button: ({ active }: { active: boolean }) => {
       return {
         color: colorConfigs.sidebar.color,
-        backgroundColor: active ? colorConfigs.sidebar.activeBg : colorConfigs.sidebar.bg,
-        "&:hover": {
+        backgroundColor: active
+          ? colorConfigs.sidebar.activeBg
+          : colorConfigs.sidebar.bg,
+        '&:hover': {
           backgroundColor: colorConfigs.sidebar.hoverBg,
         },
       };
     },
   };
 
-  const sidebarWidth = isSidebarEnabled ? sizeConfigs.sidebar.width : "0px";
+  const sidebarWidth = isSidebarEnabled ? sizeConfigs.sidebar.width : '0px';
 
   return (
-    <div
-      className="sidebar"
-      style={{ width: sidebarWidth }}
-    >
+    <div className="sidebar" style={{ width: sidebarWidth }}>
       <ProSidebar
         backgroundColor={colorConfigs.sidebar.bg}
         collapsed={!isSidebarEnabled}
         onBreakPoint={() => {
-          if (isSidebarEnabled) dispatch(toggleSidebar())
+          if (isSidebarEnabled) dispatch(toggleSidebar());
         }}
         breakPoint="md"
         collapsedWidth="0px"
         transitionDuration={300}
         rootStyles={{
-          height: "100vh !important",
+          height: '100vh !important',
         }}
       >
         <div className="sidebar-header">
-          <Link
-            className="sidebar-header-link"
-            to="/"
-            element={<HomePage />}
-          >
+          <Link className="sidebar-header-link" to="/" element={<HomePage />}>
             <Toolbar>
               <Stack
                 className="sidebar-title"
@@ -67,7 +56,7 @@ const Sidebar: React.FC = () => {
                 justifyContent="center"
               >
                 <Typography variant="h5">
-                  LaTNote Manager
+                  Note Manager
                   <hr />
                 </Typography>
               </Stack>

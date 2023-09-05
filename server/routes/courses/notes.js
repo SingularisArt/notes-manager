@@ -1,104 +1,81 @@
-import express from "express";
-import { spawn } from "child_process";
-import path from "path";
-import YAML from "yamljs";
-import fs from "fs";
-import os from "os";
+import express from 'express';
+import { spawn } from 'child_process';
+import path from 'path';
+import fs from 'fs';
+import {
+  getPath,
+  getCourseInfo,
+  getItemsInFolder,
+  getNumFolders,
+  processFileList,
+} from '../../utils.js';
 
 const courseNoteRouters = express.Router();
 
-function getPath(config, ...paths) {
-  const expandedRoot = path.join(os.homedir(), config.root.replace(/^~[\/\\]?/, ""));
-  return path.join(expandedRoot, ...paths);
-}
-
-function getCourseInfo(config, courseName) {
-  const coursePath = path.join(os.homedir(), config.root.replace(/^~[\/\\]?/, ""), courseName);
-  return YAML.load(path.join(coursePath, "info.yaml"));
-}
-
-async function getItemsInFolder(directoryPath, getFiles = true) {
-  const files = await fs.promises.readdir(directoryPath);
-
-  const notesList = files
-    .filter(file => {
-      const fullPath = path.join(directoryPath, file);
-      if (getFiles) return fs.statSync(fullPath).isFile() && file !== "README.md";
-      return fs.statSync(fullPath).isDirectory() && file !== "README.md";
-    })
-    .map(file => path.join(directoryPath, file));
-
-  return notesList;
-}
-
-function getNumFolders(fullPath, numFolders = 2) {
-  const pathComponents = fullPath.split('/');
-  const numComponents = Math.max(0, pathComponents.length - numFolders);
-  const resultPath = pathComponents.slice(numComponents).join('/');
-
-  return resultPath;
-};
-
-function processFileList(fileList, type, numFolders = 2) {
-  return fileList.map((file) => {
-    const currentFile = file.replace(/\.[^/.]+$/, "");
-    const tex = fs.existsSync(currentFile + ".tex");
-    const pdf = fs.existsSync(currentFile + ".pdf");
-
-    let name = "";
-    if (tex) {
-      const texContent = fs.readFileSync(currentFile + ".tex", 'utf8').split("\n")[0];
-      const match = texContent.match(/\\nte\[[^\]]*\]{[^}]*}{([^}]*)}/);
-      name = match ? match[1] : "";
-    }
-
-    return {
-      name: name,
-      tex,
-      texPath: tex ? getNumFolders(currentFile + ".tex", numFolders) : "",
-      pdf,
-      pdfPath: pdf ? getNumFolders(currentFile + ".pdf", numFolders) : "",
-      type: type,
-    };
-  });
-}
-
-export default function createCourseNoteRouters(config, courseName) {
-  courseNoteRouters.get("/", async (req, res) => {
+export default function createCourseNoteRouters(config) {
+  courseNoteRouters.get('/:courseName/notes', async (req, res) => {
+    const courseName = req.params.courseName;
     const courseInfo = getCourseInfo(config, courseName);
     const coursePath = getPath(config, courseName);
 
     const notesType = courseInfo.notes_type;
 
     const notesPath = path.join(coursePath, notesType);
-    const onlineNotesPath = path.join(coursePath, `online-${notesType.slice(0, -1)}-notes`);
-    const examReviewAnswersPath = path.join(coursePath, "exam-review", "answers");
-    const examReviewPracticePath = path.join(coursePath, "exam-review", "practice");
+    const onlineNotesPath = path.join(
+      coursePath,
+      `online-${notesType.slice(0, -1)}-notes`,
+    );
+    const examReviewAnswersPath = path.join(
+      coursePath,
+      'exam-review',
+      'answers',
+    );
+    const examReviewPracticePath = path.join(
+      coursePath,
+      'exam-review',
+      'practice',
+    );
 
-    const [notesList, onlineNotesList, examReviewPracticesList, examReviewAnswersList] = await Promise.all([
+    const [
+      notesList,
+      onlineNotesList,
+      examReviewPracticesList,
+      examReviewAnswersList,
+    ] = await Promise.all([
       getItemsInFolder(notesPath),
       getItemsInFolder(onlineNotesPath),
       getItemsInFolder(examReviewPracticePath),
       getItemsInFolder(examReviewAnswersPath),
     ]);
 
-    const notesData = processFileList(notesList, "lecture");
-    const onlineNotesData = processFileList(onlineNotesList, "online-lecture");
-    const examReviewPracticeData = processFileList(examReviewPracticesList, "practice", 3);
-    const examReviewAnswersData = processFileList(examReviewAnswersList, "answer", 3);
-    const examReviewNotesData = examReviewPracticeData.concat(examReviewAnswersData);
+    const notesData = processFileList(notesList, 'lecture', 2, true);
+    const onlineNotesData = processFileList(onlineNotesList, 'online-lecture');
+    const examReviewPracticeData = processFileList(
+      examReviewPracticesList,
+      'practice',
+      3,
+    );
+    const examReviewAnswersData = processFileList(
+      examReviewAnswersList,
+      'answer',
+      3,
+    );
+    const examReviewNotesData = examReviewPracticeData.concat(
+      examReviewAnswersData,
+    );
 
-    const masterTexExists = fs.existsSync(path.join(coursePath, "master.tex"));
-    const masterPdfExists = fs.existsSync(path.join(coursePath, "master.pdf"));
+    const masterTexExists = fs.existsSync(path.join(coursePath, 'master.tex'));
+    const masterPdfExists = fs.existsSync(path.join(coursePath, 'master.pdf'));
 
-    if (masterTexExists) notesData.unshift({
-      name: "Master Note",
-      tex: masterTexExists,
-      texPath: getNumFolders("master.tex"),
-      pdf: masterPdfExists,
-      pdfPath: getNumFolders("master.pdf"),
-      type: "",
-    });
+    if (masterTexExists)
+      notesData.unshift({
+        name: 'Master Note',
+        tex: masterTexExists,
+        texPath: getNumFolders('master.tex'),
+        pdf: masterPdfExists,
+        pdfPath: getNumFolders('master.pdf'),
+        type: '',
+      });
 
     const notes = {
       notesData: { ...notesData },
@@ -109,21 +86,133 @@ export default function createCourseNoteRouters(config, courseName) {
     res.send(notes);
   });
 
-  courseNoteRouters.get("/open-note", async (req, res) => {
+  courseNoteRouters.get(
+    '/:courseName/notes/open-note/:noteName',
+    async (req, res) => {
+      const courseName = req.params.courseName;
+      const coursePath = getPath(config, courseName);
+      const noteName = req.params.noteName;
+
+      const notePath = path.join(coursePath, noteName);
+
+      const type = notePath.slice(-3) === 'pdf' ? 'pdf' : 'tex';
+      const cmd = type === 'pdf' ? 'zathura' : 'kitty nvim';
+
+      const process = spawn('sh', ['-c', `${cmd} "${notePath}"`], {
+        detached: true,
+        stdio: 'ignore',
+      });
+
+      process.unref();
+
+      res.send(`Opening note in the background with ${cmd}`);
+    },
+  );
+
+  courseNoteRouters.get(
+    '/:courseName/notes/create-note/:noteName',
+    async (req, res) => {
+      const courseName = req.params.courseName;
+      const coursePath = getPath(config, courseName);
+      const noteName = req.params.noteName;
+
+      res.send('Creating note');
+    },
+  );
+
+  courseNoteRouters.get(
+    '/:courseName/notes/delete-note/:noteName',
+    async (req, res) => {
+      const courseName = req.params.courseName;
+      const coursePath = getPath(config, courseName);
+      const noteName = req.params.noteName;
+
+      res.send('Deleting note');
+    },
+  );
+
+  courseNoteRouters.get('/:courseName/notes/move-note', async (req, res) => {
+    res.send('Moving note');
+  });
+
+  courseNoteRouters.get(
+    '/:courseName/notes/renumber-note',
+    async (req, res) => {
+      const courseName = req.params.courseName;
+      const coursePath = getPath(config, courseName);
+      const courseConfig = getCourseInfo(config, courseName);
+
+      const oldNumber = req.query['old-number'];
+      const newNumber = req.query['new-number'];
+
+      const oldFormattedNumber = oldNumber.toString().padStart(2, '0');
+      const newFormattedNumber = newNumber.toString().padStart(2, '0');
+
+      const noteType = courseConfig.notes_type;
+
+      const noteSuffix = noteType === 'lectures' ? 'lec' : 'chap';
+      const oldNotePath = path.join(
+        coursePath,
+        noteType,
+        `${noteSuffix}-${oldFormattedNumber}.tex`,
+      );
+      const newNotePath = path.join(
+        coursePath,
+        noteType,
+        `${noteSuffix}-${newFormattedNumber}.tex`,
+      );
+
+      if (fs.existsSync(newNotePath)) {
+        res.send('Exists');
+        return;
+      }
+      fs.renameSync(oldNotePath, newNotePath);
+
+      const fileContent = fs.readFileSync(newNotePath, 'utf8').split('\n');
+      fileContent[1] = fileContent[1].replace(oldFormattedNumber, newFormattedNumber);
+      fs.writeFileSync(newNotePath, fileContent.join('\n'), 'utf8');
+
+      res.send("Success");
+    },
+  );
+
+  courseNoteRouters.get('/:courseName/notes/retitle-note', async (req, res) => {
+    const courseName = req.params.courseName;
+    const noteNumber = req.query['note-number'];
+    const newTitle = req.query['new-title'];
+
     const coursePath = getPath(config, courseName);
-    const noteName = req.query["note-name"];
-    const type = req.query["type"];
-    const notePath = path.join(coursePath, noteName);
+    const courseConfig = getCourseInfo(config, courseName);
+    const formattedNoteNumber = noteNumber.toString().padStart(2, '0');
 
-    const cmd = type === "pdf" ? "zathura" : "kitty nvim";
-    const process = spawn("sh", ["-c", `${cmd} "${notePath}"`], {
-      detached: true,
-      stdio: "ignore",
-    });
+    const noteType = courseConfig.notes_type;
+    const noteSuffix = noteType === 'lectures' ? 'lec' : 'chap';
 
-    process.unref();
+    const notePath = path.join(
+      coursePath,
+      noteType,
+      `${noteSuffix}-${formattedNoteNumber}.tex`,
+    );
 
-    res.send(`Opening note in the background with ${cmd}`);
+    const fileContent = fs.readFileSync(notePath, 'utf8').split('\n');
+
+    const texContent = fileContent[0];
+    const match = texContent.match(/\\nte\[([^\]]*)\]{([^}]*)}{([^}]*)}/);
+
+    const note = match ? match[1] : '';
+    const date = match ? match[2] : '';
+
+    const newTitleFormat = `\\nte[${note}]{${date}}{${newTitle}}`;
+    const newTitleLabel = `\\label{nte_${formattedNoteNumber}:${newTitle
+      .replace(/ /g, '_')
+      .toLowerCase()}}`;
+
+    fileContent[0] = newTitleFormat;
+    fileContent[1] = newTitleLabel;
+
+    fs.writeFileSync(notePath, fileContent.join('\n'), 'utf8');
+
+    res.send('Retitling note');
   });
 
   return courseNoteRouters;

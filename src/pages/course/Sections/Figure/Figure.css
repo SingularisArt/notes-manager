@@ -92,7 +92,7 @@
   text-align: center;
 }
 
-.delete-icon {
+.edit-figure {
   color: red;
   width: 80%;
   height: 80%;
@@ -105,11 +105,11 @@
   right: 0;
 }
 
-.yes-delete {
+.edit-figure.enable {
   visibility: visible;
 }
 
-.no-delete {
+.edit-figure.disable {
   visibility: hidden;
 }
 

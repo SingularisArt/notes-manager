@@ -21,3 +21,53 @@
 .notes {
   line-height: 2.5;
 }
+
+.edit-note {
+  width: 32px;
+  height: 32px;
+  color: red;
+}
+
+.edit-note.enable {
+  visibility: visible;
+}
+
+.edit-note.disable {
+  visibility: hidden;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+}
+
+.note-name,
+.note-number {
+  color: rgba(0, 0, 0, 0.6);
+  border: none;
+  padding: 5px;
+  font-size: 0.875rem;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 400;
+  white-space: normal;
+}
+
+.note-number {
+  width: 25px;
+}
+
+.note-number::-webkit-outer-spin-button,
+.note-number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.note-name:focus,
+.note-number:focus {
+  outline: none;
+}
+
+.note-name:placeholder,
+.note-number:placeholder {
+  color: var(--figure-title-placeholder);
+}

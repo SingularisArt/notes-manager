@@ -1,17 +1,22 @@
-import Typography from "@mui/material/Typography";
+import React from 'react';
+import Typography from '@mui/material/Typography';
 
-import { IconButton } from "@mui/material";
-import { AiFillSetting } from "react-icons/ai";
+import { IconButton } from '@mui/material';
+import { AiFillSetting } from 'react-icons/ai';
 
-import "./ItemTitle.css";
+import './ItemTitle.css';
 
 type ItemTitleProps = {
   title: string;
   settingIcon?: boolean;
   onIconClick?: () => void;
-}
+};
 
-const ItemTitle = ({ title, settingIcon = true, onIconClick }: ItemTitleProps) => {
+const ItemTitle: React.FC<ItemTitleProps> = ({
+  title,
+  settingIcon = true,
+  onIconClick,
+}: ItemTitleProps) => {
   return (
     <Typography className="item-title" variant="h6">
       <div className="title-div">
@@ -22,7 +27,7 @@ const ItemTitle = ({ title, settingIcon = true, onIconClick }: ItemTitleProps) =
         )}
         {title}
       </div>
-    </Typography >
+    </Typography>
   );
 };
 

@@ -1,19 +1,21 @@
-import React from "react";
-import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import { toggleSidebar } from "store/actions/sidebarActions";
-import Search from "components/common/Search/Search";
-import sizeConfigs from "configs/sizeConfigs";
-import { SidebarData } from "utils/redux";
-import "./Topbar.css";
+import React from 'react';
+import MenuIcon from '@mui/icons-material/Menu';
+import Search from 'components/common/Search/Search';
+import sizeConfigs from 'configs/sizeConfigs';
+import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
+import { toggleSidebar } from 'store/actions/sidebarActions';
+import { SidebarData } from 'utils/redux';
+import './Topbar.css';
 
 type TopbarProps = {
- title: string;
-}
+  title: string;
+};
 
 const Topbar: React.FC<TopbarProps> = ({ title }) => {
   const { sidebarData, dispatch } = SidebarData();
-  const mainContentWidth = sidebarData.isSidebarEnabled ? `calc(100% - ${sizeConfigs.sidebar.width})` : "100%";
+  const mainContentWidth = sidebarData.isSidebarEnabled
+    ? `calc(100% - ${sizeConfigs.sidebar.width})`
+    : '100%';
 
   return (
     <div className="container">

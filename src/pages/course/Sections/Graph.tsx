@@ -1,7 +1,6 @@
 import React from "react";
-
 import { AxisModel } from "@syncfusion/ej2-react-charts";
-import LineChart from "components/common/Charts/LineChart";
+import LineChart from "components/common/Graph";
 import { CourseData } from "utils/redux";
 
 type GraphDataItem = {
