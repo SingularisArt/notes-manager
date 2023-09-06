@@ -11,21 +11,33 @@ type ModalProps = {
   onClose: () => void;
   onOk: () => void;
   content: JSX.Element;
+  className?: string;
+  centerButtons?: boolean;
 };
 
-const Popup: React.FC<ModalProps> = ({ isOpen, onClose, onOk, content }) => {
+const Popup: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  onOk,
+  content,
+  className,
+  centerButtons,
+}) => {
+  const modalButtonsClassName = centerButtons ? "modal-buttons-center" : "modal-buttons";
+  console.log(modalButtonsClassName);
+
   return (
     <div>
       <Modal
         isOpen={isOpen}
         onRequestClose={onClose}
         shouldCloseOnOverlayClick={true}
-        className="custom-modal"
+        className={`custom-modal ${className}`}
         overlayClassName="custom-modal-overlay"
         contentLabel="Custom Modal"
       >
         <div className="modal-content">{content}</div>
-        <div className="modal-buttons">
+        <div className={modalButtonsClassName}>
           <Button text="Cancel" className="cancel-button" onClick={onClose} />
           <Button text="Ok" className="ok-button" onClick={onOk} />
         </div>

@@ -1,6 +1,11 @@
 const colorConfigs = {
   mainBg: '#F8F6F8',
   subItemTitle: '#8A8A8A',
+  input: {
+    border: '#2C3F55',
+    color: '#2C3F55',
+    placeholder: '#606877',
+  },
   button: {
     add: '#4051B7',
     ok: '#00BDAE',

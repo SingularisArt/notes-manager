@@ -56,12 +56,6 @@
   width: 25px;
 }
 
-.note-number::-webkit-outer-spin-button,
-.note-number::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
 .note-name:focus,
 .note-number:focus {
   outline: none;
@@ -70,4 +64,42 @@
 .note-name:placeholder,
 .note-number:placeholder {
   color: var(--figure-title-placeholder);
+}
+
+.add-popup {
+  width: 50%;
+  height: auto;
+}
+
+.delete-popup {
+  width: auto;
+  height: auto;
+}
+
+.form-box {
+  margin: 10px;
+  margin-bottom: 70px;
+}
+
+.add-note-title {
+  margin-bottom: 10px;
+}
+
+.delete-box {
+  margin-bottom: 10px;
+}
+
+.add-note-number,
+.add-note-note,
+.add-note-name {
+  border: none;
+  border-bottom: 1px solid var(--input-border);
+  color: #fff;
+  font-size: 16px;
+}
+
+.add-note-number::placeholder,
+.add-note-note::placeholder,
+.add-note-name::placeholder {
+  color: var(--input-placeholder);
 }
