@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
@@ -40,7 +41,7 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
       <Box className="container">
         <Grid container rowSpacing={1.2} columnSpacing={1.2}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Item className="graph-container">
+            <Item className="graph-container" add={false}>
               <ItemTitle title="Study Graph" settingIcon={false} />
 
               <Graph
@@ -55,9 +56,7 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
             </Item>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Item>
-              <Note courseID={courseID} />
-            </Item>
+            <Note courseID={courseID} />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Item>
@@ -72,7 +71,7 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
             </Item>
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Item>
+            <Item add={false}>
               <Figure courseID={courseID} />
             </Item>
           </Grid>

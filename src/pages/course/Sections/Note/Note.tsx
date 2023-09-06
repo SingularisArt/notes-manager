@@ -3,6 +3,9 @@ import axios from 'axios';
 
 import { BsTrash } from 'react-icons/bs';
 
+import Add from 'components/common/Add';
+import Popup from 'components/common/Popup/Popup';
+import Item from 'components/common/Item';
 import ItemTitle from 'components/common/ItemTitle/ItemTitle';
 import PDFSymbol from 'components/common/Symbols/PDF';
 import SubItemTitle from 'components/common/SubItemTitle/SubItemTitle';
@@ -39,6 +42,19 @@ const Note: React.FC<NoteProps> = ({ courseID }) => {
   const [notesType, setNotesType] = useState<string>('');
   const [editMode, setEditMode] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+
+  const openPopup = () => {
+    setIsPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+  const okPopup = () => {
+    setIsPopupOpen(false);
+  };
 
   useEffect(() => {
     const fetchAllNotes = async () => {
@@ -300,19 +316,27 @@ const Note: React.FC<NoteProps> = ({ courseID }) => {
   };
 
   return (
-    <div className="notes">
-      <ItemTitle
-        title="Notes"
-        onIconClick={(): void => setEditMode(!editMode)}
-      />
+    <Item onClick={openPopup}>
+      <div className="notes">
+        <ItemTitle title="Notes" onClick={(): void => setEditMode(!editMode)} />
 
-      {displayNotes({
-        data: data.notesData,
-        title: `${notesType.slice(0, -1)} Notes`,
-      })}
-      {displayNotes({ data: data.onlineNotesData, title: 'Professor Notes' })}
-      {displayNotes({ data: data.examReviewNotesData, title: 'Exam Review' })}
-    </div>
+        {displayNotes({
+          data: data.notesData,
+          title: `${notesType.slice(0, -1)} Notes`,
+        })}
+        {displayNotes({ data: data.onlineNotesData, title: 'Professor Notes' })}
+        {displayNotes({ data: data.examReviewNotesData, title: 'Exam Review' })}
+      </div>
+
+      {isPopupOpen && (
+        <Popup
+          isOpen={isPopupOpen}
+          onClose={closePopup}
+          onOk={okPopup}
+          content={<></>}
+        />
+      )}
+    </Item>
   );
 };
 

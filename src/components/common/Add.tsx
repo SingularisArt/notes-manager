@@ -1,28 +1,32 @@
 import React from 'react';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 
 type AddProps = {
-  text: string;
-  color: string;
-  width: number;
-  height: number;
+  onClick?: () => void;
+  style?: React.CSSProperties;
 };
 
-const Add: React.FC<AddProps> = ({ text, color, width, height }) => {
-  const buttonStyle = {
-    width: `${width}px`,
-    height: `${height}px`,
-    backgroundColor: color,
-    borderRadius: '50%',
+const Add: React.FC<AddProps> = ({ onClick, style }) => {
+  const addButtonStyle: React.CSSProperties = {
+    width: '50px',
+    minHeight: '50px',
+    maxHeight: '50px',
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
-    cursor: 'pointer',
+    justifyContent: 'center',
+    ...style,
   };
 
   return (
-    <button style={buttonStyle}>
-      {text}
-    </button>
+    <Fab
+      color="primary"
+      aria-label="add"
+      style={addButtonStyle}
+      onClick={onClick}
+    >
+      <AddIcon />
+    </Fab>
   );
 };
 

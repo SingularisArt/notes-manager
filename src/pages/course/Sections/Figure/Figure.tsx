@@ -164,7 +164,10 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
 
   return (
     <>
-      <ItemTitle title="Figures" onIconClick={() => setEditMode(!editMode)} />
+      <ItemTitle
+        title="Figures"
+        onClick={() => setEditMode(!editMode)}
+      />
 
       <Grid container spacing={0} className="figure-grid">
         <Grid item xs={12} sm={6} md={6} lg={4}>

@@ -129,6 +129,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
     "react-medium-image-zoom": "^4.4.3",
+    "react-modal": "^3.16.1",
     "react-pro-sidebar": "^1.1.0-alpha.1",
     "react-rainbow-components": "^1.32.0",
     "react-router-dom": "^6.8.1",

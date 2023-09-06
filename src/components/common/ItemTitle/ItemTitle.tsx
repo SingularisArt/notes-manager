@@ -9,19 +9,19 @@ import './ItemTitle.css';
 type ItemTitleProps = {
   title: string;
   settingIcon?: boolean;
-  onIconClick?: () => void;
+  onClick?: () => void;
 };
 
 const ItemTitle: React.FC<ItemTitleProps> = ({
   title,
   settingIcon = true,
-  onIconClick,
+  onClick,
 }: ItemTitleProps) => {
   return (
     <Typography className="item-title" variant="h6">
       <div className="title-div">
         {settingIcon === true && (
-          <IconButton color="inherit" onClick={onIconClick}>
+          <IconButton color="inherit" onClick={onClick}>
             <AiFillSetting />
           </IconButton>
         )}
