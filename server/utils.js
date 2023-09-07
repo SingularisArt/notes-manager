@@ -3,11 +3,16 @@ import YAML from 'yamljs';
 import fs from 'fs';
 import os from 'os';
 
+export function expandPath(strPath) {
+  if (strPath[0] === '~') {
+    return path.join(process.env.HOME, strPath.slice(1));
+  }
+
+  return strPath;
+}
+
 export function getPath(config, ...paths) {
-  const expandedRoot = path.join(
-    os.homedir(),
-    config.root.replace(/^~[\/\\]?/, ''),
-  );
+  const expandedRoot = expandPath(config.root);
   return path.join(expandedRoot, ...paths);
 }
 
@@ -114,4 +119,21 @@ export function processFileList(
       number: numbered ? noteNumber : '',
     };
   });
+}
+
+export function getTrashDir(config, courseName, weekNumber, folder) {
+  const courseConfig = getCourseInfo(config, courseName);
+
+  let lecOrChap;
+  if (courseConfig.notes_type === 'lectures')
+    lecOrChap = `lec-${weekNumber}`;
+  else lecOrChap = `chap-${weekNumber}`;
+
+  const nonExpandedTrashDir = path.join(
+    config.trash_dir,
+    courseName,
+    folder,
+    lecOrChap,
+  );
+  return expandPath(nonExpandedTrashDir);
 }

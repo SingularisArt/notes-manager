@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import * as API from './NoteAPI';
 import * as Types from './NoteTypes';
-import * as PopupFunctions from './Popup';
+import * as PopupFunctions from 'utils/Popup';
 
 import DisplayNotes from './DisplayNote';
 import NoteHeader from './NoteHeader';
@@ -79,36 +79,29 @@ const Note: React.FC<Types.NoteProps> = ({ courseID }) => {
     setIsAddPopupOpen(true);
   };
 
-  const closeAddPopup = () => {
-    setIsAddPopupOpen(false);
-  };
-
   const okAddPopup = () => {
     setIsAddPopupOpen(false);
   };
 
-  const closeDeletePopup = () => {
-    setIsDeletePopupOpen(false);
-  };
-
   const okDeletePopup = () => {
     setIsDeletePopupOpen(false);
+    setEditMode(false);
   };
 
-  // const deleteNote: (props: Types.deleteNoteProps) => void = ({
-  //   note,
-  //   index,
-  // }) => {
-  //   // Implement deleteNote function
-  // };
+  const deleteNote: (props: Types.deleteNoteProps) => void = ({
+    note,
+    index,
+  }) => {
+    // Implement deleteNote function
+  };
 
-  // const renameNote: (props: Types.renameNoteProps) => void = async ({
-  //   noteNumber,
-  //   newTitle,
-  //   index,
-  // }) => {
-  //   // Implement reNumberNote function
-  // };
+  const renameNote: (props: Types.renameNoteProps) => void = async ({
+    noteNumber,
+    newTitle,
+    index,
+  }) => {
+    // Implement reNumberNote function
+  };
 
   const renumberNote: (props: Types.renumberNoteProps) => void = async ({
     oldNumber,
@@ -200,30 +193,26 @@ const Note: React.FC<Types.NoteProps> = ({ courseID }) => {
           retitleNote={retitleNote}
         />
 
-        {isAddPopupOpen && (
-          <Popup
-            isOpen={isAddPopupOpen}
-            onClose={closeAddPopup}
-            onOk={okAddPopup}
-            content={PopupFunctions.addNotePopup({
-              notesType: notesType.slice(0, -1),
-            })}
-            className="add-popup"
-          />
-        )}
+        <Popup
+          className="add-popup"
+          isOpen={isAddPopupOpen}
+          onClose={() => setIsAddPopupOpen(false)}
+          onOk={okAddPopup}
+          content={PopupFunctions.addNotePopup({
+            notesType: notesType.slice(0, -1),
+          })}
+        />
 
-        {isDeletePopupOpen && (
-          <Popup
-            isOpen={isDeletePopupOpen}
-            onClose={closeDeletePopup}
-            onOk={okDeletePopup}
-            content={PopupFunctions.deleteNotePopup({
-              notesType: notesType.slice(0, -1),
-            })}
-            centerButtons={true}
-            className="delete-popup"
-          />
-        )}
+        <Popup
+          className="delete-popup"
+          isOpen={isDeletePopupOpen}
+          onClose={() => setIsDeletePopupOpen(false)}
+          onOk={okDeletePopup}
+          centerButtons={true}
+          content={PopupFunctions.deleteNotePopup({
+            notesType: notesType.slice(0, -1),
+          })}
+        />
       </div>
     </Item>
   );

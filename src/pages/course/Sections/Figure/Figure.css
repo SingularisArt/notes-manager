@@ -1,4 +1,5 @@
-.figure {
+.figure,
+[data-rmiz-wrap='visible'] {
   background-color: var(--figure-bg);
   color: var(--figure-color);
   border: none;
@@ -6,6 +7,11 @@
   flex-direction: column;
   min-height: 200px;
   height: auto;
+}
+
+[data-rmiz-wrap='hidden'] {
+  width: 100%;
+  height: 100%;
 }
 
 .figure-title,
@@ -34,7 +40,8 @@
   color: var(--figure-title-placeholder);
 }
 
-.figure-grid {
+.figure-grid,
+[data-rmiz-wrap='visible'] {
   justify-content: center;
   align-items: stretch;
   padding-bottom: 10px;

@@ -1,4 +1,8 @@
 import express from 'express';
+import path from 'path';
+import fs from 'fs';
+import clipboardy from 'clipboardy';
+import * as glob from 'glob';
 import { spawnSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import {
@@ -7,10 +11,8 @@ import {
   replaceString,
   getFigurePath,
   beautifyFileName,
+  getTrashDir,
 } from '../../utils.js';
-import path from 'path';
-import fs from 'fs';
-import clipboardy from 'clipboardy';
 
 const courseFigureRouters = express.Router();
 
@@ -57,105 +59,164 @@ export default function createCourseFigureRouters(config) {
     res.send(figures);
   });
 
-  courseFigureRouters.get('/:courseName/figures/open-figure', async (req, res) => {
-    const courseName = req.params.courseName;
-    const figureName = req.query['figure-name'];
-    const weekNumber = req.query['week-number'];
+  courseFigureRouters.get(
+    '/:courseName/figures/open-figure',
+    async (req, res) => {
+      const courseName = req.params.courseName;
+      const figureName = req.query['figure-name'];
+      const weekNumber = req.query['week-number'];
 
-    const formattedWeekNumber = weekNumber < 10 ? `0${weekNumber}` : weekNumber;
-    const figurePath = getFigurePath(
-      config,
-      courseName,
-      figureName,
-      formattedWeekNumber,
-    );
+      const formattedWeekNumber =
+        weekNumber < 10 ? `0${weekNumber}` : weekNumber;
+      console.log(courseName, figureName, formattedWeekNumber);
+      const figurePath = getFigurePath(
+        config,
+        courseName,
+        figureName,
+        formattedWeekNumber,
+      );
 
-    spawnSync('inkscape', [figurePath], {
-      stdio: 'pipe',
-      encoding: 'utf-8',
-    });
+      spawnSync('inkscape', [figurePath], {
+        stdio: 'pipe',
+        encoding: 'utf-8',
+      });
 
-    res.send(fs.readFileSync(figurePath, 'utf8'));
-  });
+      res.send(fs.readFileSync(figurePath, 'utf8'));
+    },
+  );
 
-  courseFigureRouters.get('/:courseName/figures/get-figure-data', async (req, res) => {
-    const courseName = req.params.courseName;
-    const figureName = req.query['figure-name'];
-    const weekNumber = req.query['week-number'];
+  courseFigureRouters.get(
+    '/:courseName/figures/get-figure-data',
+    async (req, res) => {
+      const courseName = req.params.courseName;
+      const figureName = req.query['figure-name'];
+      const weekNumber = req.query['week-number'];
 
-    const formattedWeekNumber = weekNumber < 10 ? `0${weekNumber}` : weekNumber;
-    const figurePath = getFigurePath(
-      config,
-      courseName,
-      figureName,
-      formattedWeekNumber,
-    );
-    const svgCode = fs.readFileSync(figurePath, 'utf8');
+      const formattedWeekNumber =
+        weekNumber < 10 ? `0${weekNumber}` : weekNumber;
+      const figurePath = getFigurePath(
+        config,
+        courseName,
+        figureName,
+        formattedWeekNumber,
+      );
+      const svgCode = fs.readFileSync(figurePath, 'utf8');
 
-    res.send(svgCode);
-  });
+      res.send(svgCode);
+    },
+  );
 
-  courseFigureRouters.get('/:courseName/figures/create-figure', async (req, res) => {
-    const courseName = req.params.courseName;
-    const figureName = req.query['figure-name'];
-    const weekNumber = req.query['week-number'];
+  courseFigureRouters.get(
+    '/:courseName/figures/create-figure',
+    async (req, res) => {
+      const courseName = req.params.courseName;
+      const figureName = req.query['figure-name'];
+      const weekNumber = req.query['week-number'];
 
-    const formattedWeekNumber = weekNumber < 10 ? `0${weekNumber}` : weekNumber;
-    const figurePath = getFigurePath(
-      config,
-      courseName,
-      figureName,
-      formattedWeekNumber,
-    );
+      const formattedWeekNumber =
+        weekNumber < 10 ? `0${weekNumber}` : weekNumber;
+      const figurePath = getFigurePath(
+        config,
+        courseName,
+        figureName,
+        formattedWeekNumber,
+      );
 
-    const currentModuleURL = import.meta.url;
-    const currentModulePath = fileURLToPath(currentModuleURL);
-    const src = path.join(
-      path.dirname(currentModulePath),
-      '../../../src/data/template-figure.svg',
-    );
-    const base = path.basename(figurePath).replace('.svg', '');
+      const currentModuleURL = import.meta.url;
+      const currentModulePath = fileURLToPath(currentModuleURL);
+      const src = path.join(
+        path.dirname(currentModulePath),
+        '../../../src/data/template-figure.svg',
+      );
+      const base = path.basename(figurePath).replace('.svg', '');
 
-    fs.mkdirSync(path.dirname(figurePath), { recursive: true });
-    fs.copyFileSync(src, figurePath);
+      fs.mkdirSync(path.dirname(figurePath), { recursive: true });
+      fs.copyFileSync(src, figurePath);
 
-    const incfigCommand = [
-      '\\begin{figure}[ht]',
-      '  \\centering',
-      `  \\incfig{${base}}`,
-      `  \\caption{${beautifyFileName(base)}}`,
-      `  \\label{fig:${base.replace(/-/gi, '_')}}`,
-      '\\end{figure}',
-    ];
-    clipboardy.writeSync(incfigCommand.join('\n'));
+      const incfigCommand = [
+        '\\begin{figure}[ht]',
+        '  \\centering',
+        `  \\incfig{${base}}`,
+        `  \\caption{${beautifyFileName(base)}}`,
+        `  \\label{fig:${base.replace(/-/gi, '_')}}`,
+        '\\end{figure}',
+      ];
+      clipboardy.writeSync(incfigCommand.join('\n'));
 
-    res.send(beautifyFileName(base));
-  });
+      res.send(beautifyFileName(base));
+    },
+  );
 
-  courseFigureRouters.get('/:courseName/figures/rename-figure', async (req, res) => {
-    const courseName = req.params.courseName;
-    const oldName = req.query['old-name'];
-    const newName = req.query['new-name'];
-    const weekNumber = req.query['week-number'];
+  courseFigureRouters.get(
+    '/:courseName/figures/rename-figure',
+    async (req, res) => {
+      const courseName = req.params.courseName;
+      const oldName = req.query['old-name'];
+      const newName = req.query['new-name'];
+      const weekNumber = req.query['week-number'];
 
-    const formattedWeekNumber = weekNumber < 10 ? `0${weekNumber}` : weekNumber;
-    const oldPath = getFigurePath(
-      config,
-      courseName,
-      oldName,
-      formattedWeekNumber,
-    );
-    const newPath = getFigurePath(
-      config,
-      courseName,
-      newName,
-      formattedWeekNumber,
-    );
+      const formattedWeekNumber =
+        weekNumber < 10 ? `0${weekNumber}` : weekNumber;
+      const oldPath = getFigurePath(
+        config,
+        courseName,
+        oldName,
+        formattedWeekNumber,
+      );
+      const newPath = getFigurePath(
+        config,
+        courseName,
+        newName,
+        formattedWeekNumber,
+      );
 
-    fs.renameSync(oldPath, newPath);
+      fs.renameSync(oldPath, newPath);
 
-    res.send(newPath);
-  });
+      res.send(newPath);
+    },
+  );
+
+  courseFigureRouters.get(
+    '/:courseName/figures/delete-figure',
+    async (req, res) => {
+      const courseName = req.params.courseName;
+      const name = req.query['name'];
+      const weekNumber = req.query['week-number'];
+
+      const formattedWeekNumber =
+        weekNumber < 10 ? `0${weekNumber}` : weekNumber;
+      const figurePath = getFigurePath(
+        config,
+        courseName,
+        name,
+        formattedWeekNumber,
+      );
+
+      const wildCardPath = `${figurePath.replace(/\.[^/.]+$/, '')}.*`;
+      const trashDir = getTrashDir(config, courseName, weekNumber, 'figures');
+
+      fs.mkdirSync(trashDir, { recursive: true });
+
+      const matchingFiles = glob.globSync(wildCardPath);
+      if (matchingFiles.length === 0) {
+        return res.send('No matching files');
+      }
+
+      for (const file of matchingFiles) {
+        const fileName = path.basename(file);
+        const destinationFilePath = path.join(trashDir, fileName);
+
+        try {
+          await fs.promises.rename(file, destinationFilePath);
+        } catch (error) {
+          console.error('Error copying file:', error);
+          return Promise.reject(error);
+        }
+      }
+
+      res.send('Success');
+    },
+  );
 
   return courseFigureRouters;
 }

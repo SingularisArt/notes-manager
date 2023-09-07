@@ -1,12 +1,13 @@
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 
-import * as Types from './NoteTypes';
+import * as NoteTypes from 'pages/course/Sections/Note/NoteTypes';
+import * as FigureTypes from 'pages/course/Sections/Figure/FigureTypes';
 import { Typography } from '@mui/material';
 
-export const addNotePopup: (props: Types.addNotePopupProps) => JSX.Element = ({
-  notesType,
-}) => {
+export const addNotePopup: (
+  props: NoteTypes.addNotePopupProps
+) => JSX.Element = ({ notesType }) => {
   return (
     <div className="form-box">
       <Typography variant="h6" className="add-note-title">
@@ -45,11 +46,19 @@ export const addNotePopup: (props: Types.addNotePopupProps) => JSX.Element = ({
 };
 
 export const deleteNotePopup: (
-  props: Types.deleteNotePopupProps
+  props: NoteTypes.deleteNotePopupProps
 ) => JSX.Element = ({ notesType }) => {
   return (
     <div className="delete-box">
       <Typography variant="h6">Delete {notesType} Note Confirmation</Typography>
+    </div>
+  );
+};
+
+export const deleteFigurePopup: () => JSX.Element = () => {
+  return (
+    <div className="delete-box">
+      <Typography variant="h6">Delete Figure Confirmation</Typography>
     </div>
   );
 };

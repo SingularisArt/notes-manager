@@ -1,10 +1,13 @@
-import React from 'react';
-import Modal from 'react-modal';
+import React, { useEffect } from 'react';
+import ReactModal from 'react-modal';
+
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
+
 import Button from 'components/common/Button';
 
 import './Popup.css';
 
-Modal.setAppElement('#root');
+ReactModal.setAppElement('#root');
 
 type ModalProps = {
   isOpen: boolean;
@@ -23,12 +26,22 @@ const Popup: React.FC<ModalProps> = ({
   className,
   centerButtons,
 }) => {
-  const modalButtonsClassName = centerButtons ? "modal-buttons-center" : "modal-buttons";
-  console.log(modalButtonsClassName);
+  const modalButtonsClassName = centerButtons
+    ? 'modal-buttons-center'
+    : 'modal-buttons';
+
+  const targetElement = document.querySelector('#root');
+
+  useEffect(() => {
+    if (targetElement) {
+      if (isOpen) disableBodyScroll(targetElement);
+      else enableBodyScroll(targetElement);
+    }
+  }, [isOpen, targetElement]);
 
   return (
     <div>
-      <Modal
+      <ReactModal
         isOpen={isOpen}
         onRequestClose={onClose}
         shouldCloseOnOverlayClick={true}
@@ -41,7 +54,7 @@ const Popup: React.FC<ModalProps> = ({
           <Button text="Cancel" className="cancel-button" onClick={onClose} />
           <Button text="Ok" className="ok-button" onClick={onOk} />
         </div>
-      </Modal>
+      </ReactModal>
     </div>
   );
 };

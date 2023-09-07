@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import axios from 'axios';
 import Zoom from 'react-medium-image-zoom';
 import { BsTrash } from 'react-icons/bs';
 
+import * as API from './FigureAPI';
+import * as Types from './FigureTypes';
+import * as PopupFunctions from 'utils/Popup';
+
+import Popup from 'components/common/Popup/Popup';
 import ItemTitle from 'components/common/ItemTitle/ItemTitle';
 
 import 'react-medium-image-zoom/dist/styles.css';
@@ -12,34 +16,21 @@ import { CourseData } from 'utils/redux';
 
 import './Figure.css';
 
-type FigureProps = {
-  courseID: string;
-};
-
-type FigureData = {
-  title: string;
-  content: string | null;
-};
-
-type FigureDataMap = {
-  [key: string]: FigureData[];
-};
-
-const Figure: React.FC<FigureProps> = ({ courseID }) => {
-  const [data, setData] = useState<FigureDataMap>({});
+const Figure: React.FC<Types.FigureProps> = ({ courseID }) => {
+  const [data, setData] = useState<Types.FigureDataMap>({});
   const [editMode, setEditMode] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState<boolean>(false);
+  const [deleteFigureIndex, setDeleteFigureIndex] = useState<number>(0);
 
   const { courseData } = CourseData();
   const currentWeek = courseData.week;
 
   useEffect(() => {
     const fetchAllNotes = async () => {
-      const res = await axios.get<FigureDataMap>(
-        `http://localhost:3000/courses/${courseID}/figures`
-      );
+      const figures = await API.fetchAllFigures({ courseID: courseID });
 
-      setData(res.data);
+      setData(figures);
       setIsLoading(false);
     };
     fetchAllNotes();
@@ -51,27 +42,29 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
 
   const sortDataAlphabetically = () => {
     setData((prevData) => {
-      const sortedData: FigureDataMap = { ...prevData };
+      const sortedData: Types.FigureDataMap = { ...prevData };
       sortedData[currentWeek].sort((a, b) => a.title.localeCompare(b.title));
       return sortedData;
     });
   };
 
-  const titleText = (title: string): string => {
+  const okDeletePopup = () => {
+    setIsDeletePopupOpen(false);
+    setEditMode(false);
+    deleteFigure({ index: deleteFigureIndex });
+  };
+
+  const titleText = ({ title }: Types.titleText): string => {
     return title.replace(/\b\w/g, (match) => match.toUpperCase());
   };
 
-  const openFigure = async (figure: FigureData, index: number) => {
-    const fileName = encodeURIComponent(
-      figure.title.toLowerCase().replace(/\s/g, '-') + '.svg'
-    );
-    const encodedFigurePath = encodeURIComponent(fileName);
-
-    const searchParams = `figure-name=${encodedFigurePath}&week-number=${currentWeek}`;
-    const newFigureData = await axios.get(
-      `http://localhost:3000/courses/${courseID}/figures/open-figure?${searchParams}`
-    );
-    const newContent = newFigureData.data;
+  const openFigure = async ({ figure, index }: Types.openFigure) => {
+    const fileName = figure.title.toLowerCase().replace(/\s/g, '-') + '.svg';
+    const newContent = await API.openFigure({
+      courseID: courseID,
+      figureTitle: fileName,
+      currentWeek: currentWeek,
+    });
 
     const currentWeekData = data[currentWeek];
     currentWeekData[index].content = newContent;
@@ -82,23 +75,20 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
     }));
   };
 
-  const createFigure = async (title: string) => {
-    const fileName = encodeURIComponent(
-      title.toLowerCase().replace(/\s/g, '-') + '.svg'
-    );
-    const searchParams = `figure-name=${fileName}&week-number=${currentWeek}`;
+  const createFigure = async ({ title }: Types.createFigure) => {
+    const fileName = title.toLowerCase().replace(/\s/g, '-') + '.svg';
+    const beautifulTitle = await API.createFigure({
+      courseID: courseID,
+      fileName: fileName,
+      currentWeek: currentWeek,
+    });
+    const templateData = await API.getFigureData({
+      courseID: courseID,
+      figureTitle: fileName,
+      currentWeek: currentWeek,
+    });
 
-    const beautifulTitleResponse = await axios.get(
-      `http://localhost:3000/courses/${courseID}/figures/create-figure?${searchParams}`
-    );
-    const beautifulTitle = beautifulTitleResponse.data;
-
-    const templateDataResponse = await axios.get(
-      `http://localhost:3000/courses/${courseID}/figures/get-figure-data?${searchParams}`
-    );
-    const templateData = templateDataResponse.data;
-
-    const newFigureData: FigureData = {
+    const newFigureData: Types.FigureData = {
       title: beautifulTitle,
       content: templateData,
     };
@@ -117,10 +107,11 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
 
     sortDataAlphabetically();
 
-    const contentResponse = await axios.get(
-      `http://localhost:3000/courses/${courseID}/figures/open-figure?${searchParams}`
-    );
-    const newContent = contentResponse.data;
+    const newContent = await API.openFigure({
+      courseID: courseID,
+      figureTitle: fileName,
+      currentWeek: currentWeek,
+    });
     newFigureData.content = newContent;
 
     setData((prevData) => {
@@ -134,25 +125,23 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
     });
   };
 
-  const renameFigure = async (
-    oldTitle: string,
-    newTitle: string,
-    index: number
-  ) => {
-    const oldFileName = encodeURIComponent(
-      oldTitle.toLowerCase().replace(/\s/g, '-') + '.svg'
-    );
-    const newFileName = encodeURIComponent(
-      newTitle.toLowerCase().replace(/\s/g, '-') + '.svg'
-    );
-    const searchParams = `old-name=${oldFileName}&new-name=${newFileName}&week-number=${currentWeek}`;
+  const renameFigure = async ({
+    oldTitle,
+    newTitle,
+    index,
+  }: Types.renameFigure) => {
+    const oldFileName = oldTitle.toLowerCase().replace(/\s/g, '-');
+    const newFileName = newTitle.toLowerCase().replace(/\s/g, '-');
 
-    await axios.get(
-      `http://localhost:3000/courses/${courseID}/figures/rename-figure?${searchParams}`
-    );
+    await API.renameFigure({
+      courseID: courseID,
+      oldTitle: oldFileName,
+      newTitle: newFileName,
+      currentWeek: currentWeek,
+    });
 
     const currentWeekData = data[currentWeek];
-    currentWeekData[index].title = titleText(newTitle);
+    currentWeekData[index].title = titleText({ title: newTitle });
 
     setData((prevData) => ({
       ...prevData,
@@ -162,12 +151,73 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
     sortDataAlphabetically();
   };
 
+  const deleteFigure = async ({ index }: Types.deleteFigure) => {
+    const fileName = data[currentWeek][index].title
+      .toLowerCase()
+      .replace(/\s/g, '-');
+    await API.deleteFigure({
+      courseID: courseID,
+      figureTitle: fileName,
+      currentWeek: currentWeek,
+    });
+
+    setData((prevData) => {
+      const newData = { ...prevData };
+      newData[currentWeek].splice(index, 1);
+      return newData;
+    });
+  };
+
+  const displayFigure = ({ figure, index }: Types.displayFigure) => {
+    return (
+      <div className="figure">
+        <div className="figure-title">
+          {editMode ? (
+            <input
+              className="figure-name"
+              placeholder="Figure Name"
+              type="text"
+              spellCheck={false}
+              defaultValue={figure.title}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  const newTitle = e.currentTarget.value;
+                  renameFigure({ oldTitle: figure.title, newTitle, index });
+
+                  e.currentTarget.value = titleText({ title: newTitle });
+                  e.currentTarget.blur();
+                  setEditMode(false);
+                }
+              }}
+            />
+          ) : (
+            figure.title
+          )}
+        </div>
+        <div className="figure-content">
+          <img
+            className="figure-image"
+            src={`data:image/svg+xml;utf8,${encodeURIComponent(
+              figure.content || ''
+            )}`}
+            alt={figure.title}
+          />
+          <BsTrash
+            onClick={() => {
+              setIsDeletePopupOpen(true);
+              setDeleteFigureIndex(index);
+              setDeleteFigureIndex(index);
+            }}
+            className={`edit-figure ${editMode ? 'enable' : 'disable'}`}
+          />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
-      <ItemTitle
-        title="Figures"
-        onClick={() => setEditMode(!editMode)}
-      />
+      <ItemTitle title="Figures" onClick={() => setEditMode(!editMode)} />
 
       <Grid container spacing={0} className="figure-grid">
         <Grid item xs={12} sm={6} md={6} lg={4}>
@@ -180,7 +230,7 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
                 placeholder="New Figure"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
-                    createFigure(e.currentTarget.value);
+                    createFigure({ title: e.currentTarget.value });
                     e.currentTarget.value = '';
                   }
                 }}
@@ -195,50 +245,35 @@ const Figure: React.FC<FigureProps> = ({ courseID }) => {
         {data[currentWeek] &&
           data[currentWeek].map((figure, index) => (
             <Grid item key={index} xs={12} sm={6} md={6} lg={4}>
-              <div className="figure">
-                <div className="figure-title">
-                  {editMode ? (
-                    <input
-                      className="figure-name"
-                      placeholder="Figure Name"
-                      type="text"
-                      spellCheck={false}
-                      defaultValue={figure.title}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          const newTitle = e.currentTarget.value;
-                          renameFigure(figure.title, newTitle, index);
-
-                          e.currentTarget.value = titleText(newTitle);
-                          e.currentTarget.blur();
-                          setEditMode(false);
-                        }
-                      }}
-                    />
-                  ) : (
-                    figure.title
-                  )}
+              {!editMode ? (
+                <div
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    openFigure({
+                      figure: figure,
+                      index: index,
+                    });
+                  }}
+                >
+                  <Zoom zoomMargin={50}>
+                    {displayFigure({ figure, index })}
+                  </Zoom>
                 </div>
-                <div className="figure-content">
-                  <img
-                    className="figure-image"
-                    src={`data:image/svg+xml;utf8,${encodeURIComponent(
-                      figure.content || ''
-                    )}`}
-                    alt={figure.title}
-                    onContextMenu={(e) => {
-                      e.preventDefault();
-                      openFigure(figure, index);
-                    }}
-                  />
-                  <BsTrash
-                    className={`edit-figure ${editMode ? 'enable' : 'disable'}`}
-                  />
-                </div>
-              </div>
+              ) : (
+                displayFigure({ figure, index })
+              )}
             </Grid>
           ))}
       </Grid>
+
+      <Popup
+        isOpen={isDeletePopupOpen}
+        onClose={() => setIsDeletePopupOpen(false)}
+        onOk={okDeletePopup}
+        content={PopupFunctions.deleteFigurePopup()}
+        centerButtons={true}
+        className="delete-popup"
+      />
     </>
   );
 };

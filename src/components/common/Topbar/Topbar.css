@@ -3,6 +3,7 @@
   box-shadow: unset;
   background-color: var(--topbar-bg);
   color: var(--topbar-color);
+  z-index: 100;;
 }
 
 .container .toolbar {
