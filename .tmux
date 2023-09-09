@@ -17,11 +17,20 @@ fi
 tmux new-session -d -s "$SESSION_NAME"
 
 tmux rename-window -t "$SESSION_NAME" "Server"
-tmux send-keys -t "$SESSION_NAME" "clear; npm start" Enter
+tmux send-keys -t "$SESSION_NAME" "clear; bun run start" Enter
+
+tmux split-window -h
+
+tmux send-keys -t "$SESSION_NAME" "cd ./server; clear; bun run start" Enter
 
 tmux new-window -t "$SESSION_NAME"
 
 tmux rename-window -t "$SESSION_NAME" "Editor"
 tmux send-keys -t "$SESSION_NAME" "nvim" Enter
+
+tmux new-window -t "$SESSION_NAME"
+
+tmux rename-window -t "$SESSION_NAME" "Git"
+tmux send-keys -t "$SESSION_NAME" "clear; git status" Enter
 
 eval "$tmuxAttachCommand"

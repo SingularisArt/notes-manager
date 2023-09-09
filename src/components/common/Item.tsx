@@ -10,6 +10,8 @@ type ItemProps = {
   onClick?: () => void;
   children: React.ReactNode;
   className?: string;
+  minHeight?: number;
+  maxHeight?: number;
 };
 
 const Item: React.FC<ItemProps> = ({
@@ -17,6 +19,8 @@ const Item: React.FC<ItemProps> = ({
   onClick,
   children,
   className,
+  minHeight = 600,
+  maxHeight = 600,
 }) => {
   const theme = useTheme();
 
@@ -25,8 +29,8 @@ const Item: React.FC<ItemProps> = ({
     ...theme.typography.body2,
     color: theme.palette.text.secondary,
     border: `1px solid ${colorConfigs.card.border}`,
-    maxHeight: '600px',
-    minHeight: '600px',
+    maxHeight: `${maxHeight}px`,
+    minHeight: `${minHeight}px`,
     overflow: 'auto',
     paddingLeft: '20px',
     paddingRight: '20px',

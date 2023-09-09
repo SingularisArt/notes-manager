@@ -13,6 +13,7 @@ import {
   beautifyFileName,
   getTrashDir,
 } from '../../utils.js';
+import { warn } from 'console';
 
 const courseFigureRouters = express.Router();
 
@@ -68,7 +69,6 @@ export default function createCourseFigureRouters(config) {
 
       const formattedWeekNumber =
         weekNumber < 10 ? `0${weekNumber}` : weekNumber;
-      console.log(courseName, figureName, formattedWeekNumber);
       const figurePath = getFigurePath(
         config,
         courseName,
@@ -163,16 +163,36 @@ export default function createCourseFigureRouters(config) {
         oldName,
         formattedWeekNumber,
       );
-      const newPath = getFigurePath(
-        config,
-        courseName,
-        newName,
-        formattedWeekNumber,
-      );
 
-      fs.renameSync(oldPath, newPath);
+      const matchingFiles = glob.globSync(`${oldPath}.*`);
+      if (matchingFiles.length === 0) {
+        return res.send('No matching files');
+      }
 
-      res.send(newPath);
+      for (const file of matchingFiles) {
+        const destDir = path.dirname(file);
+        const extension = path.parse(file).ext;
+
+        const destPath = path.join(destDir, `${newName}${extension}`);
+
+        try {
+          fs.renameSync(file, destPath);
+        } catch (error) {
+          console.error('Error renaming file:', error);
+          return Promise.reject(error);
+        }
+      };
+      // const newPath = getFigurePath(
+      //   config,
+      //   courseName,
+      //   newName,
+      //   formattedWeekNumber,
+      // );
+
+      // fs.renameSync(oldPath, newPath);
+
+      // res.send(newPath);
+      res.send("hi");
     },
   );
 

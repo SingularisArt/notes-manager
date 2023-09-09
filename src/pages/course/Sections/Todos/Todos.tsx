@@ -1,14 +1,18 @@
-import React from "react";
+import React from 'react';
 import {
   KanbanComponent,
   ColumnsDirective,
   ColumnDirective,
-} from "@syncfusion/ej2-react-kanban";
+} from '@syncfusion/ej2-react-kanban';
 
-import SubItemTitle from "components/common/SubItemTitle/SubItemTitle";
-import { CourseData } from "utils/redux";
+import { todoData } from '../../data';
+import { CourseData } from 'utils/redux';
 
-type TaskStatus = "In Progress" | "Todo" | "Done";
+import Item from 'components/common/Item';
+import ItemTitle from 'components/common/ItemTitle/ItemTitle';
+import SubItemTitle from 'components/common/SubItemTitle/SubItemTitle';
+
+type TaskStatus = 'In Progress' | 'Todo' | 'Done';
 
 type Task = {
   Id: string;
@@ -18,9 +22,6 @@ type Task = {
 };
 
 type TodosProps = {
-  data: {
-    [week: number]: Task[];
-  };
   grid: {
     headerText: string;
     keyField: string;
@@ -28,28 +29,31 @@ type TodosProps = {
   }[];
 };
 
-const Todos: React.FC<TodosProps> = ({ data, grid }) => {
+const Todos: React.FC<TodosProps> = ({ grid }) => {
   const { courseData } = CourseData();
   const currentWeek = courseData.week;
-  const currentWeekData = data[currentWeek];
+  const currentWeekData = todoData[currentWeek];
 
   return (
-    <div style={{ lineHeight: 2.5 }}>
-      <SubItemTitle title="Weekly To Do's" />
+    <Item minHeight={0}>
+      <ItemTitle title="Todos" settingIcon={false} />
+      <div style={{ lineHeight: 2.5 }}>
+        <SubItemTitle title="Weekly To Do's" />
 
-      <KanbanComponent
-        id="kanban"
-        keyField="Status"
-        dataSource={currentWeekData}
-        cardSettings={{ contentField: "Summary", headerField: "Id" }}
-      >
-        <ColumnsDirective>
-          {grid.map((item, index) => (
-            <ColumnDirective key={index} {...item} />
-          ))}
-        </ColumnsDirective>
-      </KanbanComponent>
-    </div>
+        <KanbanComponent
+          id="kanban"
+          keyField="Status"
+          dataSource={currentWeekData}
+          cardSettings={{ contentField: 'Summary', headerField: 'Id' }}
+        >
+          <ColumnsDirective>
+            {grid.map((item, index) => (
+              <ColumnDirective key={index} {...item} />
+            ))}
+          </ColumnsDirective>
+        </KanbanComponent>
+      </div>
+    </Item>
   );
 };
 

@@ -7,6 +7,7 @@ import * as PopupFunctions from 'utils/Popup';
 import DisplayNotes from './DisplayNote';
 import NoteHeader from './NoteHeader';
 
+import Loader from 'components/common/Loader';
 import Popup from 'components/common/Popup/Popup';
 import Item from 'components/common/Item';
 import SubItemTitle from 'components/common/SubItemTitle/SubItemTitle';
@@ -45,7 +46,15 @@ const Note: React.FC<Types.NoteProps> = ({ courseID }) => {
   }, [courseID]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <Item>
+          <NoteHeader editMode={editMode} setEditMode={setEditMode} />
+          <div style={{ height: '600px' }}></div>
+          <Loader />
+        </Item>
+      </>
+    );
   }
 
   if (Object.keys(data.notesData).length === 0) {

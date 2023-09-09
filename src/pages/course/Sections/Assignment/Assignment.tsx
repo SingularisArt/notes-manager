@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import SubItemTitle from "components/common/SubItemTitle/SubItemTitle";
-import "./Assignment.css";
+import Item from 'components/common/Item';
+import ItemTitle from 'components/common/ItemTitle/ItemTitle';
+import SubItemTitle from 'components/common/SubItemTitle/SubItemTitle';
+
+import './Assignment.css';
 
 type Duration = {
   hours: number;
@@ -59,9 +62,9 @@ const displayDuration = () => {
 
   const duration = getDuration(startDate, endDate);
 
-  const hours = String(duration.hours).padStart(2, "0");
-  const minutes = String(duration.minutes).padStart(2, "0");
-  const seconds = String(duration.seconds).padStart(2, "0");
+  const hours = String(duration.hours).padStart(2, '0');
+  const minutes = String(duration.minutes).padStart(2, '0');
+  const seconds = String(duration.seconds).padStart(2, '0');
 
   return `${hours}:${minutes}:${seconds}`;
 };
@@ -73,30 +76,30 @@ const DisplayDate = (
   dueToday?: boolean
 ) => {
   const daysOfWeek = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
   ];
   const monthsOfYear = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
-  const dateParts = dueDate.split("-");
+  const dateParts = dueDate.split('-');
   const year = dateParts[0];
   const month = monthsOfYear[parseInt(dateParts[1]) - 1];
   const dayOfMonth = parseInt(dateParts[2]);
@@ -111,8 +114,8 @@ const DisplayDate = (
   let daysRemaining;
 
   if (overdue) {
-    daysRemaining = daysDiff > 0 ? `${daysDiff - 1} days late` : "";
-  } else daysRemaining = daysDiff > 0 ? `${daysDiff} days remaining` : "";
+    daysRemaining = daysDiff > 0 ? `${daysDiff - 1} days late` : '';
+  } else daysRemaining = daysDiff > 0 ? `${daysDiff} days remaining` : '';
 
   if (submitted) return `${month} ${dayOfMonth}, ${dayOfWeek}, ${year}`;
   if (dueToday) {
@@ -126,7 +129,12 @@ const DisplayDate = (
       return () => clearTimeout(timer);
     });
 
-    return <div> {month} {dayOfMonth}, {dayOfWeek}, {year} ({timeLeft}) </div>;
+    return (
+      <div>
+        {' '}
+        {month} {dayOfMonth}, {dayOfWeek}, {year} ({timeLeft}){' '}
+      </div>
+    );
   }
   return `${month} ${dayOfMonth}, ${dayOfWeek}, ${year} (${daysRemaining})`;
 };
@@ -151,16 +159,18 @@ const DisplayAssignments: React.FC<AssignmentProp> = ({
           <tr key={assignment.name}>
             <td className="assignment-table-row">
               <div className="assignment-table-row-content">
-                <div className="assignment-table-row-content-name">{assignment.name}</div>
+                <div className="assignment-table-row-content-name">
+                  {assignment.name}
+                </div>
                 <div>
                   {assignment.submitted === true
                     ? GetGrade(assignment.grade)
                     : DisplayDate(
-                        assignment.dueDate,
-                        assignment.submitted,
-                        overdue,
-                        today
-                      )}
+                      assignment.dueDate,
+                      assignment.submitted,
+                      overdue,
+                      today
+                    )}
                 </div>
               </div>
             </td>
@@ -201,47 +211,50 @@ const Assignment: React.FC<AssignmentProp> = ({ data }) => {
   const submitted = data.filter((assignment) => assignment.submitted);
 
   return (
-    <div className="assignments">
-      <SubItemTitle title="Assignments Overdue" />
+    <Item>
+      <ItemTitle title="Assignments" />
+      <div className="assignments">
+        <SubItemTitle title="Assignments Overdue" />
 
-      {overdue.length === 0 ? (
-        <div>No overdue assignments.</div>
-      ) : (
-        DisplayAssignments({ data: overdue, overdue: true })
-      )}
+        {overdue.length === 0 ? (
+          <div>No overdue assignments.</div>
+        ) : (
+          DisplayAssignments({ data: overdue, overdue: true })
+        )}
 
-      <SubItemTitle title="Assignments Due Today" />
+        <SubItemTitle title="Assignments Due Today" />
 
-      {dueToday.length === 0 ? (
-        <div>No assignments due today.</div>
-      ) : (
-        DisplayAssignments({ data: dueToday, today: true })
-      )}
+        {dueToday.length === 0 ? (
+          <div>No assignments due today.</div>
+        ) : (
+          DisplayAssignments({ data: dueToday, today: true })
+        )}
 
-      <SubItemTitle title="Assignments Due This Week" />
+        <SubItemTitle title="Assignments Due This Week" />
 
-      {dueNextWeek.length === 0 ? (
-        <div>No assignments due this week.</div>
-      ) : (
-        DisplayAssignments({ data: dueNextWeek })
-      )}
+        {dueNextWeek.length === 0 ? (
+          <div>No assignments due this week.</div>
+        ) : (
+          DisplayAssignments({ data: dueNextWeek })
+        )}
 
-      <SubItemTitle title="Assignments Due Later" />
+        <SubItemTitle title="Assignments Due Later" />
 
-      {dueLater.length === 0 ? (
-        <div>No assignments due later.</div>
-      ) : (
-        DisplayAssignments({ data: dueLater })
-      )}
+        {dueLater.length === 0 ? (
+          <div>No assignments due later.</div>
+        ) : (
+          DisplayAssignments({ data: dueLater })
+        )}
 
-      <SubItemTitle title="Assignments Submitted" />
+        <SubItemTitle title="Assignments Submitted" />
 
-      {submitted.length === 0 ? (
-        <div>No assignments submitted.</div>
-      ) : (
-        DisplayAssignments({ data: submitted })
-      )}
-    </div>
+        {submitted.length === 0 ? (
+          <div>No assignments submitted.</div>
+        ) : (
+          DisplayAssignments({ data: submitted })
+        )}
+      </div>
+    </Item>
   );
 };
 

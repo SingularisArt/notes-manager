@@ -1,26 +1,17 @@
-import React from "react";
+import React from 'react';
 
-import ItemTitle from "components/common/ItemTitle/ItemTitle";
-import SubItemTitle from "components/common/SubItemTitle/SubItemTitle";
+import { examData } from '../../data';
 
-import DisplayDate from "utils/DisplayDate";
-import CalculateDiffDate from "utils/CalculateDiffDate";
+import Item from 'components/common/Item';
+import ItemTitle from 'components/common/ItemTitle/ItemTitle';
+import SubItemTitle from 'components/common/SubItemTitle/SubItemTitle';
 
-import "./Exam.css";
+import DisplayDate from 'utils/DisplayDate';
+import CalculateDiffDate from 'utils/CalculateDiffDate';
 
-type ExamProp = {
-  data: {
-    name: string;
-    dueDate: string;
-    grade: string;
-    sections: {
-      name: string;
-      status: number;
-      date: string;
-    }[];
-  }[];
-  updateData: (updatedData: { [key: string]: any }[]) => void;
-};
+import './Exam.css';
+
+type ExamProp = {};
 
 type DisplayExamProp = {
   data: {
@@ -43,12 +34,11 @@ type DisplayGradeProps = {
 };
 
 const DisplayGrade: React.FC<DisplayGradeProps> = ({ grade }) => {
-  console.log(grade);
-  if (!grade || grade === "Empty") {
+  if (!grade || grade === 'Empty') {
     return <span>NA</span>;
   }
 
-  if (!isNaN(Number(grade)) && !grade.includes("%")) {
+  if (!isNaN(Number(grade)) && !grade.includes('%')) {
     return <span>{grade}%</span>;
   }
 
@@ -56,32 +46,24 @@ const DisplayGrade: React.FC<DisplayGradeProps> = ({ grade }) => {
 };
 
 const DisplayExam: React.FC<DisplayExamProp> = ({
-  data,
-  updateData,
   date = true,
   grade = false,
 }) => {
-  const statusOptions = ["Master", "Noob", "None"];
+  const statusOptions = ['Master', 'Noob', 'None'];
 
   return (
     <table className="exam-table">
       <tbody>
-        {data.map((exam) => (
+        {examData.map((exam) => (
           <tr key={exam.name}>
             <td className="exam-table-row">
               <div className="exam-table-row-name">
-                <div className="exam-table-row-name-title">
-                  {exam.name}
-                </div>
+                <div className="exam-table-row-name-title">{exam.name}</div>
 
                 <div>
-                  {date ? (
-                    DisplayDate(exam.dueDate)
-                  ) : null}
+                  {date ? DisplayDate(exam.dueDate) : null}
 
-                  {grade ? (
-                    <DisplayGrade grade={exam.grade} />
-                  ) : null}
+                  {grade ? <DisplayGrade grade={exam.grade} /> : null}
                 </div>
               </div>
               <table className="exam-table-row-sections">
@@ -109,8 +91,8 @@ const DisplayExam: React.FC<DisplayExamProp> = ({
   );
 };
 
-const Exam: React.FC<ExamProp> = ({ data, updateData }) => {
-  if (data.length === 0) {
+const Exam: React.FC<ExamProp> = () => {
+  if (examData.length === 0) {
     return (
       <div className="no-exams">
         <SubItemTitle title="No Exams" />
@@ -118,15 +100,17 @@ const Exam: React.FC<ExamProp> = ({ data, updateData }) => {
     );
   }
 
-  const futureExams = data.filter(
+  const updateData = (updatedData: { [key: string]: any }[]) => { };
+
+  const futureExams = examData.filter(
     (exam) => CalculateDiffDate(exam.dueDate) >= 1
   );
-  const pastExams = data.filter(
+  const pastExams = examData.filter(
     (exam) => CalculateDiffDate(exam.dueDate) <= 0
   );
 
   return (
-    <>
+    <Item>
       <ItemTitle title="Exams" />
 
       <div className="exams">
@@ -135,10 +119,7 @@ const Exam: React.FC<ExamProp> = ({ data, updateData }) => {
         {futureExams.length === 0 ? (
           <div>No future exams.</div>
         ) : (
-          <DisplayExam
-            data={futureExams}
-            updateData={updateData}
-          />
+          <DisplayExam data={futureExams} updateData={updateData} />
         )}
 
         <SubItemTitle title="Past Exams" />
@@ -149,7 +130,7 @@ const Exam: React.FC<ExamProp> = ({ data, updateData }) => {
           <DisplayExam data={pastExams} updateData={updateData} />
         )}
       </div>
-    </>
+    </Item>
   );
 };
 

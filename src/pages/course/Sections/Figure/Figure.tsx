@@ -7,7 +7,9 @@ import * as API from './FigureAPI';
 import * as Types from './FigureTypes';
 import * as PopupFunctions from 'utils/Popup';
 
+import Loader from 'components/common/Loader';
 import Popup from 'components/common/Popup/Popup';
+import Item from 'components/common/Item';
 import ItemTitle from 'components/common/ItemTitle/ItemTitle';
 
 import 'react-medium-image-zoom/dist/styles.css';
@@ -37,7 +39,12 @@ const Figure: React.FC<Types.FigureProps> = ({ courseID }) => {
   }, [courseID]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <ItemTitle title="Figures" />
+        <Loader />
+      </>
+    );
   }
 
   const sortDataAlphabetically = () => {
@@ -217,63 +224,65 @@ const Figure: React.FC<Types.FigureProps> = ({ courseID }) => {
 
   return (
     <>
-      <ItemTitle title="Figures" onClick={() => setEditMode(!editMode)} />
+      <Item add={false}>
+        <ItemTitle title="Figures" onClick={() => setEditMode(!editMode)} />
 
-      <Grid container spacing={0} className="figure-grid">
-        <Grid item xs={12} sm={6} md={6} lg={4}>
-          <div className="create-figure">
-            <div className="figure-title">
-              <input
-                className="create-figure-text"
-                type="text"
-                spellCheck={false}
-                placeholder="New Figure"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    createFigure({ title: e.currentTarget.value });
-                    e.currentTarget.value = '';
-                  }
-                }}
-              />
-            </div>
-            <div className="figure-content"></div>
-          </div>
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={2} className="figure-grid">
-        {data[currentWeek] &&
-          data[currentWeek].map((figure, index) => (
-            <Grid item key={index} xs={12} sm={6} md={6} lg={4}>
-              {!editMode ? (
-                <div
-                  onContextMenu={(e) => {
-                    e.preventDefault();
-                    openFigure({
-                      figure: figure,
-                      index: index,
-                    });
+        <Grid container spacing={0} className="figure-grid">
+          <Grid item xs={12} sm={6} md={6} lg={4}>
+            <div className="create-figure">
+              <div className="figure-title">
+                <input
+                  className="create-figure-text"
+                  type="text"
+                  spellCheck={false}
+                  placeholder="New Figure"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      createFigure({ title: e.currentTarget.value });
+                      e.currentTarget.value = '';
+                    }
                   }}
-                >
-                  <Zoom zoomMargin={50}>
-                    {displayFigure({ figure, index })}
-                  </Zoom>
-                </div>
-              ) : (
-                displayFigure({ figure, index })
-              )}
-            </Grid>
-          ))}
-      </Grid>
+                />
+              </div>
+              <div className="figure-content"></div>
+            </div>
+          </Grid>
+        </Grid>
 
-      <Popup
-        isOpen={isDeletePopupOpen}
-        onClose={() => setIsDeletePopupOpen(false)}
-        onOk={okDeletePopup}
-        content={PopupFunctions.deleteFigurePopup()}
-        centerButtons={true}
-        className="delete-popup"
-      />
+        <Grid container spacing={2} className="figure-grid">
+          {data[currentWeek] &&
+            data[currentWeek].map((figure, index) => (
+              <Grid item key={index} xs={12} sm={6} md={6} lg={4}>
+                {!editMode ? (
+                  <div
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      openFigure({
+                        figure: figure,
+                        index: index,
+                      });
+                    }}
+                  >
+                    <Zoom zoomMargin={50}>
+                      {displayFigure({ figure, index })}
+                    </Zoom>
+                  </div>
+                ) : (
+                  displayFigure({ figure, index })
+                )}
+              </Grid>
+            ))}
+        </Grid>
+
+        <Popup
+          isOpen={isDeletePopupOpen}
+          onClose={() => setIsDeletePopupOpen(false)}
+          onOk={okDeletePopup}
+          content={PopupFunctions.deleteFigurePopup()}
+          centerButtons={true}
+          className="delete-popup"
+        />
+      </Item>
     </>
   );
 };

@@ -1,9 +1,5 @@
-import { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-
-import Item from 'components/common/Item';
-import ItemTitle from 'components/common/ItemTitle/ItemTitle';
 
 import WeekCounter from 'components/common/WeekCounter/WeekCounter';
 
@@ -20,10 +16,8 @@ import {
   graphData,
   xAxis,
   yAxis,
-  examData,
   assignmentData,
   gridData,
-  todoData,
 } from './data';
 
 import './CoursePage.css';
@@ -41,46 +35,30 @@ const CoursePage: React.FC<CoursePageProps> = ({ topbarTitle, courseID }) => {
       <Box className="container">
         <Grid container rowSpacing={1.2} columnSpacing={1.2}>
           <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Item className="graph-container" add={false}>
-              <ItemTitle title="Study Graph" settingIcon={false} />
-
-              <Graph
-                data={graphData}
-                height="450px"
-                xAxis={xAxis}
-                yAxis={yAxis}
-                name="Study Graph"
-                xName="day"
-                yName="hour"
-              />
-            </Item>
+            <Graph
+              data={graphData}
+              height="450px"
+              xAxis={xAxis}
+              yAxis={yAxis}
+              name="Study Graph"
+              xName="day"
+              yName="hour"
+            />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Note courseID={courseID} />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <Item>
-              <Exam data={examData} />
-            </Item>
+            <Exam />
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Item>
-              <ItemTitle title="Assignments" />
-
-              <Assignment data={assignmentData} />
-            </Item>
+            <Assignment data={assignmentData} />
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Item add={false}>
-              <Figure courseID={courseID} />
-            </Item>
+            <Figure courseID={courseID} />
           </Grid>
           <Grid item xs={12} sm={12} md={12} lg={12}>
-            <Item className="todo-container">
-              <ItemTitle title="Todos" settingIcon={false} />
-
-              <Todos grid={gridData} data={todoData} />
-            </Item>
+            <Todos grid={gridData} />
           </Grid>
         </Grid>
       </Box>
