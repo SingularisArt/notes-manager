@@ -12,8 +12,9 @@ import {
   getFigurePath,
   beautifyFileName,
   getTrashDir,
+  getWildCard,
+  getCourseInfo,
 } from '../../utils.js';
-import { warn } from 'console';
 
 const courseFigureRouters = express.Router();
 
@@ -175,24 +176,10 @@ export default function createCourseFigureRouters(config) {
 
         const destPath = path.join(destDir, `${newName}${extension}`);
 
-        try {
-          fs.renameSync(file, destPath);
-        } catch (error) {
-          console.error('Error renaming file:', error);
-          return Promise.reject(error);
-        }
-      };
-      // const newPath = getFigurePath(
-      //   config,
-      //   courseName,
-      //   newName,
-      //   formattedWeekNumber,
-      // );
+        fs.renameSync(file, destPath);
+      }
 
-      // fs.renameSync(oldPath, newPath);
-
-      // res.send(newPath);
-      res.send("hi");
+      res.send('Success');
     },
   );
 
@@ -200,6 +187,7 @@ export default function createCourseFigureRouters(config) {
     '/:courseName/figures/delete-figure',
     async (req, res) => {
       const courseName = req.params.courseName;
+      const courseConfig = getCourseInfo(config, courseName);
       const name = req.query['name'];
       const weekNumber = req.query['week-number'];
 
@@ -212,10 +200,13 @@ export default function createCourseFigureRouters(config) {
         formattedWeekNumber,
       );
 
-      const wildCardPath = `${figurePath.replace(/\.[^/.]+$/, '')}.*`;
-      const trashDir = getTrashDir(config, courseName, weekNumber, 'figures');
+      let lecOrChap;
+      if (courseConfig.notes_type === 'lectures')
+        lecOrChap = `lec-${weekNumber}`;
+      else lecOrChap = `chap-${weekNumber}`;
 
-      fs.mkdirSync(trashDir, { recursive: true });
+      const wildCardPath = getWildCard(figurePath);
+      const trashDir = getTrashDir(config, courseName, `figures/${lecOrChap}`);
 
       const matchingFiles = glob.globSync(wildCardPath);
       if (matchingFiles.length === 0) {
@@ -226,12 +217,7 @@ export default function createCourseFigureRouters(config) {
         const fileName = path.basename(file);
         const destinationFilePath = path.join(trashDir, fileName);
 
-        try {
-          await fs.promises.rename(file, destinationFilePath);
-        } catch (error) {
-          console.error('Error copying file:', error);
-          return Promise.reject(error);
-        }
+        fs.renameSync(file, destinationFilePath);
       }
 
       res.send('Success');

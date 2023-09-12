@@ -121,19 +121,19 @@ export function processFileList(
   });
 }
 
-export function getTrashDir(config, courseName, weekNumber, folder) {
-  const courseConfig = getCourseInfo(config, courseName);
-
-  let lecOrChap;
-  if (courseConfig.notes_type === 'lectures')
-    lecOrChap = `lec-${weekNumber}`;
-  else lecOrChap = `chap-${weekNumber}`;
-
+export function getTrashDir(config, courseName, folder) {
   const nonExpandedTrashDir = path.join(
     config.trash_dir,
     courseName,
     folder,
-    lecOrChap,
   );
-  return expandPath(nonExpandedTrashDir);
+
+  const trashDir = expandPath(nonExpandedTrashDir);
+  fs.mkdirSync(trashDir, { recursive: true });
+
+  return trashDir;
+}
+
+export function getWildCard(str) {
+  return `${str.replace(/\.[^/.]+$/, '')}.*`;
 }

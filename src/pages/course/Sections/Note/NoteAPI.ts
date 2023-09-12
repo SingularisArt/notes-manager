@@ -1,13 +1,17 @@
 import axios from 'axios';
 
-const baseURL = 'http://localhost:3000';
+import { NoteAPITypes } from './Types/index';
 
-export const fetchAllNotes = async (courseID: string) => {
+const baseURL = 'http://localhost:3000/courses';
+
+export const fetchAllNotes = async ({
+  courseID,
+}: NoteAPITypes.fetchAllNotesProps) => {
   try {
     const encodedCourseID = encodeURIComponent(courseID);
 
     const response = await axios.get(
-      `${baseURL}/courses/${encodedCourseID}/notes`
+      `${baseURL}/${encodedCourseID}/notes`
     );
 
     return response.data;
@@ -16,11 +20,13 @@ export const fetchAllNotes = async (courseID: string) => {
   }
 };
 
-export const fetchCourseConfig = async (courseID: string) => {
+export const fetchCourseConfig = async ({
+  courseID,
+}: NoteAPITypes.fetchCourseConfigProps) => {
   try {
     const encodedCourseID = encodeURIComponent(courseID);
 
-    const response = await axios.get(`${baseURL}/courses/${encodedCourseID}`);
+    const response = await axios.get(`${baseURL}/${encodedCourseID}`);
 
     return response.data;
   } catch (error) {
@@ -28,41 +34,80 @@ export const fetchCourseConfig = async (courseID: string) => {
   }
 };
 
-export const openNote = async (courseID: string, noteName: string) => {
+export const openNote = async ({
+  courseID,
+  noteName,
+}: NoteAPITypes.openNoteProps) => {
   try {
     const encodedCourseID = encodeURIComponent(courseID);
     const encodedNoteName = encodeURIComponent(noteName);
 
     await axios.get(
-      `${baseURL}/courses/${encodedCourseID}/notes/open-note/${encodedNoteName}`
+      `${baseURL}/${encodedCourseID}/notes/open-note/${encodedNoteName}`
     );
   } catch (error) {
     throw error;
   }
 };
 
-export const deleteNote = async (courseID: string, noteName: string) => {
+export const createNote = async ({
+  courseID,
+  noteName,
+  noteNumber,
+  noteText,
+}: NoteAPITypes.createNoteProps) => {
   try {
     const encodedCourseID = encodeURIComponent(courseID);
     const encodedNoteName = encodeURIComponent(noteName);
+    const encodedNoteNumber = encodeURIComponent(noteNumber);
+    const encodedNoteText = encodeURIComponent(noteText);
 
-    await axios.delete(
-      `${baseURL}/courses/${encodedCourseID}/notes/${encodedNoteName}`
+    const searchParams = `note-name=${encodedNoteName}&note-number=${encodedNoteNumber}&note-text=${encodedNoteText}`;
+    const data = await axios.get(
+      `${baseURL}/${encodedCourseID}/notes/create-note?${searchParams}`
+    );
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteNote = async ({
+  courseID,
+  notePath,
+}: NoteAPITypes.deleteNoteProps) => {
+  try {
+    const encodedCourseID = encodeURIComponent(courseID);
+    const encodedNotePath = encodeURIComponent(notePath);
+
+    await axios.get(
+      `${baseURL}/${encodedCourseID}/notes/delete-note/${encodedNotePath}`
     );
   } catch (error) {
     throw error;
   }
 };
 
-export const addNote = async (courseID: string, noteData: any) => {
+export const renameNote = async ({
+  courseID,
+  oldTitle,
+  newTitle,
+}: NoteAPITypes.renameNoteProps) => {
   try {
     const encodedCourseID = encodeURIComponent(courseID);
-    const encodedNoteData = encodeURIComponent(noteData.name);
+    const encodedOldTitle = encodeURIComponent(oldTitle);
+    const encodedNewTitle = encodeURIComponent(newTitle);
 
-    const response = await axios.post(
-      `${baseURL}/courses/${encodedCourseID}/notes`,
-      encodedNoteData
+    const searchParams = `old-title=${encodedOldTitle}&new-title=${encodedNewTitle}`;
+    const response = await axios.get(
+      `${baseURL}/${encodedCourseID}/notes/rename-note?${searchParams}`
     );
+
+    if (response.data === 'Exists') {
+      alert('Note with that name already exists.');
+      return;
+    }
 
     return response.data;
   } catch (error) {
@@ -70,11 +115,11 @@ export const addNote = async (courseID: string, noteData: any) => {
   }
 };
 
-export const renumberNote = async (
-  courseID: string,
-  oldNumber: number,
-  newNumber: number
-) => {
+export const renumberNote = async ({
+  courseID,
+  oldNumber,
+  newNumber,
+}: NoteAPITypes.renumberNoteProps) => {
   try {
     const encodedCourseID = encodeURIComponent(courseID);
     const encodedOldNumber = encodeURIComponent(oldNumber);
@@ -82,7 +127,7 @@ export const renumberNote = async (
 
     const searchParams = `old-number=${encodedOldNumber}&new-number=${encodedNewNumber}`;
     const response = await axios.get(
-      `${baseURL}/courses/${encodedCourseID}/notes/renumber-note?${searchParams}`
+      `${baseURL}/${encodedCourseID}/notes/renumber-note?${searchParams}`
     );
 
     if (response.data === 'Exists') {
@@ -96,11 +141,11 @@ export const renumberNote = async (
   }
 };
 
-export const retitleNote = async (
-  courseID: string,
-  noteNumber: number,
-  newTitle: string
-) => {
+export const retitleNote = async ({
+  courseID,
+  noteNumber,
+  newTitle,
+}: NoteAPITypes.retitleNoteProps) => {
   try {
     const encodedCourseID = encodeURIComponent(courseID);
     const encodedNoteNumber = encodeURIComponent(noteNumber);
@@ -108,7 +153,7 @@ export const retitleNote = async (
 
     const searchParams = `new-title=${encodedNewTitle}&note-number=${encodedNoteNumber}`;
     await axios.get(
-      `${baseURL}/courses/${encodedCourseID}/notes/retitle-note?${searchParams}`
+      `${baseURL}/${encodedCourseID}/notes/retitle-note?${searchParams}`
     );
   } catch (error) {
     throw error;

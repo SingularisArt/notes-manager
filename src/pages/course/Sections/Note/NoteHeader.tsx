@@ -1,12 +1,10 @@
 import React from 'react';
+
 import ItemTitle from 'components/common/ItemTitle/ItemTitle';
 
-type NoteHeaderProps = {
-  editMode: boolean;
-  setEditMode: (mode: boolean) => void;
-};
+import { NoteHeaderTypes } from './Types/index';
 
-const NoteHeader: React.FC<NoteHeaderProps> = ({
+const NoteHeader: React.FC<NoteHeaderTypes.NoteHeaderProps> = ({
   editMode,
   setEditMode,
 }) => {

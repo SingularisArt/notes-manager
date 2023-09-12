@@ -169,15 +169,15 @@ export const todoData = {
   1: [
     {
       Id: "Task 1 (Week 1)",
-      Title: "In Progress Task (Week 1)",
-      Summary: "Complete the task that is in progress (Week 1).",
-      Status: "In Progress",
-    },
-    {
-      Id: "Task 2 (Week 1)",
       Title: "Todo Task (Week 1)",
       Summary: "Complete the task that is in todo (Week 1).",
       Status: "Todo",
+    },
+    {
+      Id: "Task 2 (Week 1)",
+      Title: "In Progress Task (Week 1)",
+      Summary: "Complete the task that is in progress (Week 1).",
+      Status: "In Progress",
     },
     {
       Id: "Task 3 (Week 1)",

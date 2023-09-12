@@ -1,14 +1,14 @@
 import React from 'react';
-import { BsTrash } from 'react-icons/bs';
 
 import * as API from './NoteAPI';
-import * as Types from './NoteTypes';
 import * as Utils from './utils';
+
+import { BsTrash } from 'react-icons/bs';
+import { DisplayNotesTypes } from './Types/index';
 
 import PDFSymbol from '../../../../components/common/Symbols/PDF';
 import SubItemTitle from '../../../../components/common/SubItemTitle/SubItemTitle';
 import TEXSymbol from '../../../../components/common/Symbols/TEX';
-import { deleteNotePopup } from './Popup';
 
 export const DisplayPersonalNote = ({
   note,
@@ -18,7 +18,7 @@ export const DisplayPersonalNote = ({
   notesType,
   renumberNote,
   retitleNote,
-}: Types.DisplayPersonalNoteProps) => {
+}: DisplayNotesTypes.DisplayPersonalNoteProps) => {
   const handleNumberKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter') return;
     const newNumber = parseInt(e.currentTarget.value);
@@ -66,7 +66,7 @@ export const DisplayPersonalNote = ({
     </div>
   ) : (
     <>
-      {note.texPath && Utils.convertFileNameToDisplayName(note.texPath)}
+      {note.texPath && Utils.convertFileNameToDisplayName({ fileName: note.texPath })}
       {note.texPath && note.name && ': '}
       {note.name && note.name}
     </>
@@ -76,13 +76,36 @@ export const DisplayPersonalNote = ({
 export const DisplayOtherNote = ({
   note,
   editMode,
-}: Types.DisplayOtherNoteProps) => {
+  setEditMode,
+  index,
+  noteType,
+  renameNote,
+}: DisplayNotesTypes.DisplayOtherNoteProps) => {
   const suffix =
     note.type === 'practice'
       ? 'Practice: '
       : note.type === 'answer'
         ? 'Answer: '
         : '';
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Enter') return;
+
+    const oldTitlePath = note.pdfPath || note.texPath;
+
+    const newName = e.currentTarget.value;
+    const newTitle = Utils.convertDisplayNameToFileName({ displayName: newName, extension: '' });
+
+    renameNote({
+      oldTitle: oldTitlePath,
+      newTitle: newTitle,
+      noteType: noteType,
+      index: index,
+    });
+
+    e.currentTarget.blur();
+    setEditMode(false);
+  };
 
   return editMode ? (
     <div className="input-container">
@@ -92,17 +115,19 @@ export const DisplayOtherNote = ({
         placeholder="Note Name"
         type="text"
         spellCheck={false}
-        defaultValue={Utils.convertFileNameToDisplayName(note.pdfPath || '')}
+        defaultValue={Utils.convertFileNameToDisplayName({ fileName: note.pdfPath || '' })}
         onInput={Utils.handleInputChange}
+        onKeyDown={handleKeyDown}
       />
     </div>
   ) : (
-    `${suffix}${Utils.convertFileNameToDisplayName(note.pdfPath || '')}`
+    `${suffix}${Utils.convertFileNameToDisplayName({ fileName: note.pdfPath || '' })}`
   );
 };
 
 const DisplayNotes = ({
   data,
+  dataType,
   title,
   editMode,
   setEditMode,
@@ -110,9 +135,12 @@ const DisplayNotes = ({
   notesType,
   deletePopup,
   setDeletePopup,
+  setDeleteIndex,
+  setDeleteType,
   renumberNote,
   retitleNote,
-}: Types.DisplayNotesProps) => {
+  renameNote,
+}: DisplayNotesTypes.DisplayNotesProps) => {
   if (!data || Object.keys(data).length === 0) {
     return (
       <div>
@@ -134,7 +162,11 @@ const DisplayNotes = ({
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <BsTrash
                     className={`edit-note ${editMode ? 'enable' : 'disable'}`}
-                    onClick={() => (setDeletePopup(!deletePopup))}
+                    onClick={() => {
+                      setDeletePopup(!deletePopup);
+                      setDeleteIndex(index);
+                      setDeleteType(dataType);
+                    }}
                   />
                   <span style={{ marginLeft: '8px' }}>
                     {note.type === 'lecture'
@@ -147,7 +179,14 @@ const DisplayNotes = ({
                         renumberNote,
                         retitleNote,
                       })
-                      : DisplayOtherNote({ note, editMode })}
+                      : DisplayOtherNote({
+                        note,
+                        editMode,
+                        setEditMode,
+                        index,
+                        noteType: dataType,
+                        renameNote,
+                      })}
                   </span>
                 </div>
               </td>

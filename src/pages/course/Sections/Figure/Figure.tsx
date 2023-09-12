@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Grid from '@mui/material/Grid';
 import Zoom from 'react-medium-image-zoom';
+
+import { useEffect, useState } from 'react';
 import { BsTrash } from 'react-icons/bs';
 
 import * as API from './FigureAPI';
@@ -11,6 +13,7 @@ import Loader from 'components/common/Loader';
 import Popup from 'components/common/Popup/Popup';
 import Item from 'components/common/Item';
 import ItemTitle from 'components/common/ItemTitle/ItemTitle';
+import Notification from 'components/common/Notification';
 
 import 'react-medium-image-zoom/dist/styles.css';
 
@@ -22,6 +25,7 @@ const Figure: React.FC<Types.FigureProps> = ({ courseID }) => {
   const [data, setData] = useState<Types.FigureDataMap>({});
   const [editMode, setEditMode] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [createdFigure, setCreatedFigure] = useState<boolean>(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState<boolean>(false);
   const [deleteFigureIndex, setDeleteFigureIndex] = useState<number>(0);
 
@@ -53,12 +57,6 @@ const Figure: React.FC<Types.FigureProps> = ({ courseID }) => {
       sortedData[currentWeek].sort((a, b) => a.title.localeCompare(b.title));
       return sortedData;
     });
-  };
-
-  const okDeletePopup = () => {
-    setIsDeletePopupOpen(false);
-    setEditMode(false);
-    deleteFigure({ index: deleteFigureIndex });
   };
 
   const titleText = ({ title }: Types.titleText): string => {
@@ -113,6 +111,7 @@ const Figure: React.FC<Types.FigureProps> = ({ courseID }) => {
     });
 
     sortDataAlphabetically();
+    setCreatedFigure(true);
 
     const newContent = await API.openFigure({
       courseID: courseID,
@@ -274,10 +273,24 @@ const Figure: React.FC<Types.FigureProps> = ({ courseID }) => {
             ))}
         </Grid>
 
+        {createdFigure && (
+          <>
+            <Notification
+              message="Figure created successfully!"
+              severity="success"
+            />
+            {() => setCreatedFigure(false)}
+          </>
+        )}
+
         <Popup
           isOpen={isDeletePopupOpen}
           onClose={() => setIsDeletePopupOpen(false)}
-          onOk={okDeletePopup}
+          onOk={() => {
+            setIsDeletePopupOpen(false);
+            setEditMode(false);
+            deleteFigure({ index: deleteFigureIndex });
+          }}
           content={PopupFunctions.deleteFigurePopup()}
           centerButtons={true}
           className="delete-popup"

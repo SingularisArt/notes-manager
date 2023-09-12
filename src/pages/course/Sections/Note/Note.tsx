@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import * as API from './NoteAPI';
-import * as Types from './NoteTypes';
-import * as PopupFunctions from 'utils/Popup';
+import * as PopupFunctions from './Popup';
+
+import { useEffect, useState } from 'react';
+import { NoteTypes } from './Types/index';
 
 import DisplayNotes from './DisplayNote';
 import NoteHeader from './NoteHeader';
@@ -10,27 +12,34 @@ import NoteHeader from './NoteHeader';
 import Loader from 'components/common/Loader';
 import Popup from 'components/common/Popup/Popup';
 import Item from 'components/common/Item';
-import SubItemTitle from 'components/common/SubItemTitle/SubItemTitle';
 
 import './Note.css';
 
-const Note: React.FC<Types.NoteProps> = ({ courseID }) => {
-  const [data, setData] = useState<Types.Data>({
+const Note: React.FC<NoteTypes.NoteProps> = ({ courseID }) => {
+  const [data, setData] = useState<NoteTypes.Data>({
     notesData: {},
     onlineNotesData: {},
     examReviewNotesData: {},
   });
+  const [newNoteData, setNewNoteData] = useState<NoteTypes.NewNoteItem>({
+    name: '',
+    number: 0,
+    note: '',
+  });
+
   const [notesType, setNotesType] = useState<string>('');
   const [editMode, setEditMode] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAddPopupOpen, setIsAddPopupOpen] = useState<boolean>(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState<boolean>(false);
+  const [deleteIndex, setDeleteIndex] = useState<number>(0);
+  const [deleteType, setDeleteType] = useState<string>('');
 
   useEffect(() => {
     const fetchAllNotes = async () => {
       try {
-        const notesData = await API.fetchAllNotes(courseID);
-        const courseData = await API.fetchCourseConfig(courseID);
+        const notesData = await API.fetchAllNotes({ courseID: courseID });
+        const courseData = await API.fetchCourseConfig({ courseID: courseID });
         const type = courseData.notes_type;
         const upperCase = type.charAt(0).toUpperCase() + type.slice(1);
 
@@ -57,15 +66,7 @@ const Note: React.FC<Types.NoteProps> = ({ courseID }) => {
     );
   }
 
-  if (Object.keys(data.notesData).length === 0) {
-    return (
-      <div className="no-notes">
-        <SubItemTitle title="No Notes" />
-      </div>
-    );
-  }
-
-  const sortData: (props: Types.sortDataProps) => Types.NoteItem[] = ({
+  const sortData: (props: NoteTypes.sortDataProps) => NoteTypes.NoteItem[] = ({
     dataItems,
     type,
   }) => {
@@ -84,35 +85,93 @@ const Note: React.FC<Types.NoteProps> = ({ courseID }) => {
     }
   };
 
-  const openAddPopup = () => {
-    setIsAddPopupOpen(true);
+  const createNote = async () => {
+    const newDataResponse = await API.createNote({
+      courseID: courseID,
+      noteName: newNoteData.name,
+      noteNumber: newNoteData.number,
+      noteText: newNoteData.note,
+    });
+    const newData: NoteTypes.NoteItem = newDataResponse.data;
+
+    setData((prevData) => {
+      const newKey = Object.keys(prevData.notesData).length;
+      const updatedNotesData = { ...prevData.notesData };
+      updatedNotesData[newKey] = newData;
+
+      return {
+        ...prevData,
+        notesData: updatedNotesData,
+      };
+    });
   };
 
-  const okAddPopup = () => {
-    setIsAddPopupOpen(false);
+  const deleteNote = async () => {
+    if (!data[deleteType][deleteIndex]) {
+      return;
+    }
+
+    const noteToDelete = data[deleteType][deleteIndex];
+    const pathWithExtension = noteToDelete.pdfPath || noteToDelete.texPath;
+    const pathWithoutExtension = pathWithExtension.split('.')[0];
+
+    setData((prevData) => {
+      const newData = { ...prevData };
+      delete newData[deleteType][deleteIndex];
+
+      const updatedData = Object.values(newData[deleteType]);
+      newData[deleteType] = updatedData;
+
+      return newData;
+    });
+
+    await API.deleteNote({
+      courseID: courseID,
+      notePath: pathWithoutExtension,
+    });
   };
 
-  const okDeletePopup = () => {
-    setIsDeletePopupOpen(false);
-    setEditMode(false);
-  };
-
-  const deleteNote: (props: Types.deleteNoteProps) => void = ({
-    note,
-    index,
-  }) => {
-    // Implement deleteNote function
-  };
-
-  const renameNote: (props: Types.renameNoteProps) => void = async ({
-    noteNumber,
+  const renameNote: (props: NoteTypes.renameNoteProps) => void = async ({
+    oldTitle,
     newTitle,
+    noteType,
     index,
   }) => {
-    // Implement reNumberNote function
+    if (oldTitle === newTitle || !newTitle) {
+      return;
+    }
+
+    await API.renameNote({
+      courseID: courseID,
+      oldTitle: oldTitle,
+      newTitle: newTitle,
+    });
+
+    setData((prevData) => {
+      const newData = { ...prevData };
+      const note = newData[noteType][index];
+
+      if (note.pdf) {
+        let folder = note.pdfPath.split('/')[0];
+        if (folder === note.pdfPath) folder = '';
+        else folder += '/';
+
+        note.pdfPath = `${folder}${newTitle}.pdf`;
+      }
+
+      if (note.tex) {
+        let folder = note.texPath.split('/')[0];
+        if (folder === note.texPath) folder = '';
+        else folder += '/';
+
+        note.texPath = `${folder}${newTitle}.tex`;
+      }
+
+      return newData;
+    });
   };
 
-  const renumberNote: (props: Types.renumberNoteProps) => void = async ({
+  const renumberNote: (props: NoteTypes.renumberNoteProps) => void = async ({
     oldNumber,
     newNumber,
     index,
@@ -120,7 +179,11 @@ const Note: React.FC<Types.NoteProps> = ({ courseID }) => {
     if (oldNumber === newNumber || !newNumber) {
       return;
     }
-    await API.renumberNote(courseID, oldNumber, newNumber);
+    await API.renumberNote({
+      courseID: courseID,
+      oldNumber: oldNumber,
+      newNumber: newNumber,
+    });
 
     setData((prevData) => {
       const newData = { ...prevData };
@@ -141,14 +204,18 @@ const Note: React.FC<Types.NoteProps> = ({ courseID }) => {
     });
   };
 
-  const retitleNote: (props: Types.retitleNoteProps) => void = async ({
+  const retitleNote: (props: NoteTypes.retitleNoteProps) => void = async ({
     noteNumber,
     newTitle,
     index,
   }) => {
     if (!newTitle) return;
 
-    await API.retitleNote(courseID, noteNumber, newTitle);
+    await API.retitleNote({
+      courseID: courseID,
+      noteNumber: noteNumber,
+      newTitle: newTitle,
+    });
 
     const newData = { ...data };
     newData.notesData[index].name = newTitle;
@@ -161,12 +228,13 @@ const Note: React.FC<Types.NoteProps> = ({ courseID }) => {
   }
 
   return (
-    <Item onClick={openAddPopup}>
+    <Item onClick={() => setIsAddPopupOpen(true)}>
       <div className="notes">
         <NoteHeader editMode={editMode} setEditMode={setEditMode} />
 
         <DisplayNotes
           data={data.notesData}
+          dataType="notesData"
           title={`${notesType.slice(0, -1)} Notes`}
           editMode={editMode}
           setEditMode={setEditMode}
@@ -174,11 +242,15 @@ const Note: React.FC<Types.NoteProps> = ({ courseID }) => {
           notesType={notesType}
           deletePopup={isDeletePopupOpen}
           setDeletePopup={setIsDeletePopupOpen}
+          setDeleteIndex={setDeleteIndex}
+          setDeleteType={setDeleteType}
           renumberNote={renumberNote}
           retitleNote={retitleNote}
+          renameNote={renameNote}
         />
         <DisplayNotes
           data={data.onlineNotesData}
+          dataType="onlineNotesData"
           title="Professor Notes"
           editMode={editMode}
           setEditMode={setEditMode}
@@ -186,11 +258,15 @@ const Note: React.FC<Types.NoteProps> = ({ courseID }) => {
           notesType={notesType}
           deletePopup={isDeletePopupOpen}
           setDeletePopup={setIsDeletePopupOpen}
+          setDeleteIndex={setDeleteIndex}
+          setDeleteType={setDeleteType}
           renumberNote={renumberNote}
           retitleNote={retitleNote}
+          renameNote={renameNote}
         />
         <DisplayNotes
           data={data.examReviewNotesData}
+          dataType="examReviewNotesData"
           title="Exam Review"
           editMode={editMode}
           setEditMode={setEditMode}
@@ -198,29 +274,40 @@ const Note: React.FC<Types.NoteProps> = ({ courseID }) => {
           notesType={notesType}
           deletePopup={isDeletePopupOpen}
           setDeletePopup={setIsDeletePopupOpen}
+          setDeleteIndex={setDeleteIndex}
+          setDeleteType={setDeleteType}
           renumberNote={renumberNote}
           retitleNote={retitleNote}
+          renameNote={renameNote}
         />
 
         <Popup
           className="add-popup"
           isOpen={isAddPopupOpen}
           onClose={() => setIsAddPopupOpen(false)}
-          onOk={okAddPopup}
           content={PopupFunctions.addNotePopup({
             notesType: notesType.slice(0, -1),
+            data: newNoteData,
+            setData: setNewNoteData,
           })}
+          onOk={() => {
+            setIsAddPopupOpen(false);
+            setEditMode(false);
+            createNote();
+          }}
         />
 
         <Popup
           className="delete-popup"
           isOpen={isDeletePopupOpen}
           onClose={() => setIsDeletePopupOpen(false)}
-          onOk={okDeletePopup}
+          onOk={() => {
+            setIsDeletePopupOpen(false);
+            setEditMode(false);
+            deleteNote();
+          }}
           centerButtons={true}
-          content={PopupFunctions.deleteNotePopup({
-            notesType: notesType.slice(0, -1),
-          })}
+          content={PopupFunctions.deleteNotePopup()}
         />
       </div>
     </Item>
