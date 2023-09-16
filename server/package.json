@@ -4,7 +4,7 @@
   "description": "Server side manager for my memory trainer.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "bun index.js"
   },
   "repository": {
     "type": "git",
