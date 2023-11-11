@@ -1,11 +1,11 @@
 import axios from 'axios';
-import * as Types from './FigureTypes';
+import { FigureAPITypes } from './Types/index';
 
 const baseURL = 'http://localhost:3000/courses';
 
 export const fetchAllFigures = async ({
   courseID,
-}: Types.APIfetchAllFigures) => {
+}: FigureAPITypes.APIfetchAllFigures) => {
   try {
     const encodedCourseID = encodeURIComponent(courseID);
     const response = await axios.get(`${baseURL}/${encodedCourseID}/figures`);
@@ -19,7 +19,7 @@ export const createFigure = async ({
   courseID,
   fileName,
   currentWeek,
-}: Types.APIcreateFigure) => {
+}: FigureAPITypes.APIcreateFigure) => {
   try {
     const encodedCourseID = encodeURIComponent(courseID);
     const encodedFileName = encodeURIComponent(fileName);
@@ -41,7 +41,7 @@ export const getFigureData = async ({
   courseID,
   figureTitle,
   currentWeek,
-}: Types.APIgetFigureData) => {
+}: FigureAPITypes.APIgetFigureData) => {
   try {
     const encodedCourseID = encodeURIComponent(courseID);
     const encodedFileTitle = encodeURIComponent(figureTitle);
@@ -63,7 +63,7 @@ export const openFigure = async ({
   courseID,
   figureTitle,
   currentWeek,
-}: Types.APIopenFigure) => {
+}: FigureAPITypes.APIopenFigure) => {
   try {
     const encodedCourseID = encodeURIComponent(courseID);
     const encodedFileTitle = encodeURIComponent(figureTitle);
@@ -86,7 +86,7 @@ export const renameFigure = async ({
   oldTitle,
   newTitle,
   currentWeek,
-}: Types.APIrenameFigure) => {
+}: FigureAPITypes.APIrenameFigure) => {
   try {
     const encodedCourseID = encodeURIComponent(courseID);
     const encodedOldFigureTitle = encodeURIComponent(oldTitle);
@@ -107,7 +107,7 @@ export const deleteFigure = async ({
   courseID,
   figureTitle,
   currentWeek,
-}: Types.APIdeleteFigure) => {
+}: FigureAPITypes.APIdeleteFigure) => {
   try {
     const encodedCourseID = encodeURIComponent(courseID);
     const encodedFigureTitle = encodeURIComponent(figureTitle);

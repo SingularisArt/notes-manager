@@ -1,1 +1,2 @@
-export * as FIgureAPITypes from './FigureAPI';
+export * as FigureAPITypes from './FigureAPI';
+export * as FigureTypes from './Figure';

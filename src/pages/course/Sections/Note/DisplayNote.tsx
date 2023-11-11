@@ -66,7 +66,8 @@ export const DisplayPersonalNote = ({
     </div>
   ) : (
     <>
-      {note.texPath && Utils.convertFileNameToDisplayName({ fileName: note.texPath })}
+      {note.texPath &&
+        Utils.convertFileNameToDisplayName({ fileName: note.texPath })}
       {note.texPath && note.name && ': '}
       {note.name && note.name}
     </>
@@ -94,7 +95,10 @@ export const DisplayOtherNote = ({
     const oldTitlePath = note.pdfPath || note.texPath;
 
     const newName = e.currentTarget.value;
-    const newTitle = Utils.convertDisplayNameToFileName({ displayName: newName, extension: '' });
+    const newTitle = Utils.convertDisplayNameToFileName({
+      displayName: newName,
+      extension: '',
+    });
 
     renameNote({
       oldTitle: oldTitlePath,
@@ -115,13 +119,17 @@ export const DisplayOtherNote = ({
         placeholder="Note Name"
         type="text"
         spellCheck={false}
-        defaultValue={Utils.convertFileNameToDisplayName({ fileName: note.pdfPath || '' })}
+        defaultValue={Utils.convertFileNameToDisplayName({
+          fileName: note.pdfPath || '',
+        })}
         onInput={Utils.handleInputChange}
         onKeyDown={handleKeyDown}
       />
     </div>
   ) : (
-    `${suffix}${Utils.convertFileNameToDisplayName({ fileName: note.pdfPath || '' })}`
+    `${suffix}${Utils.convertFileNameToDisplayName({
+      fileName: note.pdfPath || '',
+    })}`
   );
 };
 
@@ -201,7 +209,10 @@ const DisplayNotes = ({
                     >
                       <TEXSymbol
                         onClick={() =>
-                          API.openNote(courseID, note.texPath || '')
+                          API.openNote({
+                            courseID: courseID,
+                            noteName: note.texPath || '',
+                          })
                         }
                       />
                     </span>
@@ -212,7 +223,10 @@ const DisplayNotes = ({
                     <span className="note-table-icon">
                       <PDFSymbol
                         onClick={() =>
-                          API.openNote(courseID, note.pdfPath || '')
+                          API.openNote({
+                            courseID: courseID,
+                            noteName: note.pdfPath || '',
+                          })
                         }
                       />
                     </span>
