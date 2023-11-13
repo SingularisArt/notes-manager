@@ -1,67 +1,52 @@
 import express from 'express';
 import path from 'path';
-import { getPath, getItemsInFolder, replaceString } from '../../utils.js';
+import { getPath, getItemsInFolder } from '../../utils.js';
 
 const courseAssignmentRouters = express.Router();
 
-export default function createCourseAssignmentRouters(config, courseName) {
-  courseAssignmentRouters.get('/', async (req, res) => {
+export default function createCourseAssignmentRouters(config, _) {
+  courseAssignmentRouters.get('/:courseName/assignments', async (req, res) => {
+    const courseName = req.params.courseName;
     const coursePath = getPath(config, courseName);
 
-    const courseSearchString = 'current-course/';
-    const myAssignmentsSearchString = 'my-assignments/';
+    const myAssignmentFolders = config.assignment_folders;
 
-    const gradedAss = config.graded_assignments_folder;
-    const myAss = config.my_assignments_folder;
-    const onlineAss = config.online_assignments_folder;
-    const latexAss = config.my_assignments_latex_folder;
-    const yamlAss = config.my_assignments_yaml_folder;
-    const pdfAss = config.my_assignments_pdf_folder;
-
-    const gradedPath = path.join(
+    const assignmentsDir = path.join(
       coursePath,
-      replaceString(gradedAss, courseSearchString),
-    );
-    const myPath = path.join(
-      coursePath,
-      replaceString(myAss, courseSearchString),
-    );
-    const onlinePath = path.join(
-      coursePath,
-      replaceString(onlineAss, courseSearchString),
+      path.basename(config.assignments_dir),
     );
 
-    const gradedList = await getItemsInFolder(gradedPath);
-    const onlineList = await getItemsInFolder(onlinePath);
+    const assignments = {};
+    for (const folder in myAssignmentFolders) {
+      const folderPath = path.join(assignmentsDir, myAssignmentFolders[folder]);
+      assignments[folder] = await getItemsInFolder(folderPath);
+    }
 
-    const latexPath = path.join(
-      myPath,
-      replaceString(latexAss, myAssignmentsSearchString),
-    );
-    const yamlPath = path.join(
-      myPath,
-      replaceString(yamlAss, myAssignmentsSearchString),
-    );
-    const pdfPath = path.join(
-      myPath,
-      replaceString(pdfAss, myAssignmentsSearchString),
-    );
+    const pathsWithoutExtensions = [];
+    for (const folder in assignments) {
+      if (assignments.hasOwnProperty(folder)) {
+        assignments[folder].forEach((path) => {
+          const pathWithoutExtension = path.split('.').slice(0, -1).join('.');
+          pathsWithoutExtensions.push(pathWithoutExtension);
+        });
+      }
+    }
+    const filePaths = [...new Set(pathsWithoutExtensions)];
 
-    const latexList = await getItemsInFolder(latexPath);
-    const yamlList = await getItemsInFolder(yamlPath);
-    const pdfList = await getItemsInFolder(pdfPath);
+    const keyFilePaths = {};
+    const keys = Object.keys(assignments);
+    filePaths.forEach((filePath) => {
+      const fileName = path.basename(filePath, path.extname(filePath));
 
-    const notes = {
-      gradedAssignments: gradedList,
-      onlineAssignments: onlineList,
-      myAssignments: {
-        latex: latexList,
-        yaml: yamlList,
-        pdf: pdfList,
-      },
-    };
+      keyFilePaths[fileName] = {};
+      keys.forEach((key) => {
+        const folderPath = assignments[key].find((p) => p.includes(fileName));
 
-    res.send(notes);
+        keyFilePaths[fileName][key] = folderPath || '';
+      });
+    });
+
+    res.send(keyFilePaths);
   });
 
   return courseAssignmentRouters;
