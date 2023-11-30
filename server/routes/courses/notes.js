@@ -29,44 +29,14 @@ export default function createCourseNoteRouters(config) {
       coursePath,
       `online-${notesType.slice(0, -1)}-notes`,
     );
-    const examReviewAnswersPath = path.join(
-      coursePath,
-      'exam-review',
-      'answers',
-    );
-    const examReviewPracticePath = path.join(
-      coursePath,
-      'exam-review',
-      'practice',
-    );
 
-    const [
-      notesList,
-      onlineNotesList,
-      examReviewPracticesList,
-      examReviewAnswersList,
-    ] = await Promise.all([
+    const [notesList, onlineNotesList] = await Promise.all([
       getItemsInFolder(notesPath),
       getItemsInFolder(onlineNotesPath),
-      getItemsInFolder(examReviewPracticePath),
-      getItemsInFolder(examReviewAnswersPath),
     ]);
 
     const notesData = processFileList(notesList, 'lecture', 2, true);
     const onlineNotesData = processFileList(onlineNotesList, 'online-lecture');
-    const examReviewPracticeData = processFileList(
-      examReviewPracticesList,
-      'practice',
-      3,
-    );
-    const examReviewAnswersData = processFileList(
-      examReviewAnswersList,
-      'answer',
-      3,
-    );
-    const examReviewNotesData = examReviewPracticeData.concat(
-      examReviewAnswersData,
-    );
 
     const masterTexExists = fs.existsSync(path.join(coursePath, 'master.tex'));
     const masterPdfExists = fs.existsSync(path.join(coursePath, 'master.pdf'));
@@ -84,8 +54,20 @@ export default function createCourseNoteRouters(config) {
     const notes = {
       notesData: { ...notesData },
       onlineNotesData: { ...onlineNotesData },
-      examReviewNotesData: { ...examReviewNotesData },
+      examReviewNotesData: {},
     };
+
+    const exams_dir = config.exams_dir;
+    let exams = {};
+
+    for (const [key, value] of Object.entries(config.exam_review)) {
+      const exam = path.join(coursePath, exams_dir, value);
+      const items = await getItemsInFolder(exam);
+      const numFolders = (exams_dir + '/' + value).split('/').length;
+      exams = { ...exams, ...processFileList(items, key, numFolders) };
+    }
+
+    notes.examReviewNotesData = { ...exams };
 
     res.send(notes);
   });
@@ -309,15 +291,19 @@ export default function createCourseNoteRouters(config) {
     const matchingExistingFiles = glob.globSync(newWildCard);
     if (matchingExistingFiles.length > 0) {
       return res.send('Exists');
-    };
+    }
 
     for (const file of matchingFiles) {
       const fileParse = path.parse(file);
       const fileExtension = fileParse.ext;
-      const newPath = path.join(coursePath, folder, `${newTitle}${fileExtension}`);
+      const newPath = path.join(
+        coursePath,
+        folder,
+        `${newTitle}${fileExtension}`,
+      );
 
       fs.renameSync(file, newPath);
-    };
+    }
 
     res.send('Success');
   });

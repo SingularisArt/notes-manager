@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import Collapse from 'components/common/Collapse/Collapse';
 import Item from 'components/common/Item';
 import ItemTitle from 'components/common/ItemTitle/ItemTitle';
 import SubItemTitle from 'components/common/SubItemTitle/SubItemTitle';
@@ -16,8 +17,17 @@ type AssignmentProp = {
   data: {
     name: string;
     submitted: boolean;
-    grade: string;
     dueDate: string;
+    grade: string;
+    url: string;
+    collapse?: boolean;
+    collapseData?: {
+      name: string;
+      submitted: boolean;
+      dueDate: string;
+      grade: string;
+      url: string;
+    }[];
   }[];
   overdue?: boolean;
   today?: boolean;
@@ -147,34 +157,58 @@ const GetGrade = (grade: string) => {
   }
 };
 
-const DisplayAssignments: React.FC<AssignmentProp> = ({
-  data,
-  overdue,
-  today,
-}) => {
+const DisplayAssignments: React.FC<AssignmentProp> = ({ data, overdue, today }) => {
+  const [isCollapsed, setIsCollapsed] = useState<boolean[]>(Array(data.length).fill(false));
+
+  const toggleCollapse = (index: number) => {
+    setIsCollapsed((prevIsCollapsed) => {
+      const newIsCollapsed = [...prevIsCollapsed];
+      newIsCollapsed[index] = !newIsCollapsed[index];
+      return newIsCollapsed;
+    });
+  };
+
   return (
     <table className="assignment-table">
       <tbody>
-        {data.map((assignment) => (
-          <tr key={assignment.name}>
-            <td className="assignment-table-row">
-              <div className="assignment-table-row-content">
-                <div className="assignment-table-row-content-name">
-                  {assignment.name}
-                </div>
-                <div>
-                  {assignment.submitted === true
-                    ? GetGrade(assignment.grade)
-                    : DisplayDate(
-                      assignment.dueDate,
-                      assignment.submitted,
-                      overdue,
-                      today
+        {data.map((assignment, index) => (
+          <React.Fragment key={assignment.name}>
+            <tr>
+              <td className="assignment-table-row">
+                <div className="assignment-table-row-content">
+                  <div className="assignment-table-row-content-name">
+                    {assignment.collapse ? (
+                      <Collapse
+                        title={assignment.name}
+                        onClick={() => toggleCollapse(index)}
+                      />
+                    ) : (
+                      assignment.name
                     )}
+                  </div>
+                  <div>
+                    {assignment.submitted === true
+                      ? GetGrade(assignment.grade)
+                      : DisplayDate(
+                          assignment.dueDate,
+                          assignment.submitted,
+                          overdue,
+                          today
+                        )}
+                  </div>
                 </div>
-              </div>
-            </td>
-          </tr>
+              </td>
+            </tr>
+            {assignment.collapseData && assignment.collapse && isCollapsed[index] ? (
+              <tr>
+                <td className="assignment-table-row">
+                  <div className="assignment-table-row-content">
+                    <DisplayAssignments data={assignment.collapseData} />
+                  </div>
+                </td>
+              </tr>
+            ) : null}
+          </React.Fragment>
         ))}
       </tbody>
     </table>

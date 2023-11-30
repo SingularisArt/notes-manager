@@ -156,6 +156,33 @@ export const assignmentData = [
     submitted: true,
     dueDate: "2023-03-01",
     grade: "100",
+    url: "",
+    collapse: false,
+  },
+  {
+    name: "Graded Assignment 2",
+    submitted: true,
+    dueDate: "2023-03-01",
+    grade: "100",
+    url: "",
+    collapse: false,
+  },
+  {
+    name: "Graded Assignment 3",
+    submitted: false,
+    dueDate: "2023-12-31",
+    grade: "NA",
+    url: "",
+    collapse: true,
+    collapseData: [
+      {
+        name: "Graded Assignment 3/1",
+        submitted: false,
+        dueDate: "2023-12-31",
+        grade: "NA",
+        url: "",
+      },
+    ],
   },
 ];
 

@@ -30,6 +30,8 @@ export function getCourseInfo(config, courseName) {
 }
 
 export async function getItemsInFolder(directoryPath, getFiles = true) {
+  if (fs.existsSync(directoryPath) === false) return [];
+
   const files = await fs.promises.readdir(directoryPath);
 
   const notesList = files
