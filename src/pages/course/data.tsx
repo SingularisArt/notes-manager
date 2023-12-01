@@ -156,33 +156,60 @@ export const assignmentData = [
     submitted: true,
     dueDate: "2023-03-01",
     grade: "100",
+    progress: 0,
     url: "",
     collapse: false,
+    collapseData: [],
   },
   {
     name: "Graded Assignment 2",
     submitted: true,
     dueDate: "2023-03-01",
     grade: "100",
+    progress: 1,
     url: "",
     collapse: false,
+    collapseData: [],
   },
   {
     name: "Graded Assignment 3",
     submitted: false,
     dueDate: "2023-12-31",
     grade: "NA",
+    progress: 1,
     url: "",
     collapse: true,
     collapseData: [
       {
-        name: "Graded Assignment 3/1",
+        name: "Graded Assignment 3.1",
+        submitted: true,
+        dueDate: "2023-12-31",
+        grade: "50",
+        url: "",
+        progress: "done",
+        collapse: false,
+        collapseData: [],
+      },
+      {
+        name: "Graded Assignment 3.2",
         submitted: false,
         dueDate: "2023-12-31",
         grade: "NA",
         url: "",
+        progress: 0,
+        collapse: false,
+        collapseData: [],
       },
     ],
+  },
+  {
+    name: "Graded Assignment 4",
+    submitted: false,
+    dueDate: "2023-12-31",
+    grade: "NA",
+    progress: 1,
+    url: "",
+    collapse: false,
   },
 ];
 
@@ -216,15 +243,15 @@ export const todoData = {
   2: [
     {
       Id: "Task 1 (Week 2)",
-      Title: "In Progress Task (Week 2)",
-      Summary: "Complete the task that is in progress (Week 2).",
-      Status: "In Progress",
-    },
-    {
-      Id: "Task 2 (Week 2)",
       Title: "Todo Task (Week 2)",
       Summary: "Complete the task that is in todo (Week 2).",
       Status: "Todo",
+    },
+    {
+      Id: "Task 2 (Week 2)",
+      Title: "In Progress Task (Week 2)",
+      Summary: "Complete the task that is in progress (Week 2).",
+      Status: "In Progress",
     },
     {
       Id: "Task 3 (Week 2)",
@@ -236,15 +263,15 @@ export const todoData = {
   3: [
     {
       Id: "Task 1 (Week 3)",
-      Title: "In Progress Task (Week 3)",
-      Summary: "Complete the task that is in progress (Week 3).",
-      Status: "In Progress",
-    },
-    {
-      Id: "Task 2 (Week 3)",
       Title: "Todo Task (Week 3)",
       Summary: "Complete the task that is in todo (Week 3).",
       Status: "Todo",
+    },
+    {
+      Id: "Task 2 (Week 3)",
+      Title: "In Progress Task (Week 3)",
+      Summary: "Complete the task that is in progress (Week 3).",
+      Status: "In Progress",
     },
     {
       Id: "Task 3 (Week 3)",
@@ -253,18 +280,19 @@ export const todoData = {
       Status: "Done",
     },
   ],
+  // do that for 12 weeks
   4: [
     {
       Id: "Task 1 (Week 4)",
-      Title: "In Progress Task (Week 4)",
-      Summary: "Complete the task that is in progress (Week 4).",
-      Status: "In Progress",
-    },
-    {
-      Id: "Task 2 (Week 4)",
       Title: "Todo Task (Week 4)",
       Summary: "Complete the task that is in todo (Week 4).",
       Status: "Todo",
+    },
+    {
+      Id: "Task 2 (Week 4)",
+      Title: "In Progress Task (Week 4)",
+      Summary: "Complete the task that is in progress (Week 4).",
+      Status: "In Progress",
     },
     {
       Id: "Task 3 (Week 4)",
@@ -276,15 +304,15 @@ export const todoData = {
   5: [
     {
       Id: "Task 1 (Week 5)",
-      Title: "In Progress Task (Week 5)",
-      Summary: "Complete the task that is in progress (Week 5).",
-      Status: "In Progress",
-    },
-    {
-      Id: "Task 2 (Week 5)",
       Title: "Todo Task (Week 5)",
       Summary: "Complete the task that is in todo (Week 5).",
       Status: "Todo",
+    },
+    {
+      Id: "Task 2 (Week 5)",
+      Title: "In Progress Task (Week 5)",
+      Summary: "Complete the task that is in progress (Week 5).",
+      Status: "In Progress",
     },
     {
       Id: "Task 3 (Week 5)",
@@ -296,15 +324,15 @@ export const todoData = {
   6: [
     {
       Id: "Task 1 (Week 6)",
-      Title: "In Progress Task (Week 6)",
-      Summary: "Complete the task that is in progress (Week 6).",
-      Status: "In Progress",
-    },
-    {
-      Id: "Task 2 (Week 6)",
       Title: "Todo Task (Week 6)",
       Summary: "Complete the task that is in todo (Week 6).",
       Status: "Todo",
+    },
+    {
+      Id: "Task 2 (Week 6)",
+      Title: "In Progress Task (Week 6)",
+      Summary: "Complete the task that is in progress (Week 6).",
+      Status: "In Progress",
     },
     {
       Id: "Task 3 (Week 6)",
@@ -316,15 +344,15 @@ export const todoData = {
   7: [
     {
       Id: "Task 1 (Week 7)",
-      Title: "In Progress Task (Week 7)",
-      Summary: "Complete the task that is in progress (Week 7).",
-      Status: "In Progress",
-    },
-    {
-      Id: "Task 2 (Week 7)",
       Title: "Todo Task (Week 7)",
       Summary: "Complete the task that is in todo (Week 7).",
       Status: "Todo",
+    },
+    {
+      Id: "Task 2 (Week 7)",
+      Title: "In Progress Task (Week 7)",
+      Summary: "Complete the task that is in progress (Week 7).",
+      Status: "In Progress",
     },
     {
       Id: "Task 3 (Week 7)",
@@ -336,15 +364,15 @@ export const todoData = {
   8: [
     {
       Id: "Task 1 (Week 8)",
-      Title: "In Progress Task (Week 8)",
-      Summary: "Complete the task that is in progress (Week 8).",
-      Status: "In Progress",
-    },
-    {
-      Id: "Task 2 (Week 8)",
       Title: "Todo Task (Week 8)",
       Summary: "Complete the task that is in todo (Week 8).",
       Status: "Todo",
+    },
+    {
+      Id: "Task 2 (Week 8)",
+      Title: "In Progress Task (Week 8)",
+      Summary: "Complete the task that is in progress (Week 8).",
+      Status: "In Progress",
     },
     {
       Id: "Task 3 (Week 8)",
@@ -356,15 +384,15 @@ export const todoData = {
   9: [
     {
       Id: "Task 1 (Week 9)",
-      Title: "In Progress Task (Week 9)",
-      Summary: "Complete the task that is in progress (Week 9).",
-      Status: "In Progress",
-    },
-    {
-      Id: "Task 2 (Week 9)",
       Title: "Todo Task (Week 9)",
       Summary: "Complete the task that is in todo (Week 9).",
       Status: "Todo",
+    },
+    {
+      Id: "Task 2 (Week 9)",
+      Title: "In Progress Task (Week 9)",
+      Summary: "Complete the task that is in progress (Week 9).",
+      Status: "In Progress",
     },
     {
       Id: "Task 3 (Week 9)",
@@ -376,15 +404,15 @@ export const todoData = {
   10: [
     {
       Id: "Task 1 (Week 10)",
-      Title: "In Progress Task (Week 10)",
-      Summary: "Complete the task that is in progress (Week 10).",
-      Status: "In Progress",
-    },
-    {
-      Id: "Task 2 (Week 10)",
       Title: "Todo Task (Week 10)",
       Summary: "Complete the task that is in todo (Week 10).",
       Status: "Todo",
+    },
+    {
+      Id: "Task 2 (Week 10)",
+      Title: "In Progress Task (Week 10)",
+      Summary: "Complete the task that is in progress (Week 10).",
+      Status: "In Progress",
     },
     {
       Id: "Task 3 (Week 10)",
@@ -396,15 +424,15 @@ export const todoData = {
   11: [
     {
       Id: "Task 1 (Week 11)",
-      Title: "In Progress Task (Week 11)",
-      Summary: "Complete the task that is in progress (Week 11).",
-      Status: "In Progress",
-    },
-    {
-      Id: "Task 2 (Week 11)",
       Title: "Todo Task (Week 11)",
       Summary: "Complete the task that is in todo (Week 11).",
       Status: "Todo",
+    },
+    {
+      Id: "Task 2 (Week 11)",
+      Title: "In Progress Task (Week 11)",
+      Summary: "Complete the task that is in progress (Week 11).",
+      Status: "In Progress",
     },
     {
       Id: "Task 3 (Week 11)",
@@ -416,15 +444,15 @@ export const todoData = {
   12: [
     {
       Id: "Task 1 (Week 12)",
-      Title: "In Progress Task (Week 12)",
-      Summary: "Complete the task that is in progress (Week 12).",
-      Status: "In Progress",
-    },
-    {
-      Id: "Task 2 (Week 12)",
       Title: "Todo Task (Week 12)",
       Summary: "Complete the task that is in todo (Week 12).",
       Status: "Todo",
+    },
+    {
+      Id: "Task 2 (Week 12)",
+      Title: "In Progress Task (Week 12)",
+      Summary: "Complete the task that is in progress (Week 12).",
+      Status: "In Progress",
     },
     {
       Id: "Task 3 (Week 12)",

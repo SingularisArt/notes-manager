@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
-import Collapse from 'components/common/Collapse/Collapse';
+import Collapse from '@mui/material/Collapse';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
+
+import IconButton from '@mui/material/IconButton';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+
 import Item from 'components/common/Item';
 import ItemTitle from 'components/common/ItemTitle/ItemTitle';
 import SubItemTitle from 'components/common/SubItemTitle/SubItemTitle';
@@ -20,6 +30,7 @@ type AssignmentProp = {
     dueDate: string;
     grade: string;
     url: string;
+    progress: number;
     collapse?: boolean;
     collapseData?: {
       name: string;
@@ -32,6 +43,55 @@ type AssignmentProp = {
   overdue?: boolean;
   today?: boolean;
 };
+
+enum Progress {
+  'None',
+  'In Progress',
+  'Done',
+}
+
+function createData(
+  name: string,
+  submitted: boolean,
+  dueDate: string,
+  grade: string,
+  url: string,
+  progress: number,
+  collapse?: boolean,
+  collapseData?: {
+    name: string;
+    submitted: boolean;
+    dueDate: string;
+    grade: string;
+    url: string;
+  }[]
+) {
+  return {
+    name,
+    submitted,
+    dueDate,
+    grade,
+    url,
+    progress,
+    collapse,
+    collapseData,
+  };
+}
+
+function getRows(data: AssignmentProp['data']) {
+  return data.map((assignment) =>
+    createData(
+      assignment.name,
+      assignment.submitted,
+      assignment.dueDate,
+      assignment.grade,
+      assignment.url,
+      assignment.progress,
+      assignment.collapse,
+      assignment.collapseData
+    )
+  );
+}
 
 const calculateDiffDate = (dueDate: string) => {
   const today = new Date();
@@ -157,63 +217,54 @@ const GetGrade = (grade: string) => {
   }
 };
 
-const DisplayAssignments: React.FC<AssignmentProp> = ({ data, overdue, today }) => {
-  const [isCollapsed, setIsCollapsed] = useState<boolean[]>(Array(data.length).fill(false));
-
-  const toggleCollapse = (index: number) => {
-    setIsCollapsed((prevIsCollapsed) => {
-      const newIsCollapsed = [...prevIsCollapsed];
-      newIsCollapsed[index] = !newIsCollapsed[index];
-      return newIsCollapsed;
-    });
-  };
+function Row(
+  props: { row: ReturnType<typeof createData> },
+  overdue?: boolean,
+  today?: boolean
+) {
+  const { row } = props;
+  const [open, setOpen] = useState(false);
 
   return (
-    <table className="assignment-table">
-      <tbody>
-        {data.map((assignment, index) => (
-          <React.Fragment key={assignment.name}>
-            <tr>
-              <td className="assignment-table-row">
-                <div className="assignment-table-row-content">
-                  <div className="assignment-table-row-content-name">
-                    {assignment.collapse ? (
-                      <Collapse
-                        title={assignment.name}
-                        onClick={() => toggleCollapse(index)}
-                      />
-                    ) : (
-                      assignment.name
-                    )}
-                  </div>
-                  <div>
-                    {assignment.submitted === true
-                      ? GetGrade(assignment.grade)
-                      : DisplayDate(
-                          assignment.dueDate,
-                          assignment.submitted,
-                          overdue,
-                          today
-                        )}
-                  </div>
-                </div>
-              </td>
-            </tr>
-            {assignment.collapseData && assignment.collapse && isCollapsed[index] ? (
-              <tr>
-                <td className="assignment-table-row">
-                  <div className="assignment-table-row-content">
-                    <DisplayAssignments data={assignment.collapseData} />
-                  </div>
-                </td>
-              </tr>
-            ) : null}
-          </React.Fragment>
-        ))}
-      </tbody>
-    </table>
+    <>
+      <TableRow>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            style={{ visibility: row.collapse ? 'visible' : 'hidden' }}
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+          {row.name}
+        </TableCell>
+        <TableCell align="center">Hi</TableCell>
+        <TableCell align="center">Hi</TableCell>
+        <TableCell align="right">
+          {row.submitted === true
+            ? GetGrade(row.grade)
+            : DisplayDate(row.dueDate, row.submitted, overdue, today)}
+        </TableCell>
+      </TableRow>
+      {row.collapseData && row.collapse ? (
+        <TableRow>
+          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={4}>
+            <Collapse in={open}>
+              <Table>
+                <TableBody>
+                  {getRows(row.collapseData).map((rowData) => (
+                    <Row key={rowData.name} row={rowData} />
+                  ))}
+                </TableBody>
+              </Table>
+            </Collapse>
+          </TableCell>
+        </TableRow>
+      ) : null}
+    </>
   );
-};
+}
 
 const Assignment: React.FC<AssignmentProp> = ({ data }) => {
   if (data.length === 0) {
@@ -228,65 +279,106 @@ const Assignment: React.FC<AssignmentProp> = ({ data }) => {
     (assignment) =>
       !assignment.submitted && calculateDiffDate(assignment.dueDate) === 0
   );
+  const dueTodayRows = getRows(dueToday);
+
   const dueNextWeek = data.filter(
     (assignment) =>
       !assignment.submitted &&
       calculateDiffDate(assignment.dueDate) >= 1 &&
       calculateDiffDate(assignment.dueDate) <= 7
   );
+  const dueNextWeekRows = getRows(dueNextWeek);
+
   const dueLater = data.filter(
     (assignment) =>
       !assignment.submitted && calculateDiffDate(assignment.dueDate) > 7
   );
+  const dueLaterRows = getRows(dueLater);
+
   const overdue = data.filter(
     (assignment) =>
       !assignment.submitted && calculateDiffDate(assignment.dueDate) < 0
   );
+  const overdueRows = getRows(overdue);
+
   const submitted = data.filter((assignment) => assignment.submitted);
+  const submittedRows = getRows(submitted);
 
   return (
     <Item>
       <ItemTitle title="Assignments" />
+
       <div className="assignments">
-        <SubItemTitle title="Assignments Overdue" />
+        <TableContainer>
+          <Table
+            aria-label="collapsible table"
+            sx={{
+              [`& .${tableCellClasses.root}`]: {
+                borderBottom: 'none',
+              },
+            }}
+          >
+            <TableRow><SubItemTitle title="Assignments Overdue" /></TableRow>
 
-        {overdue.length === 0 ? (
-          <div>No overdue assignments.</div>
-        ) : (
-          DisplayAssignments({ data: overdue, overdue: true })
-        )}
+            {overdue.length === 0 ? (
+              <TableRow>No over due assignments.</TableRow>
+            ) : (
+              <TableBody>
+                {overdueRows.map((row) => (
+                  <Row key={row.name} row={row} overdue={true} />
+                ))}
+              </TableBody>
+            )}
 
-        <SubItemTitle title="Assignments Due Today" />
+            <TableRow><SubItemTitle title="Assignments Due Today" /></TableRow>
 
-        {dueToday.length === 0 ? (
-          <div>No assignments due today.</div>
-        ) : (
-          DisplayAssignments({ data: dueToday, today: true })
-        )}
+            {dueToday.length === 0 ? (
+              <TableRow>No assignments due today.</TableRow>
+            ) : (
+              <TableBody>
+                {dueTodayRows.map((row) => (
+                  <Row key={row.name} row={row} today={true} />
+                ))}
+              </TableBody>
+            )}
 
-        <SubItemTitle title="Assignments Due This Week" />
+            <TableRow><SubItemTitle title="Assignments Due This Week" /></TableRow>
 
-        {dueNextWeek.length === 0 ? (
-          <div>No assignments due this week.</div>
-        ) : (
-          DisplayAssignments({ data: dueNextWeek })
-        )}
+            {dueNextWeek.length === 0 ? (
+              <TableRow>No assignments due this week.</TableRow>
+            ) : (
+              <TableBody>
+                {dueNextWeekRows.map((row) => (
+                  <Row key={row.name} row={row} />
+                ))}
+              </TableBody>
+            )}
 
-        <SubItemTitle title="Assignments Due Later" />
+            <TableRow><SubItemTitle title="Assignments Due Later" /></TableRow>
 
-        {dueLater.length === 0 ? (
-          <div>No assignments due later.</div>
-        ) : (
-          DisplayAssignments({ data: dueLater })
-        )}
+            {dueLater.length === 0 ? (
+              <TableRow>No assignments due later.</TableRow>
+            ) : (
+              <TableBody>
+                {dueLaterRows.map((row) => (
+                  <Row key={row.name} row={row} />
+                ))}
+              </TableBody>
+            )}
 
-        <SubItemTitle title="Assignments Submitted" />
+            <TableRow><SubItemTitle title="Assignments Submitted" /></TableRow>
 
-        {submitted.length === 0 ? (
-          <div>No assignments submitted.</div>
-        ) : (
-          DisplayAssignments({ data: submitted })
-        )}
+            {submitted.length === 0 ? (
+              <div>No assignments submitted.</div>
+            ) : (
+              <TableBody>
+                {submittedRows.map((row) => (
+                  <Row key={row.name} row={row} />
+                ))}
+              </TableBody>
+            )}
+          </Table>
+        </TableContainer>
       </div>
     </Item>
   );
